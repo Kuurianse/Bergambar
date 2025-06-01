@@ -1,0 +1,641 @@
+ArtistController.php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Commission;
+use App\Models\User;
+
+class ArtistController extends Controller
+{
+    // Display a list of artists (users with commissions)
+    public function index()
+    {
+        // Retrieve all users who have posted commissions, including commission and review data
+        $artists = User::whereHas('commissions')->with('commissions.reviews.user')->get();
+
+        // Pass the artist data to the 'artists.index' view
+        return view('artists.index', compact('artists'));
+    }
+
+    // Search function for an artist based on the user ID
+    public function search($id)
+    {
+        // Find the user by ID and load related commissions and reviews
+        $artist = User::whereHas('commissions')->with('commissions.reviews.user')->find($id);
+
+        // Check if the artist (user) exists
+        if (!$artist) {
+            return redirect()->route('artists.index')->with('error', 'Artist not found');
+        }
+
+        // Return a view to display the artist's details (create a view named 'artists.show' or similar)
+        return view('artists.show', compact('artist'));
+    }
+}
+
+
+CardController.php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Commission;
+
+class CardController extends Controller
+{
+    public function welcome()
+    {
+        // Ambil semua commission beserta user yang membuatnya
+        $commissions = Commission::with('user')->get();
+        
+        // Kirim data commission ke view
+        return view('welcome', compact('commissions'));
+    }
+
+}
+
+ChatController.php
+<?php
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use App\Models\Message;
+use App\Events\MessageSent;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class ChatController extends Controller
+{
+    
+    public function index()
+    {
+        $userId = Auth::id();
+
+        // Mengambil semua pesan yang berhubungan dengan user yang sedang login
+        $chats = Message::where('sender_id', $userId)
+                        ->orWhere('receiver_id', $userId)
+                        ->with(['sender', 'receiver'])
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+
+        // Mengelompokkan pesan berdasarkan pengguna yang di-chat
+        $groupedChats = $chats->groupBy(function($message) use ($userId) {
+            return $message->sender_id == $userId ? $message->receiver_id : $message->sender_id;
+        });
+
+        return view('chat.index', compact('groupedChats'));
+    }
+
+    public function show(User $artist)
+    {
+        $messages = Message::where(function($query) use ($artist) {
+            $query->where('sender_id', auth()->id())
+                ->where('receiver_id', $artist->id);
+        })->orWhere(function($query) use ($artist) {
+            $query->where('sender_id', $artist->id)
+                ->where('receiver_id', auth()->id());
+        })->get();
+
+        return view('chat.chat', ['artist' => $artist, 'messages' => $messages]);
+    }
+
+    public function sendMessage(Request $request)
+    {
+        // Validasi data input
+        $request->validate([
+            'message' => 'required|string',
+            'receiver_id' => 'required|exists:users,id',
+        ]);
+
+        // Buat pesan baru di database
+        $message = Message::create([
+            'sender_id' => auth()->id(), // ID pengirim
+            'receiver_id' => $request->receiver_id, // ID penerima
+            'message' => $request->message, // Isi pesan
+        ]);
+
+        // Memancarkan event agar pesan dikirim real-time
+        broadcast(new MessageSent($message, auth()->user()->name))->toOthers();
+
+        return response()->json($message); // Mengembalikan response JSON
+    }
+}
+
+
+
+CommissionController.php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Commission;
+use App\Models\Review;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; // Tambahkan ini
+
+class CommissionController extends Controller
+{
+    // Menampilkan semua commission
+    public function index()
+    {
+        // Memuat data commission beserta relasi user
+        $commissions = Commission::with('user')->get();
+        // Memuat data commission berdasarkan user yang sedang login
+        $commissions = Commission::where('user_id', Auth::id())->get();
+        return view('commissions.index', compact('commissions'));
+    }
+
+    // Menampilkan form untuk menambah commission
+    public function create()
+    {
+        return view('commissions.create');
+    }
+
+    // Menyimpan commission baru ke database
+    public function store(Request $request)
+    {
+        // Validasi input
+        $validatedData = $request->validate([
+            'status' => 'required|string|in:pending,accepted,completed',
+            'total_price' => 'required|numeric',
+            'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        // Mengelola upload gambar
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('commissions', 'public');
+            $validatedData['image'] = $imagePath;
+        }
+
+        // Tambahkan user_id dari user yang login
+        $validatedData['user_id'] = Auth::user()->id;
+
+        // Simpan commission ke database
+        Commission::create($validatedData);
+
+        return redirect()->route('commissions.index')->with('success', 'Commission berhasil ditambahkan!');
+    }
+
+    // Menampilkan detail commission
+    public function show($id)
+    {
+        $commission = Commission::with('user')->findOrFail($id);
+        return view('commissions.show', compact('commission'));
+    }
+
+    // Menampilkan form untuk mengedit commission
+    // Menampilkan form untuk mengedit commission
+    public function edit($id)
+    {
+        $commission = Commission::findOrFail($id);
+
+        // Pastikan hanya user yang memiliki commission yang bisa mengedit
+        if ($commission->user_id !== Auth::id()) {
+            return redirect()->route('commissions.index')->with('error', 'Unauthorized action.');
+        }
+
+        return view('commissions.edit', compact('commission'));
+    }
+
+
+    // Mengupdate commission di database
+    public function update(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'status' => 'required|string|in:pending,accepted,completed',
+            'total_price' => 'required|numeric',
+            'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $commission = Commission::findOrFail($id);
+
+        // Mengelola upload gambar baru jika ada
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('commissions', 'public');
+            $validatedData['image'] = $imagePath;
+        }
+
+        // Update data commission di database
+        $commission->update($validatedData);
+
+        return redirect()->route('commissions.index')->with('success', 'Commission berhasil diupdate!');
+    }
+
+    // Menghapus commission dari database
+    public function destroy($id)
+    {
+        $commission = Commission::findOrFail($id);
+
+        // Pastikan hanya user yang memiliki commission yang bisa menghapus
+        if ($commission->user_id !== Auth::id()) {
+            return redirect()->route('commissions.index')->with('error', 'Unauthorized action.');
+        }
+
+        // Hapus commission
+        $commission->delete();
+
+        return redirect()->route('commissions.index')->with('success', 'Commission berhasil dihapus!');
+    }
+
+    public function toggleLove($id)
+    {
+        $commission = Commission::findOrFail($id);
+        $user = auth()->user();
+    
+        // Cek apakah user sudah love commission ini
+        if ($commission->loves()->where('user_id', $user->id)->exists()) {
+            // Jika sudah love, kurangi loved_count
+            $commission->loved_count -= 1;
+            $commission->save();
+    
+            // Hapus love dari user ini di tabel pivot
+            $commission->loves()->detach($user->id);
+    
+            $loved = false;
+        } else {
+            // Jika belum love, tambahkan loved_count
+            $commission->loved_count += 1;
+            $commission->save();
+    
+            // Tambahkan love untuk user ini di tabel pivot
+            $commission->loves()->attach($user->id);
+    
+            $loved = true;
+        }
+    
+        // Return response dalam bentuk JSON
+        return response()->json([
+            'loved' => $loved,
+            'loved_count' => $commission->loved_count
+        ]);
+    }
+
+    public function addReview(Request $request, $id)
+    {
+        $request->validate([
+            'review' => 'required|string|max:255',
+        ]);
+    
+        // Cari commission berdasarkan ID
+        $commission = Commission::findOrFail($id);
+    
+        // Tambahkan review baru ke tabel reviews
+        Review::create([
+            'commission_id' => $commission->id,
+            'user_id' => auth()->user()->id, // ID user yang memberikan review
+            'review' => $request->review, // Isi review
+        ]);
+    
+        return back()->with('success', 'Review added successfully!');
+    }
+    
+    
+}
+
+
+Controller.php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Routing\Controller as BaseController;
+
+class Controller extends BaseController
+{
+    use AuthorizesRequests, ValidatesRequests;
+}
+
+
+HomeController.php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class HomeController extends Controller
+{
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function index()
+    {
+        return view('home');
+    }
+}
+
+
+OrderController.php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Order;
+use App\Models\Commission;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class OrderController extends Controller
+{
+    // Display the list of orders for the logged-in user
+    public function index()
+    {
+        $orders = Order::where('user_id', auth()->id())->get();
+        return view('orders.index', compact('orders'));
+    }
+
+    // Display a specific order's details
+    public function show($id)
+    {
+        // Fetch the commission by ID
+        $commission = Commission::find($id);
+
+        if (!$commission) {
+            abort(404); // If the commission doesn't exist, show a 404 page
+        }
+        
+        // Fetch the artist who created the commission
+        $artist = $commission->user;
+
+        return view('orders.show', compact('commission', 'artist'));
+    }
+
+    // Handle payment confirmation
+    public function confirmPayment($id)
+    {
+        // Fetch the commission by ID
+        $commission = Commission::find($id);
+
+        if (!$commission) {
+            return redirect()->route('orders.index')->with('error', 'Commission not found.');
+        }
+
+        // Create a new order entry or mark an order as paid
+        Order::create([
+            'user_id' => Auth::id(),
+            'commission_id' => $commission->id,
+            'status' => 'paid', // Or any other status you want to set
+        ]);
+
+        // Redirect to a success page or back to the orders page
+        return redirect()->route('orders.index')->with('message', 'Payment confirmed successfully!');
+    }
+}
+
+
+PaymentController.php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Payment;
+use App\Models\Commission;
+use Illuminate\Http\Request;
+
+class PaymentController extends Controller
+{
+    // Menampilkan daftar semua pembayaran
+    public function index()
+    {
+        $payments = Payment::with('commission')->get();
+        return view('payments.index', compact('payments'));
+    }
+
+    // Menampilkan detail pembayaran tertentu
+    public function show($id)
+    {
+        $payment = Payment::with('commission')->findOrFail($id);
+        return view('payments.show', compact('payment'));
+    }
+
+    // Form untuk menambah pembayaran
+    public function create()
+    {
+        $commissions = Commission::all(); // Menampilkan daftar commission untuk dipilih
+        return view('payments.create', compact('commissions'));
+    }
+
+    // Menyimpan pembayaran baru
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'commission_id' => 'required|exists:commissions,id',
+            'payment_method' => 'required|string',
+            'amount' => 'required|numeric',
+            'payment_status' => 'required|string',
+            'payment_date' => 'required|date',
+        ]);
+
+        Payment::create($validatedData);
+
+        return redirect()->route('payments.index');
+    }
+
+    // Mengupdate pembayaran
+    public function update(Request $request, $id)
+    {
+        $payment = Payment::findOrFail($id);
+        
+        $validatedData = $request->validate([
+            'payment_method' => 'required|string',
+            'amount' => 'required|numeric',
+            'payment_status' => 'required|string',
+            'payment_date' => 'required|date',
+        ]);
+
+        $payment->update($validatedData);
+
+        return redirect()->route('payments.show', $id);
+    }
+
+    // Menghapus pembayaran
+    public function destroy($id)
+    {
+        $payment = Payment::findOrFail($id);
+        $payment->delete();
+
+        return redirect()->route('payments.index');
+    }
+}
+
+
+ServiceController.php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Service;
+use Illuminate\Http\Request;
+
+class ServiceController extends Controller
+{
+    // Menampilkan semua service
+    public function index()
+    {
+        $services = Service::with('artist', 'category')->get();
+        return view('services.index', compact('services'));
+    }
+
+    // Menampilkan detail service tertentu
+    public function show($id)
+    {
+        $service = Service::with('artist', 'category')->findOrFail($id);
+        return view('services.show', compact('service'));
+    }
+
+    // Form untuk menambah service
+    public function create()
+    {
+        return view('services.create');
+    }
+
+    // Menyimpan service baru
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'artist_id' => 'required|exists:artists,id',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'service_type' => 'required|string',
+        ]);
+
+        Service::create($validatedData);
+
+        return redirect()->route('services.index');
+    }
+}
+
+
+UserController.php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use App\Models\Commission;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
+class UserController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['create', 'store']);
+    }
+
+    public function index()
+    {
+        if (Auth::user()->role !== 'admin') { // Cek apakah user adalah admin
+            abort(403, 'Anda tidak memiliki akses ke halaman ini');
+        }
+
+        // Menggunakan pagination untuk mengurangi beban query
+        $users = User::paginate(10);
+        return view('users.index', compact('users'));
+    }
+
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+    
+        // Pastikan hanya user yang sedang login bisa melihat profilnya sendiri
+        if (Auth::id() !== $user->id) {
+            abort(403, 'Anda tidak memiliki akses untuk melihat profil ini');
+        }
+    
+         // Mengambil commissions milik user tersebut
+        $commissions = Commission::where('user_id', $user->id)->get();
+    
+        return view('users.show', compact('user', 'commissions'));  // Menyertakan commissions ke view
+    }
+
+    public function create()
+    {
+        return view('users.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',  // Validasi konfirmasi password
+        ]);
+
+        User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => bcrypt($validatedData['password']),
+        ]);
+
+        return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan');
+    }
+
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Pastikan hanya user itu sendiri yang bisa mengedit profilnya
+        if (Auth::id() !== $user->id) {
+            abort(403, 'Anda tidak memiliki akses untuk mengedit profil ini');
+        }
+
+        return view('users.edit', compact('user'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        // Validasi data input
+        $validatedData = $request->validate([
+            'username' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'bio' => 'nullable|string|max:500',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Update data user
+        $user->username = $validatedData['username'];
+        $user->email = $validatedData['email'];
+        $user->bio = $validatedData['bio'];
+
+        // Jika ada gambar profil yang di-upload
+        if ($request->hasFile('profile_picture')) {
+            // Hapus gambar lama jika ada
+            if ($user->profile_picture) {
+                Storage::delete('public/' . $user->profile_picture);
+            }
+
+            // Simpan gambar baru
+            $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $user->profile_picture = $imagePath;
+        }
+
+        $user->save(); // Simpan perubahan
+
+        return redirect()->route('users.show', $user->id)->with('success', 'Profil berhasil diperbarui');
+    }
+}
+
+
