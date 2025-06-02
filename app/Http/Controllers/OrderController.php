@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Commission;
 use App\Models\Payment; // Added
+use App\Models\OrderRevision; // Ditambahkan
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,13 +24,13 @@ class OrderController extends Controller
     // Display a specific order's details
     public function show($id) // $id here refers to Order ID
     {
-        $order = Order::with(['commission.user'])->findOrFail($id); // Eager load commission and its user (artist)
+        $order = Order::with(['commission.user', 'revisions.user'])->findOrFail($id); // Eager load commission, its user, and revisions with their users
 
-        // Authorization: Ensure the logged-in user owns this order, or is an admin
-        // This is a good practice to add. For now, focusing on the plan's direct task.
-        // if (Auth::id() !== $order->user_id && !Auth::user()->isAdmin()) { // Assuming isAdmin() method or role check
-        //     abort(403, 'Unauthorized action.');
-        // }
+        // Authorization: Ensure the logged-in user owns this order
+        if (Auth::id() !== $order->user_id) {
+            // Jika ingin admin bisa melihat semua order, tambahkan kondisi: && !Auth::user()->isAdmin()
+            abort(403, 'Aksi tidak diizinkan. Anda hanya dapat melihat pesanan Anda sendiri.');
+        }
 
         $commission = $order->commission;
         $artist = $commission ? $commission->user : null; // Artist who created the commission
@@ -92,5 +93,66 @@ class OrderController extends Controller
         
         // Redirect to a success page or back to the orders page
         return redirect()->route('orders.index')->with('message', 'Payment confirmed and order created successfully! The artist has been notified.');
+    }
+
+    public function approveDelivery(Order $order)
+    {
+        // Otorisasi: Pastikan pengguna yang login adalah pemilik order
+        if (Auth::id() !== $order->user_id) {
+            abort(403, 'Aksi tidak diizinkan.');
+        }
+
+        // Validasi: Pastikan status komisi adalah 'submitted_for_client_review'
+        if (!$order->commission || $order->commission->status !== 'submitted_for_client_review') {
+            return redirect()->route('orders.show', $order->id)->with('error', 'Tidak dapat menyetujui hasil karya pada status komisi saat ini.');
+        }
+
+        // Aksi
+        $commission = $order->commission;
+        $commission->status = 'completed';
+        $commission->save();
+
+        $order->status = 'completed'; // Atau 'client_approved' jika ada status order yang lebih spesifik
+        $order->save();
+
+        // TODO: Kirim notifikasi ke seniman bahwa karya telah disetujui
+
+        return redirect()->route('orders.show', $order->id)->with('success', 'Hasil karya telah disetujui dan pesanan diselesaikan.');
+    }
+
+    public function requestRevision(Request $request, Order $order)
+    {
+        // Otorisasi: Pastikan pengguna yang login adalah pemilik order
+        if (Auth::id() !== $order->user_id) {
+            abort(403, 'Aksi tidak diizinkan.');
+        }
+
+        // Validasi: Pastikan status komisi adalah 'submitted_for_client_review'
+        if (!$order->commission || $order->commission->status !== 'submitted_for_client_review') {
+            return redirect()->route('orders.show', $order->id)->with('error', 'Tidak dapat meminta revisi pada status komisi saat ini.');
+        }
+
+        $validated = $request->validate([
+            'revision_notes' => 'required|string|max:5000',
+        ],[
+            'revision_notes.required' => 'Catatan revisi tidak boleh kosong.',
+            'revision_notes.max' => 'Catatan revisi tidak boleh lebih dari 5000 karakter.',
+        ]);
+
+        // Aksi
+        OrderRevision::create([
+            'order_id' => $order->id,
+            'user_id' => Auth::id(),
+            'notes' => $validated['revision_notes'],
+            'requested_at' => now(),
+        ]);
+
+        $commission = $order->commission;
+        $commission->status = 'needs_revision';
+        $commission->save();
+
+        // TODO: Kirim notifikasi ke seniman bahwa revisi diminta
+
+        return redirect()->route('orders.show', $order->id)->with('success', 'Permintaan revisi telah dikirim ke seniman.');
     }
 }

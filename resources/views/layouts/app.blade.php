@@ -68,7 +68,18 @@
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <a href="{{ route('users.show', Auth::user()->id) }}" class="dropdown-item {{ Request::is('users/*') ? 'fw-bold' : '' }}">
                                     Edit Profile
-                                </a>                                                
+                                </a>
+                                @if(Auth::user()->artist)
+                                <a href="{{ route('artist.orders.index') }}" class="dropdown-item {{ Request::routeIs('artist.orders.index') ? 'fw-bold' : '' }}">
+                                    Kelola Pesanan Saya
+                                </a>
+                                <a href="{{ route('services.index') }}" class="dropdown-item {{ Request::routeIs('services.index') ? 'fw-bold' : '' }}">
+                                    Kelola Layanan Saya
+                                </a>
+                                @endif
+                                <a href="{{ route('orders.index') }}" class="dropdown-item {{ Request::routeIs('orders.index') ? 'fw-bold' : '' }}">
+                                    Pesanan Saya (Klien)
+                                </a>
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();">

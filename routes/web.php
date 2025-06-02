@@ -64,6 +64,15 @@ Route::delete('/commissions/{commission}', [CommissionController::class, 'destro
 Route::middleware('auth')->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+
+    // Artist's Order Management
+    Route::get('/artist/orders', [ArtistController::class, 'listArtistOrders'])->name('artist.orders.index');
+    Route::get('/artist/orders/{commission}', [ArtistController::class, 'showArtistOrderDetails'])->name('artist.orders.show');
+    Route::post('/artist/orders/{commission}/update-status', [ArtistController::class, 'updateArtistOrderStatus'])->name('artist.orders.updateStatus');
+
+    // Client Actions on Order
+    Route::post('/orders/{order}/approve-delivery', [OrderController::class, 'approveDelivery'])->name('orders.approveDelivery');
+    Route::post('/orders/{order}/request-revision', [OrderController::class, 'requestRevision'])->name('orders.requestRevision');
 });
 
 Route::get('/commissions/{commission}/order', [OrderController::class, 'createOrderForCommission'])->name('commissions.order');

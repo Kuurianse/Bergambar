@@ -29,6 +29,7 @@ Berikut adalah fitur-fitur utama yang saat ini sudah berjalan atau fungsionalita
 *   **Halaman Detail Seniman (Dasar):** Menampilkan informasi dasar seniman dan komisi yang mereka miliki.
 *   **Manajemen Komisi oleh Pengguna:** Pengguna dapat membuat, melihat, mengedit, dan menghapus komisi milik mereka sendiri. Komisi dapat ditautkan ke layanan spesifik yang ditawarkan oleh seniman.
 *   **Manajemen Layanan oleh Seniman:** Seniman dapat melakukan operasi CRUD (Create, Read, Update, Delete) pada layanan yang mereka tawarkan. Halaman detail publik untuk setiap layanan juga tersedia dan dapat diakses dari profil artis.
+*   **Dasar Manajemen Pesanan oleh Seniman:** Seniman memiliki halaman untuk melihat daftar komisi mereka yang telah dipesan (`/artist/orders`). Mereka dapat melihat detail setiap pesanan dan melakukan aksi dasar untuk mengubah status komisi (misalnya, menerima pesanan, mengirim karya untuk review via link eksternal).
 
 ## Isu dan Bug yang Diketahui
 
@@ -53,7 +54,7 @@ Fitur-fitur berikut telah dimulai namun belum sepenuhnya fungsional atau terinte
 *   **Pelacakan Pembayaran Detail:** Model `Payment` dan tabel `payments` ada, namun alur pemesanan saat ini hanya menyederhanakan status order menjadi 'paid' tanpa integrasi gateway pembayaran atau penggunaan model `Payment` secara detail.
 *   **Chat Real-time (Frontend):** Backend telah siap dengan event broadcasting (`MessageSent`), namun implementasi sisi klien (Laravel Echo) untuk pengalaman chat real-time belum ada.
 *   **Panel Admin:** Fungsionalitas admin yang komprehensif untuk mengelola pengguna, seniman, komisi, dll., belum dikembangkan secara menyeluruh.
-*   **Persistensi Detail Pesanan:** `OrderController@confirmPayment` belum menyimpan `total_price` ke dalam tabel `orders`.
+*   **Persistensi Detail Pesanan:** ~~`OrderController@confirmPayment` belum menyimpan `total_price` ke dalam tabel `orders`.~~ *(Status: TERATASI. Metode `confirmPayment` di `OrderController` sudah menyimpan `total_price` saat membuat order baru).*
 *   **Relasi Model yang Hilang:** ~~Beberapa relasi penting (seperti `orders()`, `reviews()`, `messages()`) belum didefinisikan di model `User`.~~ *(Status: TERATASI. Relasi-relasi yang diperlukan seperti `orders()`, `reviews()`, `messagesSent()`, `messagesReceived()`, dan `lovedCommissions()` sudah ada di model `User`)*.
 *   **Inkonsistensi Penggunaan `name` vs. `username`:** ~~Pada tabel `users`, perlu ada standarisasi penggunaan antara `name` dan `username`.~~ *(Status: TERATASI. `UserController@update` telah dimodifikasi untuk memungkinkan pembaruan field `name` selain `username`, menyelaraskannya dengan form registrasi dan edit yang sudah ada. Kedua field kini dapat dikelola).*
 
@@ -78,11 +79,21 @@ Berikut adalah garis besar fitur yang direncanakan untuk pengembangan di masa me
     *   Implementasi Laravel Echo di sisi klien.
 *   **Pengembangan Panel Admin Komprehensif:**
     *   Area khusus untuk admin mengelola berbagai aspek platform.
-*   **Alur Kerja Manajemen Pesanan untuk Seniman:**
-    *   Antarmuka bagi seniman untuk melihat dan mengelola pesanan masuk.
-    *   Pembaruan status komisi oleh seniman (misalnya, 'In Progress', 'Submitted for Review').
-    *   Rencana detail untuk fitur ini terdapat di [`artist_order_management_plan.md`](artist_order_management_plan.md).
-    *   Akan ada pembedaan yang jelas antara status komisi yang ditampilkan secara publik di marketplace (misalnya, "Tersedia", "Sudah Dipesan") dan status alur kerja internal yang lebih detail (misalnya, `ordered_pending_artist_action`, `In Progress`) yang hanya dapat diakses oleh pihak-pihak terkait (seniman, klien, admin).
+*   **Alur Kerja Manajemen Pesanan untuk Seniman & Klien:** *(Status: Implementasi Dasar SELESAI untuk alur seniman; Implementasi Dasar SELESAI untuk alur review klien)*
+    *   **Sisi Seniman:**
+        *   Antarmuka untuk melihat daftar pesanan masuk ([`resources/views/artists/orders/index.blade.php`](resources/views/artists/orders/index.blade.php:1)) dan detail pesanan ([`resources/views/artists/orders/show.blade.php`](resources/views/artists/orders/show.blade.php:1)).
+        *   Seniman dapat memperbarui status komisi (misalnya, `ordered_pending_artist_action` -> `artist_accepted` -> `in_progress` -> `submitted_for_client_review`).
+        *   Pengiriman hasil karya via link eksternal (disimpan di `orders.delivery_link`) saat status `submitted_for_client_review`.
+        *   Dapat melihat catatan revisi dari klien jika status `needs_revision`.
+        *   Navigasi "Kelola Pesanan Saya" tersedia.
+    *   **Sisi Klien:**
+        *   Pada halaman detail pesanan ([`resources/views/orders/show.blade.php`](resources/views/orders/show.blade.php:1)), klien dapat melihat link hasil karya yang dikirim seniman.
+        *   Klien dapat "Menyetujui Hasil Karya" (mengubah status komisi & order menjadi `completed`).
+        *   Klien dapat "Minta Revisi" dengan menyertakan catatan (mengubah status komisi menjadi `needs_revision` dan menyimpan catatan di tabel `order_revisions`).
+        *   Histori permintaan revisi ditampilkan kepada klien.
+    *   Rencana detail untuk fitur ini terdapat di [`artist_order_management_plan.md`](artist_order_management_plan.md:1).
+    *   Pembedaan status publik dan internal via accessor `public_status` di model `Commission`.
+    *   *(Pengembangan Lanjutan: Notifikasi email/platform, penanganan revisi yang lebih interaktif, pembatalan pesanan, upload file langsung).*
 *   **Perbaikan Bug dan Isu yang Ada:** Menyelesaikan semua bug yang teridentifikasi.
 *   **Penyempurnaan UI/UX:** Meningkatkan pengalaman pengguna secara keseluruhan.
 
@@ -155,6 +166,7 @@ erDiagram
         int commission_id FK
         string status
         decimal total_price
+        text delivery_link nullable
         timestamp created_at
         timestamp updated_at
     }
@@ -214,6 +226,18 @@ erDiagram
     COMMISSIONS ||--o{ REVIEWS : "has_review"
     COMMISSIONS }o--o{ COMMISSION_LOVES : "loved_by"
     ORDERS ||--o{ PAYMENTS : "paid_via"
+    ORDERS ||--o{ ORDER_REVISIONS : "has_revisions"
+    USERS ||--o{ ORDER_REVISIONS : "requests_revision"
+
+    ORDER_REVISIONS {
+        int id PK
+        int order_id FK
+        int user_id FK
+        text notes
+        timestamp requested_at
+        timestamp created_at
+        timestamp updated_at
+    }
 ```
 
 ## Sorotan Rencana Pengembangan

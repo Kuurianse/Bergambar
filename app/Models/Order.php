@@ -19,6 +19,7 @@ class Order extends Model
         'commission_id',
         'status',
         'total_price',
+        'delivery_link', // Ditambahkan
     ];
 
     public function commission()
@@ -34,5 +35,13 @@ class Order extends Model
     public function payments()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    /**
+     * Get all of the revisions for the Order.
+     */
+    public function revisions()
+    {
+        return $this->hasMany(OrderRevision::class, 'order_id')->orderBy('requested_at', 'desc');
     }
 }
