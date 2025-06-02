@@ -41,6 +41,7 @@ Beberapa isu dan bug yang telah teridentifikasi dan memerlukan perhatian:
 *   **Ketidaksesuaian Skema Tabel `services`:** Kolom `category_id` untuk relasi ke kategori hilang dari tabel `services`.
 *   **Typo Minor pada Migrasi `commission_loves`:** Perlu dikoreksi pada metode `down()`.
 *   **Komentar yang Salah Tempat pada Migrasi `users`**.
+*   **Visibilitas Status Komisi Internal:** Saat ini, status alur kerja internal komisi (seperti `ordered_pending_artist_action`) kemungkinan terlihat oleh publik secara luas, padahal idealnya hanya relevan untuk seniman, klien yang memesan, dan admin. Status publik di marketplace seharusnya lebih umum (misalnya, "Sudah Dipesan").
 
 ## Fitur yang Belum Selesai atau Sebagian Diimplementasikan
 
@@ -80,6 +81,7 @@ Berikut adalah garis besar fitur yang direncanakan untuk pengembangan di masa me
     *   Antarmuka bagi seniman untuk melihat dan mengelola pesanan masuk.
     *   Pembaruan status komisi oleh seniman (misalnya, 'In Progress', 'Submitted for Review').
     *   Rencana detail untuk fitur ini terdapat di [`artist_order_management_plan.md`](artist_order_management_plan.md).
+    *   Akan ada pembedaan yang jelas antara status komisi yang ditampilkan secara publik di marketplace (misalnya, "Tersedia", "Sudah Dipesan") dan status alur kerja internal yang lebih detail (misalnya, `ordered_pending_artist_action`, `In Progress`) yang hanya dapat diakses oleh pihak-pihak terkait (seniman, klien, admin).
 *   **Perbaikan Bug dan Isu yang Ada:** Menyelesaikan semua bug yang teridentifikasi.
 *   **Penyempurnaan UI/UX:** Meningkatkan pengalaman pengguna secara keseluruhan.
 
