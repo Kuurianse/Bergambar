@@ -75,7 +75,26 @@
                                         <a href="{{ route('commissions.show', $commission->id) }}">{{ Str::limit($commission->description, 50) }}</a>
                                     </h5>
                                     <p class="card-text"><small class="text-muted">Price: Rp{{ number_format($commission->total_price, 0, ',', '.') }}</small></p>
-                                    <p class="card-text"><small class="text-muted">Status: {{ ucfirst($commission->status) }}</small></p>
+                                    <p class="card-text"><small class="text-muted">Status:
+                                        @php
+                                            $badgeClass = 'bg-secondary'; // Default
+                                            switch ($commission->public_status) {
+                                                case 'Available':
+                                                    $badgeClass = 'bg-success';
+                                                    break;
+                                                case 'Ordered':
+                                                    $badgeClass = 'bg-warning';
+                                                    break;
+                                                case 'Completed':
+                                                    $badgeClass = 'bg-primary';
+                                                    break;
+                                                case 'Status Undefined':
+                                                    $badgeClass = 'bg-danger';
+                                                    break;
+                                            }
+                                        @endphp
+                                        <span class="badge {{ $badgeClass }}">{{ $commission->public_status }}</span>
+                                    </small></p>
                                     <p class="card-text"><small class="text-muted">Loves: {{ $commission->loved_count ?? 0 }}</small></p>
                                 </div>
                                 <div class="card-footer">

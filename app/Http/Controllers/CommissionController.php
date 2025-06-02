@@ -175,7 +175,16 @@ class CommissionController extends Controller
     public function addReview(Request $request, $id)
     {
         $request->validate([
-            'review' => 'required|string|max:255',
+            'review' => 'required|string|max:1000', // Increased max length for review
+            'rating' => 'required|integer|min:1|max:5',
+        ], [
+            'review.required' => 'Ulasan tidak boleh kosong.',
+            'review.string' => 'Ulasan harus berupa teks.',
+            'review.max' => 'Ulasan tidak boleh lebih dari 1000 karakter.',
+            'rating.required' => 'Rating tidak boleh kosong.',
+            'rating.integer' => 'Rating harus berupa angka.',
+            'rating.min' => 'Rating minimal adalah 1.',
+            'rating.max' => 'Rating maksimal adalah 5.',
         ]);
     
         // Cari commission berdasarkan ID
@@ -186,9 +195,10 @@ class CommissionController extends Controller
             'commission_id' => $commission->id,
             'user_id' => auth()->user()->id, // ID user yang memberikan review
             'review' => $request->review, // Isi review
+            'rating' => $request->rating, // Simpan rating
         ]);
     
-        return back()->with('success', 'Review added successfully!');
+        return back()->with('success', 'Ulasan berhasil ditambahkan!');
     }
     
     

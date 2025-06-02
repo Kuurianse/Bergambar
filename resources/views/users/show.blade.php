@@ -133,9 +133,19 @@
                             <h4 class="text-black">Username: {{ $user->username }}</h4>
                             <p class="text-black"><strong>Email:</strong> {{ $user->email }}</p>
                             <p class="text-black"><strong>Bio:</strong> {{ $user->bio ? $user->bio : 'Belum ada bio.' }}</p>
-                            <a href="{{ route('users.edit', $user->id) }}">
-                            <button class="btn text-black float-end w-25 edit">Edit</button>
-                            </a>
+                            <div class="d-flex justify-content-end align-items-center">
+                                @if(Auth::id() == $user->id) {{-- Show artist profile buttons only for the owner viewing their own profile --}}
+                                    @if($user->artist)
+                                        <a href="{{ route('artists.show', $user->artist->id) }}" class="btn btn-info btn-sm me-2">View Artist Profile</a>
+                                        <a href="{{ route('artists.edit', $user->artist->id) }}" class="btn btn-warning btn-sm me-2">Edit Artist Profile</a>
+                                    @else
+                                        <a href="{{ route('artists.create') }}" class="btn btn-success btn-sm me-2">Become an Artist</a>
+                                    @endif
+                                @endif
+                                <a href="{{ route('users.edit', $user->id) }}">
+                                    <button class="btn text-black edit">Edit User Profile</button>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

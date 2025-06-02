@@ -13,7 +13,12 @@
                     <div class="card-body">
                         @if($artistProfile->user)
                             <a href="{{ route('artists.show', $artistProfile->id) }}">
-                                <h5 class="card-title fw-bold fst-italic">{{ $artistProfile->user->username ?? $artistProfile->user->name }}</h5>
+                                <h5 class="card-title fw-bold fst-italic">
+                                    {{ $artistProfile->user->username ?? $artistProfile->user->name }}
+                                    @if($artistProfile->is_verified)
+                                        <span class="badge bg-success ms-2">Verified</span>
+                                    @endif
+                                </h5>
                             </a>
                             <p><strong class="fw-bold fst-italic">Full Name:</strong> {{ $artistProfile->user->name }}</p>
                             @if($artistProfile->portfolio_link)
@@ -21,6 +26,9 @@
                             @endif
                             <p><strong class="fw-bold fst-italic">Commissions:</strong> {{ $artistProfile->user->commissions_count ?? 0 }}</p>
                             <p><strong class="fw-bold fst-italic">Services:</strong> {{ $artistProfile->services_count ?? 0 }}</p>
+                            @if(!is_null($artistProfile->rating) && $artistProfile->rating > 0)
+                                <p><strong class="fw-bold fst-italic">Rating:</strong> {{ number_format($artistProfile->rating, 1) }} <i class="fas fa-star text-warning"></i></p>
+                            @endif
                              <a href="{{ route('artists.show', $artistProfile->id) }}" class="btn btn-sm btn-primary">View Profile</a>
                         @else
                             <p>Artist user data not found.</p>

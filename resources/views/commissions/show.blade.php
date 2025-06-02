@@ -82,10 +82,15 @@
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <p class="card-text">{{ $review->review }}</p>
+                                    @if($review->rating)
+                                    <p class="card-text">
+                                        <strong>Rating: {{ $review->rating }} / 5</strong>
+                                    </p>
+                                    @endif
                                     <p class="card-text">
                                         <small class="text-muted">
-                                            By: {{ $review->user->username ?? $review->user->name ?? 'Anonymous' }} 
-                                            on {{ $review->created_at->format('M d, Y') }}
+                                            Oleh: {{ $review->user->username ?? $review->user->name ?? 'Anonim' }}
+                                            pada {{ $review->created_at->translatedFormat('d M Y') }} {{-- Using translatedFormat for Indonesian date --}}
                                         </small>
                                     </p>
                                 </div>
@@ -102,12 +107,27 @@
                     <form action="{{ route('commissions.addReview', $commission->id) }}" method="POST">
                         @csrf
                         <div class="mb-3">
-                            <textarea name="review" class="form-control @error('review') is-invalid @enderror" rows="3" placeholder="Write your review..." required>{{ old('review') }}</textarea>
+                            <label for="review" class="form-label">Ulasan Anda</label>
+                            <textarea name="review" id="review" class="form-control @error('review') is-invalid @enderror" rows="3" placeholder="Tulis ulasan Anda..." required>{{ old('review') }}</textarea>
                             @error('review')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
                         </div>
-                        <button type="submit" class="btn btn-success">Submit Review</button>
+                        <div class="mb-3">
+                            <label for="rating" class="form-label">Rating</label>
+                            <select name="rating" id="rating" class="form-select @error('rating') is-invalid @enderror" required>
+                                <option value="">Pilih Rating</option>
+                                <option value="1" {{ old('rating') == '1' ? 'selected' : '' }}>1 Bintang</option>
+                                <option value="2" {{ old('rating') == '2' ? 'selected' : '' }}>2 Bintang</option>
+                                <option value="3" {{ old('rating') == '3' ? 'selected' : '' }}>3 Bintang</option>
+                                <option value="4" {{ old('rating') == '4' ? 'selected' : '' }}>4 Bintang</option>
+                                <option value="5" {{ old('rating') == '5' ? 'selected' : '' }}>5 Bintang</option>
+                            </select>
+                            @error('rating')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
+                        </div>
+                        <button type="submit" class="btn btn-success">Kirim Ulasan</button>
                     </form>
                 </div>
                 @endauth

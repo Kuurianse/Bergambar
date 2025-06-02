@@ -28,17 +28,18 @@ class UserController extends Controller
 
     public function show($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::with('artist', 'commissions')->findOrFail($id); // Eager load artist and commissions
     
         // Pastikan hanya user yang sedang login bisa melihat profilnya sendiri
+        // atau jika user yang dilihat adalah dirinya sendiri (untuk route /profile)
         if (Auth::id() !== $user->id) {
             abort(403, 'Anda tidak memiliki akses untuk melihat profil ini');
         }
     
-         // Mengambil commissions milik user tersebut
-        $commissions = Commission::where('user_id', $user->id)->get();
+        // Commissions sudah di-load dengan eager loading
+        $commissions = $user->commissions;
     
-        return view('users.show', compact('user', 'commissions'));  // Menyertakan commissions ke view
+        return view('users.show', compact('user', 'commissions'));
     }
 
     public function create()
@@ -115,8 +116,8 @@ class UserController extends Controller
 
     public function profile()
     {
-        $user = Auth::user(); // Get the authenticated user
-        $commissions = Commission::where('user_id', $user->id)->get(); // Get their commissions
+        $user = User::with('artist', 'commissions')->findOrFail(Auth::id()); // Get the authenticated user and eager load relations
+        $commissions = $user->commissions; // Commissions already loaded
 
         // Assuming 'users.show' can be used for the authenticated user's profile view
         // or a new view 'users.profile' could be created if different layout is needed.

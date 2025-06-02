@@ -8,7 +8,7 @@ class Review extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['commission_id', 'user_id', 'review'];
+    protected $fillable = ['commission_id', 'user_id', 'review', 'rating'];
 
     // Relasi ke commission yang direview
     public function commission()
