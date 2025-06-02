@@ -49,10 +49,10 @@
                                 <p class="card-text">{{ Str::limit($service->description, 100) }}</p>
                                 <p class="card-text"><strong>Price:</strong> Rp{{ number_format($service->price, 0, ',', '.') }}</p>
                                 <p class="card-text"><small class="text-muted">Type: {{ ucfirst($service->service_type) }}</small></p>
-                                {{-- <a href="#" class="btn btn-primary">View Service</a> --}}
-                            </div>
-                        </div>
-                    </div>
+                                <a href="{{ route('services.show', $service->id) }}" class="btn btn-outline-primary btn-sm mt-auto">View Service Details</a>
+                           </div>
+                       </div>
+                   </div>
                 @endforeach
             </div>
             <hr class="my-4">

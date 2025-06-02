@@ -8,10 +8,22 @@
         @csrf
         @method('PUT') <!-- Laravel membutuhkan method PUT/PATCH untuk update -->
 
+        <!-- Title -->
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" id="title" value="{{ old('title', $commission->title) }}" required>
+            @error('title')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
         <!-- Description -->
         <div class="form-group">
             <label for="description">Description</label>
-            <input type="text" class="form-control" name="description" id="description" value="{{ old('description', $commission->description) }}" required>
+            <textarea class="form-control @error('description') is-invalid @enderror" name="description" id="description" rows="3" required>{{ old('description', $commission->description) }}</textarea>
+            @error('description')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- Total Price -->
@@ -20,6 +32,26 @@
             <input type="number" class="form-control" name="total_price" id="total_price" value="{{ old('total_price', $commission->total_price) }}" required>
         </div>
 
+        <!-- Link to Existing Service (Optional) -->
+        <div class="form-group">
+            <label for="service_id">Link to Existing Service (Optional)</label>
+            <select class="form-control @error('service_id') is-invalid @enderror" name="service_id" id="service_id">
+                <option value="">-- Select a Service --</option>
+                @if($services && count($services) > 0)
+                    @foreach($services as $service)
+                        <option value="{{ $service->id }}" {{ old('service_id', $commission->service_id) == $service->id ? 'selected' : '' }}>
+                            {{ $service->title }} (Rp{{ number_format($service->price, 0, ',', '.') }})
+                        </option>
+                    @endforeach
+                @else
+                    <option value="" disabled>You have no available services to link.</option>
+                @endif
+            </select>
+            @error('service_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+ 
         <!-- Status -->
         <div class="form-group">
             <label for="status">Status</label>

@@ -20,14 +20,15 @@ Berikut adalah fitur-fitur utama yang saat ini sudah berjalan atau fungsionalita
 *   **Autentikasi Pengguna:** Registrasi, login, dan fungsionalitas reset password standar Laravel.
 *   **Halaman Sambutan:** Menampilkan daftar komisi yang tersedia untuk umum.
 *   **Fitur "Suka" (Love) pada Komisi:** Pengguna dapat menyukai/membatalkan suka pada komisi, dan jumlah suka akan diperbarui.
-*   **Ulasan Komisi:** Pengguna dapat menambahkan ulasan untuk komisi yang telah selesai.
+*   **Ulasan dan Rating Komisi:** Pengguna dapat menambahkan ulasan beserta rating (1-5 bintang) untuk komisi yang telah selesai.
 *   **Fungsionalitas Dasar Chat (Backend):**
     *   Melihat daftar percakapan pengguna.
     *   Menampilkan detail percakapan tertentu.
     *   Mengirim pesan (tersimpan di database dan memicu event).
 *   **Daftar Seniman (Dasar):** Menampilkan pengguna yang memiliki komisi (dianggap sebagai seniman).
 *   **Halaman Detail Seniman (Dasar):** Menampilkan informasi dasar seniman dan komisi yang mereka miliki.
-*   **Manajemen Komisi oleh Pengguna:** Pengguna dapat membuat, melihat, mengedit, dan menghapus komisi milik mereka sendiri.
+*   **Manajemen Komisi oleh Pengguna:** Pengguna dapat membuat, melihat, mengedit, dan menghapus komisi milik mereka sendiri. Komisi dapat ditautkan ke layanan spesifik yang ditawarkan oleh seniman.
+*   **Manajemen Layanan oleh Seniman:** Seniman dapat melakukan operasi CRUD (Create, Read, Update, Delete) pada layanan yang mereka tawarkan. Halaman detail publik untuk setiap layanan juga tersedia dan dapat diakses dari profil artis.
 
 ## Isu dan Bug yang Diketahui
 
@@ -47,8 +48,8 @@ Beberapa isu dan bug yang telah teridentifikasi dan memerlukan perhatian:
 
 Fitur-fitur berikut telah dimulai namun belum sepenuhnya fungsional atau terintegrasi:
 
-*   **Profil Seniman Tingkat Lanjut:** Model `Artist` dan tabel `artists` ada. `ArtistController` telah di-refactor untuk menggunakan model `Artist`. View `artists.index` dan `artists.show` telah diperbarui untuk menampilkan detail lebih kaya (`is_verified`, `rating` jika ada) dan alur pembuatan/pengelolaan profil artis dari halaman profil pengguna telah ditambahkan. *(Progres langkah awal untuk sistem rating: kolom `rating` telah ditambahkan ke tabel `reviews` dan model `Review` telah diperbarui. Langkah selanjutnya adalah implementasi input rating di form review dan pembaruan controller terkait).* Aspek pengelolaan `is_verified` dan kalkulasi `rating` otomatis untuk seniman masih memerlukan pengembangan lebih lanjut (kemungkinan via panel admin atau sistem).
-*   **Manajemen Layanan oleh Seniman:** Model `Service` dan `Category` ada, namun fungsionalitas bagi seniman untuk mendefinisikan, mengkategorikan, dan menawarkan layanan spesifik belum terintegrasi penuh ke dalam alur komisi. Relasi `service()` di model `Commission` masih dikomentari.
+*   **Profil Seniman Tingkat Lanjut:** Model `Artist` dan tabel `artists` ada. `ArtistController` telah di-refactor untuk menggunakan model `Artist`. View `artists.index` dan `artists.show` telah diperbarui untuk menampilkan detail lebih kaya (`is_verified`, `rating` jika ada) dan alur pembuatan/pengelolaan profil artis dari halaman profil pengguna telah ditambahkan. *(Status Fitur Rating: Implementasi input rating (1-5 bintang) pada form review, validasi, dan penyimpanan rating di controller, serta penampilan rating pada daftar ulasan telah SELESAI. Pesan UI terkait juga sudah dalam Bahasa Indonesia)*. Aspek pengelolaan `is_verified` dan kalkulasi `rating` otomatis untuk seniman masih memerlukan pengembangan lebih lanjut (kemungkinan via panel admin atau sistem).
+*   **Manajemen Layanan oleh Seniman:** *(Status: SELESAI)* Fungsionalitas CRUD penuh untuk layanan oleh seniman telah diimplementasikan. Seniman dapat membuat, melihat, mengedit, dan menghapus layanan mereka. Halaman detail publik untuk layanan juga tersedia dan tertaut dari profil artis. Komisi dapat ditautkan ke layanan saat pembuatan/pengeditan.
 *   **Pelacakan Pembayaran Detail:** Model `Payment` dan tabel `payments` ada, namun alur pemesanan saat ini hanya menyederhanakan status order menjadi 'paid' tanpa integrasi gateway pembayaran atau penggunaan model `Payment` secara detail.
 *   **Chat Real-time (Frontend):** Backend telah siap dengan event broadcasting (`MessageSent`), namun implementasi sisi klien (Laravel Echo) untuk pengalaman chat real-time belum ada.
 *   **Panel Admin:** Fungsionalitas admin yang komprehensif untuk mengelola pengguna, seniman, komisi, dll., belum dikembangkan secara menyeluruh.
@@ -175,6 +176,7 @@ erDiagram
         int commission_id FK
         int user_id FK
         text review
+        tinyint rating "nullable, 1-5"
         timestamp created_at
         timestamp updated_at
     }
