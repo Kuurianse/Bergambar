@@ -83,13 +83,15 @@ class UserController extends Controller
 
         // Validasi data input
         $validatedData = $request->validate([
-            'username' => 'required|string|max:255',
+            'name' => 'required|string|max:255', // Added name validation
+            'username' => 'required|string|max:255|unique:users,username,' . $id, // Ensure username remains unique, ignoring current user
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
             'bio' => 'nullable|string|max:500',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Update data user
+        $user->name = $validatedData['name']; // Added name update
         $user->username = $validatedData['username'];
         $user->email = $validatedData['email'];
         $user->bio = $validatedData['bio'];
@@ -108,7 +110,7 @@ class UserController extends Controller
 
         $user->save(); // Simpan perubahan
 
-        return redirect()->route('users.show', $user->id)->with('success', 'Profil berhasil diperbarui');
+        return redirect()->route('users.show', $user->id)->with('success', 'Profile updated successfully!');
     }
 
     public function profile()

@@ -50,4 +50,42 @@ class Commission extends Model
     {
         return $this->hasMany(Payment::class);
     }
+/**
+     * Get the public-facing status of the commission.
+     *
+     * @return string
+     */
+    public function getPublicStatusAttribute()
+    {
+        $internalStatus = $this->attributes['status'] ?? null;
+
+        switch ($internalStatus) {
+            case 'pending':
+            case 'accepted': // Assuming 'accepted' by artist means it's listed and available
+                return 'Available';
+
+            case 'ordered_pending_artist_action':
+            case 'in_progress':
+            case 'submitted_for_client_review':
+            case 'needs_revision':
+                return 'Ordered'; // Publicly, it's taken/in process
+
+            case 'completed':
+                return 'Completed';
+            
+            // Add more cases here if other internal statuses exist
+            // e.g., 'cancelled', 'on_hold', 'closed_by_artist'
+            // case 'cancelled_by_artist':
+            //     return 'Unavailable';
+
+            default:
+                // If status is null (e.g., new commission not yet saved with a status) or unmapped
+                if (is_null($internalStatus)) {
+                     // Default for a new commission before any status is set by artist
+                    return 'Available'; // Or 'Pending Review' if there's an admin approval step first
+                }
+                // For any other unmapped status, it's safer to not assume availability.
+                return 'Status Undefined'; // Or 'Unavailable'
+        }
+    }
 }

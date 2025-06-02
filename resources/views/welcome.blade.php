@@ -51,7 +51,7 @@
                     @auth
                     <li class="nav-item mx-1">
                         <a href="{{ route('commissions.index') }}" class="btn btn-muted{{ Request::routeIs('commissions.index') ? 'fw-bold' : '' }}">
-                        <i class="fa-solid fa-file-signature me-2"></i>Commission
+                        <i class="fa-solid fa-file-signature me-2"></i>Commissions
                         </a>
                     </li>
                     @endauth
@@ -110,7 +110,7 @@
         <h2 class="text-black fw-semibold">Discover Commissions</h2>
         <div class="row">
             @if($commissions->isEmpty())
-                <p class="text-black fw-semibold">No commissions available at the moment.</p>
+                <p class="text-black fw-semibold">No commissions are currently available.</p>
             @else
                 @foreach($commissions as $commission)
             <div class="col-md-4">
@@ -123,21 +123,26 @@
                                 </a>
                             </h5>
                              <!-- Cek apakah user sudah love commission ini -->
-                             @if($commission->loves->contains(auth()->user()))
-                                    <!-- Tampilkan ikon hati penuh jika user sudah love -->
-                                    <i class="fa-solid fa-heart mt-1 ms-auto me-0 love-icon" 
-                                    style="color: #ff0000; cursor: pointer;" 
-                                    data-commission-id="{{ $commission->id }}"></i>
-                                @else
-                                    <!-- Tampilkan ikon hati kosong jika user belum love -->
-                                    <i class="fa-regular fa-heart mt-1 ms-auto me-0 love-icon" 
-                                    style="color: #ff3300; cursor: pointer;" 
-                                    data-commission-id="{{ $commission->id }}"></i>
-                                @endif
+                             @auth
+                                @if($commission->loves->contains(auth()->user()))
+                                        <!-- Tampilkan ikon hati penuh jika user sudah love -->
+                                        <i class="fa-solid fa-heart mt-1 ms-auto me-0 love-icon"
+                                        style="color: #ff0000; cursor: pointer;"
+                                        data-commission-id="{{ $commission->id }}"></i>
+                                    @else
+                                        <!-- Tampilkan ikon hati kosong jika user belum love -->
+                                        <i class="fa-regular fa-heart mt-1 ms-auto me-0 love-icon"
+                                        style="color: #ff3300; cursor: pointer;"
+                                        data-commission-id="{{ $commission->id }}"></i>
+                                    @endif
+                             @else
+                                {{-- Optionally show a non-interactive heart or nothing for guests --}}
+                                <i class="fa-regular fa-heart mt-1 ms-auto me-0" style="color: #cccccc;"></i>
+                             @endauth
                             <span class="love-count ms-2">{{ $commission->loved_count }}</span>
                         </div>
                         <p class="card-text fw-medium">Made by: {{ $commission->user->name }}</p>
-                        <p class="card-text">Status: {{ $commission->status }}</p>
+                        <p class="card-text">Status: {{ $commission->public_status }}</p>
                         <p class="card-text">Price:  Rp{{ number_format($commission->total_price, 0, ',', '.') }}</p>
                         @if($commission->image)
                             <img src="{{ asset('storage/' . $commission->image) }}" alt="Commission Image" class="img-fluid">

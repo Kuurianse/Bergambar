@@ -21,7 +21,7 @@
         @endif
         
         @if($commissions->isEmpty())
-            <p>No commissions found.</p>
+            <p>No commissions are currently available.</p>
         @else
             <table class="table table-hover">
                 <thead class="table-light">
@@ -45,7 +45,26 @@
                         </td>
                         <td>{{ $commission->user->username ?? $commission->user->name ?? 'N/A' }}</td>
                         <td>Rp{{ number_format($commission->total_price, 0, ',', '.') }}</td>
-                        <td><span class="badge bg-{{ $commission->status == 'completed' ? 'success' : ($commission->status == 'accepted' ? 'info' : 'warning') }}">{{ ucfirst($commission->status) }}</span></td>
+                        <td>
+                            @php
+                                $badgeClass = 'bg-secondary'; // Default for undefined or other statuses
+                                switch ($commission->public_status) {
+                                    case 'Available':
+                                        $badgeClass = 'bg-success';
+                                        break;
+                                    case 'Ordered':
+                                        $badgeClass = 'bg-warning';
+                                        break;
+                                    case 'Completed':
+                                        $badgeClass = 'bg-primary'; // Or 'bg-info'
+                                        break;
+                                    case 'Status Undefined':
+                                        $badgeClass = 'bg-danger';
+                                        break;
+                                }
+                            @endphp
+                            <span class="badge {{ $badgeClass }}">{{ $commission->public_status }}</span>
+                        </td>
                     <td>
                         <a href="{{ route('commissions.show', $commission->id) }}" class="btn btn-sm btn-info">View</a>
                         @auth

@@ -33,15 +33,15 @@ Berikut adalah fitur-fitur utama yang saat ini sudah berjalan atau fungsionalita
 
 Beberapa isu dan bug yang telah teridentifikasi dan memerlukan perhatian:
 
-*   **Kritis: Kegagalan Pembuatan Pesanan (Order Creation Failure):** Disebabkan oleh properti `$fillable` yang hilang di model `Order` dan kolom `commission_id` yang hilang di tabel `orders`. Rencana perbaikan detail terdapat di [`fix_order_creation_plan.md`](fix_order_creation_plan.md).
-*   **Rute Profil Pengguna Belum Terimplementasi:** Rute `/profile` belum memiliki metode `profile()` di `UserController`.
-*   **Kesalahan Daftar Komisi di Halaman Indeks:** Halaman indeks komisi (`/commissions`) saat ini menampilkan komisi milik pengguna yang login saja, bukan semua komisi publik. Selain itu, ada kesalahan routing dimana `GET /commissions` mengarah ke `create` bukan `index`.
-*   **Logika Keliru pada `OrderController@show`:** Metode ini keliru mengambil `Commission` berdasarkan ID, bukan `Order`.
-*   **Ketidaksesuaian Skema Tabel `artists`:** Kolom `portfolio_link`, `is_verified`, `rating` didefinisikan di model `Artist` tetapi tidak ada di migrasi tabel `artists`.
-*   **Ketidaksesuaian Skema Tabel `services`:** Kolom `category_id` untuk relasi ke kategori hilang dari tabel `services`.
-*   **Typo Minor pada Migrasi `commission_loves`:** Perlu dikoreksi pada metode `down()`.
-*   **Komentar yang Salah Tempat pada Migrasi `users`**.
-*   **Visibilitas Status Komisi Internal:** Saat ini, status alur kerja internal komisi (seperti `ordered_pending_artist_action`) kemungkinan terlihat oleh publik secara luas, padahal idealnya hanya relevan untuk seniman, klien yang memesan, dan admin. Status publik di marketplace seharusnya lebih umum (misalnya, "Sudah Dipesan").
+*   **Kritis: Kegagalan Pembuatan Pesanan (Order Creation Failure):** ~~Disebabkan oleh properti `$fillable` yang hilang di model `Order` dan kolom `commission_id` yang hilang di tabel `orders`. Rencana perbaikan detail terdapat di [`fix_order_creation_plan.md`](fix_order_creation_plan.md).~~ *(Status: Diasumsikan TERATASI berdasarkan analisis kode terbaru yang menunjukkan komponen yang diperlukan sudah ada).*
+*   **Rute Profil Pengguna Belum Terimplementasi:** ~~Rute `/profile` belum memiliki metode `profile()` di `UserController`.~~ *(Status: TERATASI. Metode `profile()` sudah ada di `UserController`)*.
+*   **Kesalahan Daftar Komisi di Halaman Indeks:** ~~Halaman indeks komisi (`/commissions`) saat ini menampilkan komisi milik pengguna yang login saja, bukan semua komisi publik. Selain itu, ada kesalahan routing dimana `GET /commissions` mengarah ke `create` bukan `index`.~~ *(Status: TERATASI. Logika `CommissionController@index` dan rute di `routes/web.php` sudah benar).*
+*   **Logika Keliru pada `OrderController@show`:** ~~Metode ini keliru mengambil `Commission` berdasarkan ID, bukan `Order`.~~ *(Status: TERATASI. Metode `OrderController@show()` sudah benar mengambil `Order`)*.
+*   **Ketidaksesuaian Skema Tabel `artists`:** ~~Kolom `portfolio_link`, `is_verified`, `rating` didefinisikan di model `Artist` tetapi tidak ada di migrasi tabel `artists`.~~ *(Status: TERATASI. Kolom-kolom ini telah ditambahkan oleh migrasi `2025_05_28_051000_add_details_to_artists_table.php`)*.
+*   **Ketidaksesuaian Skema Tabel `services`:** ~~Kolom `category_id` untuk relasi ke kategori hilang dari tabel `services`.~~ *(Status: TERATASI. Kolom `category_id` telah ditambahkan oleh migrasi `2025_05_28_052555_add_category_id_to_services_table.php`)*.
+*   **Typo Minor pada Migrasi `commission_loves`:** ~~Perlu dikoreksi pada metode `down()`.~~ *(Status: TERATASI. Metode `down()` di migrasi `2024_10_22_080834_create_commission_loves_table.php` sudah benar).*
+*   **Komentar yang Salah Tempat pada Migrasi `users`**: ~~Komentar `// Menambahkan kolom 'username'` salah tempat.~~ *(Status: TERATASI. Komentar sudah berada di baris yang benar pada migrasi `2014_10_12_000000_create_users_table.php`)*.
+*   **Visibilitas Status Komisi Internal:** Saat ini, status alur kerja internal komisi (seperti `ordered_pending_artist_action`) kemungkinan terlihat oleh publik secara luas. *(Status: Langkah awal PENANGANAN telah dilakukan dengan menambahkan accessor `public_status` di model `Commission` dan memperbarui view publik. Penyesuaian lebih lanjut mungkin diperlukan untuk view admin/seniman dan logika bisnis yang lebih kompleks).*
 
 ## Fitur yang Belum Selesai atau Sebagian Diimplementasikan
 
@@ -53,8 +53,8 @@ Fitur-fitur berikut telah dimulai namun belum sepenuhnya fungsional atau terinte
 *   **Chat Real-time (Frontend):** Backend telah siap dengan event broadcasting (`MessageSent`), namun implementasi sisi klien (Laravel Echo) untuk pengalaman chat real-time belum ada.
 *   **Panel Admin:** Fungsionalitas admin yang komprehensif untuk mengelola pengguna, seniman, komisi, dll., belum dikembangkan secara menyeluruh.
 *   **Persistensi Detail Pesanan:** `OrderController@confirmPayment` belum menyimpan `total_price` ke dalam tabel `orders`.
-*   **Relasi Model yang Hilang:** Beberapa relasi penting (seperti `orders()`, `reviews()`, `messages()`) belum didefinisikan di model `User`.
-*   **Inkonsistensi Penggunaan `name` vs. `username`:** Pada tabel `users`, perlu ada standarisasi penggunaan antara `name` dan `username`.
+*   **Relasi Model yang Hilang:** ~~Beberapa relasi penting (seperti `orders()`, `reviews()`, `messages()`) belum didefinisikan di model `User`.~~ *(Status: TERATASI. Relasi-relasi yang diperlukan seperti `orders()`, `reviews()`, `messagesSent()`, `messagesReceived()`, dan `lovedCommissions()` sudah ada di model `User`)*.
+*   **Inkonsistensi Penggunaan `name` vs. `username`:** ~~Pada tabel `users`, perlu ada standarisasi penggunaan antara `name` dan `username`.~~ *(Status: TERATASI. `UserController@update` telah dimodifikasi untuk memungkinkan pembaruan field `name` selain `username`, menyelaraskannya dengan form registrasi dan edit yang sudah ada. Kedua field kini dapat dikelola).*
 
 ## Fitur yang Direncanakan & Pengembangan Selanjutnya
 

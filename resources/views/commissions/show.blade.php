@@ -15,7 +15,7 @@
                                 @if($commission->image)
                                     <img src="{{ asset('storage/' . $commission->image) }}" alt="Commission Image for {{ $commission->description }}" class="img-fluid rounded" style="max-height: 400px; width: 100%; object-fit: contain;">
                                 @else
-                                    <p>No image provided.</p>
+                                    <p>No image has been provided for this commission.</p>
                                 @endif
                             </div>
                             <div class="col-md-6">
@@ -26,26 +26,46 @@
                                         {{ $commission->user->username ?? $commission->user->name ?? 'N/A' }}
                                     </a>
                                 </p>
-                                <p><strong>Status:</strong> <span class="badge bg-{{ $commission->status == 'completed' ? 'success' : ($commission->status == 'accepted' ? 'info' : 'warning') }}">{{ ucfirst($commission->status) }}</span></p>
+                                <p><strong>Status:</strong>
+                                    @php
+                                        $badgeClass = 'bg-secondary'; // Default
+                                        switch ($commission->public_status) {
+                                            case 'Available':
+                                                $badgeClass = 'bg-success';
+                                                break;
+                                            case 'Ordered':
+                                                $badgeClass = 'bg-warning';
+                                                break;
+                                            case 'Completed':
+                                                $badgeClass = 'bg-primary';
+                                                break;
+                                            case 'Status Undefined':
+                                                $badgeClass = 'bg-danger';
+                                                break;
+                                        }
+                                    @endphp
+                                    <span class="badge {{ $badgeClass }}">{{ $commission->public_status }}</span>
+                                </p>
                                 <p><strong>Price:</strong> Rp{{ number_format($commission->total_price, 0, ',', '.') }}</p>
                                 <p><strong>Created:</strong> {{ $commission->created_at->format('F j, Y') }}</p>
-                                <p><strong>Loves:</strong> {{ $commission->loved_count ?? 0 }}</p>
+                                <p><strong>Loves:</strong> <span id="loveCount-{{$commission->id}}">{{ $commission->loved_count ?? 0 }}</span></p> {{-- Ensure span has ID for JS update --}}
 
                                 @auth
                                 <div class="mt-3">
                                     {{-- Love Button --}}
                                     <form action="{{ route('commissions.toggleLove', $commission->id) }}" method="POST" style="display: inline-block;" id="loveForm-{{$commission->id}}">
                                         @csrf
-                                        <button type="submit" class="btn btn-outline-danger btn-sm love-button" data-commission-id="{{$commission->id}}">
-                                            <i class="fa fa-heart"></i> <span id="loveCount-{{$commission->id}}">{{ $commission->loved_count ?? 0 }}</span>
+                                        <button type="submit" class="btn {{ $commission->loves->contains(Auth::user()) ? 'btn-danger' : 'btn-outline-danger' }} btn-sm love-button" data-commission-id="{{$commission->id}}">
+                                            <i class="fa fa-heart"></i> <span id="loveText-{{$commission->id}}">{{ $commission->loves->contains(Auth::user()) ? 'Loved' : 'Love' }}</span> (<span id="loveCountDisplay-{{$commission->id}}">{{ $commission->loved_count ?? 0 }}</span>)
                                         </button>
                                     </form>
 
-                                    {{-- Order Button (if applicable, e.g., if status is 'accepted' or 'pending' and not owned by current user) --}}
-                                    @if(Auth::id() !== $commission->user_id && ($commission->status == 'pending' || $commission->status == 'accepted'))
+                                    {{-- Order Button --}}
+                                    @if(Auth::id() !== $commission->user_id && $commission->public_status == 'Available')
                                         <a href="{{ route('commissions.order', $commission->id) }}" class="btn btn-primary btn-sm ms-2">Order This Commission</a>
                                     @endif
-                                     @if(Auth::id() == $commission->user_id)
+                                    {{-- Edit Button for Owner --}}
+                                    @if(Auth::id() == $commission->user_id)
                                         <a href="{{ route('commissions.edit', $commission->id) }}" class="btn btn-warning btn-sm ms-2">Edit Commission</a>
                                     @endif
                                 </div>
@@ -72,7 +92,7 @@
                             </div>
                         @endforeach
                     @else
-                        <p>No reviews yet for this commission.</p>
+                        <p>There are no reviews for this commission yet.</p>
                     @endif
                 </div>
 
@@ -93,7 +113,7 @@
                 @endauth
 
             @else
-                <p>Commission not found.</p>
+                <p>The requested commission could not be found.</p>
             @endif
         </div>
     </div>
@@ -122,10 +142,17 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(response => response.json())
             .then(data => {
-                if (loveCountSpan) {
-                    loveCountSpan.textContent = data.loved_count;
+                let loveTextSpan = document.getElementById('loveText-' + commissionId); // For "Love" / "Loved" text
+                let loveCountDisplaySpan = document.getElementById('loveCountDisplay-' + commissionId); // For the count number
+
+                if (loveCountDisplaySpan) {
+                    loveCountDisplaySpan.textContent = data.loved_count;
                 }
-                // Optionally change button style (e.g., filled heart)
+                if (loveTextSpan) {
+                    loveTextSpan.textContent = data.loved ? 'Loved' : 'Love';
+                }
+                
+                // Change button style
                 if(data.loved) {
                     this.classList.remove('btn-outline-danger');
                     this.classList.add('btn-danger');
