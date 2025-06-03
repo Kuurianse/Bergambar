@@ -21,10 +21,10 @@ Berikut adalah fitur-fitur utama yang saat ini sudah berjalan atau fungsionalita
 *   **Halaman Sambutan:** Menampilkan daftar komisi yang tersedia untuk umum.
 *   **Fitur "Suka" (Love) pada Komisi:** Pengguna dapat menyukai/membatalkan suka pada komisi, dan jumlah suka akan diperbarui.
 *   **Ulasan dan Rating Komisi:** Pengguna dapat menambahkan ulasan beserta rating (1-5 bintang) untuk komisi yang telah selesai.
-*   **Fungsionalitas Dasar Chat (Backend):**
-    *   Melihat daftar percakapan pengguna.
-    *   Menampilkan detail percakapan tertentu.
-    *   Mengirim pesan (tersimpan di database dan memicu event).
+*   **Chat Real-time:**
+    *   Backend telah siap dengan event broadcasting (`MessageSent`).
+    *   Frontend ([`resources/views/chat/chat.blade.php`](resources/views/chat/chat.blade.php:1)) telah diimplementasikan menggunakan Laravel Echo dan Pusher untuk menerima dan menampilkan pesan baru secara real-time tanpa perlu refresh halaman.
+    *   Pengguna dapat melihat daftar percakapan dan mengirim pesan.
 *   **Daftar Seniman (Dasar):** Menampilkan pengguna yang memiliki komisi (dianggap sebagai seniman).
 *   **Halaman Detail Seniman (Dasar):** Menampilkan informasi dasar seniman dan komisi yang mereka miliki.
 *   **Manajemen Komisi oleh Pengguna:** Pengguna dapat membuat, melihat, mengedit, dan menghapus komisi milik mereka sendiri. Komisi dapat ditautkan ke layanan spesifik yang ditawarkan oleh seniman.
@@ -52,7 +52,7 @@ Fitur-fitur berikut telah dimulai namun belum sepenuhnya fungsional atau terinte
 *   **Profil Seniman Tingkat Lanjut:** Model `Artist` dan tabel `artists` ada. `ArtistController` telah di-refactor untuk menggunakan model `Artist`. View `artists.index` dan `artists.show` telah diperbarui untuk menampilkan detail lebih kaya (`is_verified`, `rating` jika ada) dan alur pembuatan/pengelolaan profil artis dari halaman profil pengguna telah ditambahkan. *(Status Fitur Rating: Implementasi input rating (1-5 bintang) pada form review, validasi, dan penyimpanan rating di controller, serta penampilan rating pada daftar ulasan telah SELESAI. Pesan UI terkait juga sudah dalam Bahasa Indonesia)*. Aspek pengelolaan `is_verified` dan kalkulasi `rating` otomatis untuk seniman masih memerlukan pengembangan lebih lanjut (kemungkinan via panel admin atau sistem).
 *   **Manajemen Layanan oleh Seniman:** *(Status: SELESAI)* Fungsionalitas CRUD penuh untuk layanan oleh seniman telah diimplementasikan. Seniman dapat membuat, melihat, mengedit, dan menghapus layanan mereka. Halaman detail publik untuk layanan juga tersedia dan tertaut dari profil artis. Komisi dapat ditautkan ke layanan saat pembuatan/pengeditan.
 *   **Pelacakan Pembayaran Detail:** Model `Payment` dan tabel `payments` ada, namun alur pemesanan saat ini hanya menyederhanakan status order menjadi 'paid' tanpa integrasi gateway pembayaran atau penggunaan model `Payment` secara detail.
-*   **Chat Real-time (Frontend):** Backend telah siap dengan event broadcasting (`MessageSent`), namun implementasi sisi klien (Laravel Echo) untuk pengalaman chat real-time belum ada.
+*   **Chat Real-time (Frontend):** *(Status: SELESAI)* Implementasi sisi klien (Laravel Echo dan Pusher di [`resources/views/chat/chat.blade.php`](resources/views/chat/chat.blade.php:1)) untuk pengalaman chat real-time telah selesai. Pesan baru muncul tanpa refresh.
 *   **Panel Admin:** Fungsionalitas admin yang komprehensif untuk mengelola pengguna, seniman, komisi, dll., belum dikembangkan secara menyeluruh.
 *   **Persistensi Detail Pesanan:** ~~`OrderController@confirmPayment` belum menyimpan `total_price` ke dalam tabel `orders`.~~ *(Status: TERATASI. Metode `confirmPayment` di `OrderController` sudah menyimpan `total_price` saat membuat order baru).*
 *   **Relasi Model yang Hilang:** ~~Beberapa relasi penting (seperti `orders()`, `reviews()`, `messages()`) belum didefinisikan di model `User`.~~ *(Status: TERATASI. Relasi-relasi yang diperlukan seperti `orders()`, `reviews()`, `messagesSent()`, `messagesReceived()`, dan `lovedCommissions()` sudah ada di model `User`)*.
@@ -74,9 +74,10 @@ Berikut adalah garis besar fitur yang direncanakan untuk pengembangan di masa me
     *   Implementasi `PaymentController`.
     *   Integrasi dengan gateway pembayaran (misalnya, Midtrans, Stripe).
     *   Pembuatan record `Payment` setelah transaksi berhasil.
-*   **Implementasi Penuh Chat Real-Time:**
-    *   Konfigurasi Laravel Broadcasting (Pusher, Ably, atau self-hosted).
-    *   Implementasi Laravel Echo di sisi klien.
+*   **Implementasi Penuh Chat Real-Time:** *(Status: Frontend SELESAI, Backend sudah ada)*
+    *   Konfigurasi Laravel Broadcasting (Pusher) sudah diasumsikan berjalan.
+    *   Implementasi Laravel Echo di sisi klien ([`resources/views/chat/chat.blade.php`](resources/views/chat/chat.blade.php:1)) telah selesai, memungkinkan pesan tampil secara real-time.
+    *   *(Pengembangan Lanjutan: Notifikasi unread messages, status online/offline, UI yang lebih kaya).*
 *   **Pengembangan Panel Admin Komprehensif:**
     *   Area khusus untuk admin mengelola berbagai aspek platform.
 *   **Alur Kerja Manajemen Pesanan untuk Seniman & Klien:** *(Status: Implementasi Dasar SELESAI untuk alur seniman; Implementasi Dasar SELESAI untuk alur review klien)*

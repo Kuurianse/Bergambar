@@ -1,0 +1,773 @@
+# UI Content Outline
+
+Dokumen ini berisi outline konten utama untuk setiap halaman view yang signifikan dalam proyek Bergambar, sebagai panduan untuk proses desain ulang UI/UX.
+
+## 1. Welcome Page (`resources/views/welcome.blade.php`)
+
+-   **Navbar Utama:**
+    -   Logo Aplikasi (link ke home)
+    -   Tombol Toggle Navigasi (untuk mobile)
+    -   Menu Navigasi:
+        -   Link "Artists"
+        -   Link "Commissions" (jika user login)
+        -   Dropdown Profil Pengguna (jika user login):
+            -   Nama Pengguna
+            -   Link "Edit Profile"
+            -   Link "Kelola Pesanan Saya" (jika user adalah artist)
+            -   Link "Kelola Layanan Saya" (jika user adalah artist)
+            -   Link "Pesanan Saya (Klien)"
+            -   Tombol "Logout"
+        -   Link "Login" (jika user belum login)
+        -   Link "Chat" (jika user login)
+
+-   **Hero Section:**
+    -   Judul Utama: "Welcome to Bergambar"
+    -   Subjudul: "Arts for all, from heart to crafts"
+    -   Gambar Latar Hero
+
+-   **Commission Section ("Discover Commissions"):**
+    -   Judul Bagian: "Discover Commissions"
+    -   Pesan jika tidak ada komisi: "No commissions are currently available."
+    -   Loop untuk setiap komisi (jika ada):
+        -   Judul/Deskripsi Komisi (link ke halaman order komisi)
+        -   Ikon/Status "Love" (interaktif jika user login)
+        -   Jumlah "Love"
+        -   Nama Pembuat (Artist)
+        -   Status Publik Komisi (misalnya, Available, Ordered, Completed)
+        -   Harga Komisi
+        -   Gambar Komisi (jika ada)
+
+## 2. Artists Index Page (`resources/views/artists/index.blade.php`)
+
+-   **Judul Halaman:** "Artist Profiles"
+-   Pesan jika tidak ada profil artis: "No artist profiles available at the moment."
+-   Loop untuk setiap profil artis (jika ada):
+    -   Link ke Profil Detail Artis:
+        -   Username/Nama Artis
+        -   Badge "Verified" (jika terverifikasi)
+    -   Nama Lengkap Artis
+    -   Link Portofolio (jika ada)
+    -   Jumlah Komisi yang dimiliki artis
+    -   Jumlah Layanan yang ditawarkan artis
+    -   Rating Artis (jika ada, dengan ikon bintang)
+    -   Tombol/Link "View Profile"
+-   Navigasi Paginasi (jika ada banyak artis)
+
+---
+
+## 3. Create Artist Profile Page (`resources/views/artists/create.blade.php`)
+
+-   **Judul Halaman/Kartu:** "Create Your Artist Profile"
+-   **Form Pembuatan Profil Artis:**
+    -   Input untuk "Portfolio Link (Optional)" (tipe URL)
+    -   Area untuk menampilkan error validasi untuk link portofolio.
+    -   Tombol Submit: "Create Artist Profile"
+
+---
+
+## 4. Edit Artist Profile Page (`resources/views/artists/edit.blade.php`)
+
+-   **Judul Halaman/Kartu:** "Edit Your Artist Profile"
+-   **Form Edit Profil Artis:**
+    -   Field "Username" (readonly, dengan catatan tidak bisa diubah di sini)
+    -   Field "Full Name" (readonly, dengan catatan tidak bisa diubah di sini)
+    -   Input untuk "Portfolio Link" (tipe URL)
+    -   Area untuk menampilkan error validasi untuk link portofolio.
+    -   Tombol Submit: "Update Artist Profile"
+    -   Link "Cancel" (kembali ke halaman profil artis)
+
+---
+## 5. Artist Show Page (`resources/views/artists/show.blade.php`)
+
+-   **Kondisi Utama:** Tampilkan konten jika profil artis ditemukan. Jika tidak, tampilkan pesan "Artist profile not found."
+-   **Bagian Profil Artis:**
+    -   **Kolom Kiri (Info Utama):**
+        -   Foto Profil Artis (dengan placeholder jika tidak ada)
+        -   Username/Nama Artis
+        -   Nama Lengkap Artis (teks muted)
+        -   Tombol/Link "View Portfolio" (jika ada link portofolio)
+        -   **Tombol Aksi (tergantung konteks):**
+            -   Jika melihat profil sendiri: Tombol "Edit Artist Profile" (link ke halaman edit profil artis)
+            -   Jika melihat profil artis lain: Tombol "Contact Artist" (link ke halaman chat dengan artis)
+    -   **Kolom Kanan (Detail Tambahan):**
+        -   Judul "About [Username Artis]"
+        -   Bio Artis (atau pesan "No bio provided.")
+        -   Email Artis
+        -   Badge "Verified Artist" (jika terverifikasi)
+        -   Rating Artis (misalnya, "4.5/5.0", jika ada)
+-   **Pemisah (`<hr>`)**
+-   **Bagian Layanan yang Ditawarkan ("Services Offered"):**
+    -   Judul Bagian: "Services Offered"
+    -   Tampilkan jika artis memiliki layanan. Jika tidak, bisa ada pesan seperti "This artist currently offers no services." (opsional, tergantung desain akhir).
+    -   **Daftar Kartu Layanan (dalam baris/grid):**
+        -   Untuk setiap layanan:
+            -   Judul Layanan
+            -   Deskripsi singkat Layanan
+            -   Harga Layanan
+            -   Tipe Layanan (misalnya, "Digital Art", "Illustration")
+            -   Tombol/Link "View Service Details" (link ke halaman detail layanan)
+-   **Pemisah (`<hr>`)**
+-   **Bagian Komisi oleh Artis ("Commissions by [Username Artis]"):**
+    -   Judul Bagian: "Commissions by [Username Artis]"
+    -   Tampilkan jika artis memiliki komisi. Jika tidak, tampilkan pesan "This artist has not posted any commissions yet."
+    -   **Daftar Kartu Komisi (dalam baris/grid):**
+        -   Untuk setiap komisi:
+            -   Gambar Komisi (link ke halaman detail komisi)
+            -   Judul/Deskripsi Komisi (link ke halaman detail komisi)
+            -   Harga Komisi
+            -   Status Komisi (misalnya, "Available", "Ordered", "Completed" dengan badge berwarna)
+            -   Jumlah "Loves"
+            -   Tombol/Link "View Details" (link ke halaman detail komisi)
+---
+---
+
+## 6. Artist Orders Index Page (`resources/views/artists/orders/index.blade.php`)
+
+-   **Judul Halaman:** "Kelola Pesanan Komisi Saya"
+-   **Pesan Notifikasi (Placeholder):**
+    -   Area untuk pesan sukses (misalnya, "Status pesanan berhasil diperbarui.")
+    -   Area untuk pesan error (misalnya, "Gagal memperbarui status pesanan.")
+    -   Area untuk pesan info (misalnya, "Anda memiliki pesanan baru yang memerlukan tindakan.")
+-   **Kondisi: Tidak Ada Pesanan:**
+    -   Pesan: "Anda belum memiliki pesanan komisi aktif saat ini."
+-   **Kondisi: Ada Pesanan:**
+    -   **Tabel Responsif Pesanan:**
+        -   **Header Tabel:**
+            -   Judul Komisi
+            -   Klien
+            -   Tanggal Pesan
+            -   Status Komisi
+            -   Total Harga
+            -   Aksi
+        -   **Body Tabel (Loop untuk setiap komisi dengan pesanan):**
+            -   **Baris Pesanan (Contoh 1):**
+                -   Judul Komisi (link ke detail komisi): "Judul Komisi Placeholder 1"
+                -   Nama Klien: "Nama Klien 1"
+                -   Tanggal Pesan: "01 Jan 2024, 10:00"
+                -   Status Komisi (dengan badge berwarna): "Ordered Pending Artist Action" (kuning)
+                -   Total Harga: "Rp100.000"
+                -   Tombol Aksi: "Kelola Pesanan" (link ke halaman detail pengelolaan pesanan artis)
+            -   **Baris Pesanan (Contoh 2):**
+                -   Judul Komisi (link ke detail komisi): "Judul Komisi Placeholder 2 Panjang Sekali Sampai Harus Dipotong"
+                -   Nama Klien: "Nama Klien 2"
+                -   Tanggal Pesan: "02 Feb 2024, 12:30"
+                -   Status Komisi (dengan badge berwarna): "In Progress" (biru)
+                -   Total Harga: "Rp250.000"
+                -   Tombol Aksi: "Kelola Pesanan"
+            -   **Baris Pesanan (Contoh 3 - Status Berbeda):**
+                -   Judul Komisi (link ke detail komisi): "Komisi Desain Logo Cepat"
+                -   Nama Klien: "Klien Setia"
+                -   Tanggal Pesan: "15 Mar 2024, 08:15"
+                -   Status Komisi (dengan badge berwarna): "Submitted For Client Review" (hijau)
+                -   Total Harga: "Rp500.000"
+                -   Tombol Aksi: "Kelola Pesanan"
+    -   **Navigasi Paginasi (Placeholder):**
+        -   Tombol "Previous" (disabled jika halaman pertama)
+        -   Nomor Halaman (misalnya, 1, 2 (aktif), 3)
+        -   Tombol "Next" (disabled jika halaman terakhir)
+---
+
+## 7. Artist Order Show Page (`resources/views/artists/orders/show.blade.php`)
+
+-   **Layout:** Dua Kolom (Konten Utama 8-col, Sidebar 4-col)
+-   **Kolom Konten Utama (Kiri):**
+    -   **Judul Halaman:** "Kelola Pesanan: [Judul Komisi Singkat]" (misalnya, "Kelola Pesanan: Judul Komisi Placeholder Panjang")
+    -   Pemisah (`<hr>`)
+    -   **Pesan Notifikasi (Placeholder):**
+        -   Area untuk pesan sukses.
+        -   Area untuk pesan error.
+    -   **Bagian Detail Komisi:**
+        -   Judul Bagian: "Detail Komisi"
+        -   Judul/Deskripsi Komisi: Teks lengkap.
+        -   Status Komisi Saat Ini: Dengan badge berwarna (misalnya, "In Progress" - biru).
+        -   Gambar Komisi (Placeholder): `https://via.placeholder.com/200x150.png?text=Gambar+Komisi`
+    -   **Bagian Detail Pesanan (Placeholder):**
+        -   Judul Bagian: "Detail Pesanan"
+        -   **Kondisi: Ada Detail Pesanan:**
+            -   Dipesan oleh: "Nama Klien Placeholder"
+            -   Tanggal Pesan: "01 Februari 2024, 12:30"
+            -   Total Harga: "Rp250.000"
+            -   Status Pembayaran: Badge "Paid" (hijau).
+            -   **Link Hasil Karya (Placeholder, tampil jika status 'submitted_for_client_review'):**
+                -   Alert Info: "Link Hasil Karya yang Telah Dikirim:"
+                -   Link: `https://contoh.com/hasilkarya_placeholder`
+            -   **Catatan Revisi dari Klien (Placeholder, tampil jika status 'needs_revision'):**
+                -   Alert Warning: "Permintaan Revisi dari Klien"
+                -   Loop untuk setiap revisi (contoh 2 revisi):
+                    -   Diminta pada: Tanggal dan waktu.
+                    -   Catatan: Isi catatan revisi.
+        -   **Kondisi: Tidak Ada Detail Pesanan (Placeholder, tampil jika tidak ada info order):**
+            -   Pesan Error: "Informasi pesanan tidak ditemukan."
+    -   **Bagian Aksi Seniman (Placeholder):**
+        -   Judul Bagian: "Aksi Seniman"
+        -   **Kondisi: Ada Aksi Tersedia:**
+            -   Pesan: "Pilih aksi untuk memperbarui status komisi ini:"
+            -   **Form Aksi (Contoh):**
+                -   Tombol "Terima Pesanan" (Hijau)
+                -   Tombol "Mulai Pengerjaan" (Biru, tampil jika relevan)
+                -   **Form Kirim Hasil Karya:**
+                    -   Label: "Link Hasil Karya (Wajib diisi)"
+                    -   Input URL untuk link hasil karya.
+                    -   Area untuk pesan error validasi link.
+                    -   Tombol "Kirim Hasil Karya untuk Review" (Biru Primer)
+                -   **Form Kirim Hasil Revisi (Tampil jika relevan):**
+                    -   Label: "Link Hasil Karya Revisi (Wajib diisi)"
+                    -   Input URL untuk link hasil karya revisi.
+                    -   Tombol "Kirim Hasil Revisi" (Kuning)
+        -   **Kondisi: Tidak Ada Aksi Tersedia (Placeholder, tampil jika tidak ada aksi):**
+            -   Pesan: "Tidak ada aksi yang tersedia untuk status komisi saat ini dari sisi Anda."
+            -   Pesan Tambahan (Contoh): "Menunggu review dari klien."
+    -   Pemisah (`<hr>`)
+    -   Tombol "Kembali ke Daftar Pesanan" (link ke halaman indeks pesanan artis).
+-   **Kolom Sidebar (Kanan):**
+    -   Judul: "Catatan:"
+    -   Teks: "Pastikan untuk selalu berkomunikasi dengan klien Anda melalui fitur chat jika ada pertanyaan atau klarifikasi yang diperlukan."
+    -   **Kartu Ringkasan Klien (Placeholder):**
+        -   Judul Kartu: "Ringkasan Klien"
+        -   Nama Klien: "Nama Klien Placeholder"
+        -   Bergabung: "01 Jan 2023"
+        -   Tombol "Lihat Profil Klien" (outline-primary)
+---
+
+## 8. Login Page (`resources/views/auth/login.blade.php`)
+
+-   **Tata Letak:** Kontainer utama, baris dengan justifikasi tengah, kolom `col-md-8`.
+-   **Kartu Login:**
+    -   **Header Kartu:** Teks "Login".
+    -   **Body Kartu:**
+        -   **Form Login:**
+            -   **Input Email:**
+                -   Label: "Email Address"
+                -   Input tipe email dengan placeholder "Enter your email", contoh value "user@example.com".
+                -   Area untuk pesan error validasi email (contoh: "Email is required and must be a valid email address.").
+            -   **Input Password:**
+                -   Label: "Password"
+                -   Input tipe password dengan placeholder "Enter your password", contoh value "password".
+                -   Area untuk pesan error validasi password (contoh: "Password is required.").
+            -   **Checkbox "Remember Me":**
+                -   Checkbox dengan label "Remember Me" (tercentang secara default).
+            -   **Area Pesan Error Login General (Placeholder):**
+                -   Alert danger: "Invalid login credentials. Please try again." (tampil jika ada error login).
+            -   **Tombol Submit:**
+                -   Tombol "Login" (tipe primary).
+            -   **Link "Forgot Your Password?":**
+                -   Link ke halaman reset password.
+            -   **Link "Don't have an account? Register here":**
+                -   Link ke halaman registrasi.
+---
+
+## 9. Register Page (`resources/views/auth/register.blade.php`)
+
+-   **Tata Letak:** Kontainer utama, baris dengan justifikasi tengah, kolom `col-md-8`.
+-   **Kartu Register:**
+    -   **Header Kartu:** Teks "Register".
+    -   **Body Kartu:**
+        -   **Form Registrasi:**
+            -   **Input Username:**
+                -   Label: "Username"
+                -   Input tipe text dengan placeholder "Choose a username", contoh value "newuser".
+                -   Area untuk pesan error validasi username (contoh: "Username is required and may only contain letters, numbers, and underscores.").
+            -   **Input Name (Full Name):**
+                -   Label: "Name"
+                -   Input tipe text dengan placeholder "Enter your full name", contoh value "New User".
+                -   Area untuk pesan error validasi nama (contoh: "Name is required.").
+            -   **Input Email:**
+                -   Label: "Email Address"
+                -   Input tipe email dengan placeholder "Enter your email address", contoh value "newuser@example.com".
+                -   Area untuk pesan error validasi email (contoh: "A valid email address is required.").
+            -   **Input Password:**
+                -   Label: "Password"
+                -   Input tipe password dengan placeholder "Create a password", contoh value "password123".
+                -   Area untuk pesan error validasi password (contoh: "Password must be at least 8 characters long.").
+            -   **Input Confirm Password:**
+                -   Label: "Confirm Password"
+                -   Input tipe password dengan placeholder "Confirm your password", contoh value "password123".
+                -   Area untuk pesan error validasi konfirmasi password (contoh: "Passwords do not match.").
+            -   **Area Pesan Error Registrasi General (Placeholder):**
+                -   Alert danger: "An error occurred during registration. Please check your input." (tampil jika ada error umum).
+            -   **Tombol Submit:**
+                -   Tombol "Register" (tipe primary).
+            -   **Link "Have an account? Click Here!":**
+                -   Link ke halaman login.
+---
+
+## 10. Verify Email Page (`resources/views/auth/verify.blade.php`)
+
+-   **Tata Letak:** Kontainer utama, baris dengan justifikasi tengah, kolom `col-md-8`.
+-   **Kartu Verifikasi Email:**
+    -   **Header Kartu:** Teks "Verify Your Email Address".
+    -   **Body Kartu:**
+        -   **Pesan Sukses Pengiriman Ulang (Placeholder, tampil jika session 'resent' ada):**
+            -   Alert success: "A fresh verification link has been sent to your email address."
+        -   **Instruksi Utama:**
+            -   Paragraf: "Before proceeding, please check your email for a verification link."
+            -   Paragraf: "If you did not receive the email, [form untuk kirim ulang]."
+                -   **Form Kirim Ulang (Inline):**
+                    -   Tombol link: "click here to request another".
+        -   Pemisah (`<hr>`)
+        -   **Informasi Tambahan (Placeholder):**
+            -   Paragraf (teks muted, kecil): "Make sure to check your spam or junk folder if you don't see the email in your inbox. If you continue to have issues, please contact support."
+            -   Tombol "Back to Homepage" (outline-secondary, kecil).
+---
+
+## 11. Confirm Password Page (`resources/views/auth/passwords/confirm.blade.php`)
+
+-   **Tata Letak:** Kontainer utama, baris dengan justifikasi tengah, kolom `col-md-8`.
+-   **Kartu Konfirmasi Password:**
+    -   **Header Kartu:** Teks "Confirm Password".
+    -   **Body Kartu:**
+        -   Paragraf instruksi: "Please confirm your password before continuing."
+        -   **Form Konfirmasi Password:**
+            -   **Input Password:**
+                -   Label: "Password"
+                -   Input tipe password dengan placeholder "Enter your password", contoh value "password".
+                -   Area untuk pesan error validasi password (contoh: "Password is required.").
+            -   **Area Pesan Error Konfirmasi General (Placeholder):**
+                -   Alert danger: "Incorrect password. Please try again." (tampil jika password salah).
+            -   **Tombol Submit:**
+                -   Tombol "Confirm Password" (tipe primary).
+            -   **Link "Forgot Your Password?":**
+                -   Link ke halaman permintaan reset password.
+---
+
+## 12. Request Password Reset Page (`resources/views/auth/passwords/email.blade.php`)
+
+-   **Tata Letak:** Kontainer utama, baris dengan justifikasi tengah, kolom `col-md-8`.
+-   **Kartu Reset Password:**
+    -   **Header Kartu:** Teks "Reset Password".
+    -   **Body Kartu:**
+        -   **Pesan Status (Placeholder, tampil jika session 'status' ada):**
+            -   Alert success: "We have emailed your password reset link!" (contoh status).
+        -   **Form Permintaan Reset Password:**
+            -   **Input Email:**
+                -   Label: "Email Address"
+                -   Input tipe email dengan placeholder "Enter your registered email", contoh value "user@example.com".
+                -   Area untuk pesan error validasi email (contoh: "Please enter a valid email address.").
+            -   **Tombol Submit:**
+                -   Tombol "Send Password Reset Link" (tipe primary).
+            -   **Link "Back to Login":**
+                -   Link kembali ke halaman login.
+---
+
+## 13. Reset Password Page (`resources/views/auth/passwords/reset.blade.php`)
+
+-   **Tata Letak:** Kontainer utama, baris dengan justifikasi tengah, kolom `col-md-8`.
+-   **Kartu Reset Password:**
+    -   **Header Kartu:** Teks "Reset Password".
+    -   **Body Kartu:**
+        -   **Form Reset Password:**
+            -   Input hidden untuk `token` (contoh value: "dummy_token_placeholder").
+            -   **Input Email:**
+                -   Label: "Email Address"
+                -   Input tipe email dengan placeholder "Your email address", contoh value "user@example.com".
+                -   Area untuk pesan error validasi email (contoh: "Please enter a valid email address.").
+            -   **Input New Password:**
+                -   Label: "New Password"
+                -   Input tipe password dengan placeholder "Enter your new password", contoh value "newpassword123".
+                -   Area untuk pesan error validasi password (contoh: "Password must be at least 8 characters.").
+            -   **Input Confirm New Password:**
+                -   Label: "Confirm New Password"
+                -   Input tipe password dengan placeholder "Confirm your new password", contoh value "newpassword123".
+                -   Area untuk pesan error validasi konfirmasi password (contoh: "Passwords do not match.").
+            -   **Area Pesan Error Reset General (Placeholder):**
+                -   Alert danger: "Could not reset password. Please check your input or token." (tampil jika ada error umum).
+            -   **Tombol Submit:**
+                -   Tombol "Reset Password" (tipe primary).
+---
+
+## 14. Chat Page (`resources/views/chat/chat.blade.php`)
+
+-   **Tata Letak:** Kontainer utama, baris dengan justifikasi tengah, kolom `col-md-8`.
+-   **Kartu Chat:**
+    -   **Header Kartu:** "Chat with [Artist Name Placeholder]"
+    -   **Body Kartu:**
+        -   **Area Chat Box (Placeholder):**
+            -   Kontainer dengan tinggi tetap, overflow scroll, border, padding, dan warna latar.
+            -   **Item Pesan (Contoh Penerima):**
+                -   Layout flex `justify-content-start`.
+                -   Bubble pesan (background abu-abu, teks gelap, border radius spesifik).
+                -   Nama Pengirim: "[Artist Name Placeholder]:"
+                -   Isi Pesan: "Halo! Ada yang bisa saya bantu?"
+                -   Timestamp (kecil, muted, di bawah bubble, rata kiri): "10:00 AM"
+            -   **Item Pesan (Contoh Pengirim - Anda):**
+                -   Layout flex `justify-content-end`.
+                -   Bubble pesan (background biru, teks putih, border radius spesifik).
+                -   Nama Pengirim: "You:"
+                -   Isi Pesan: "Ya, saya tertarik dengan komisi Anda."
+                -   Timestamp (kecil, muted, di bawah bubble, rata kanan): "10:01 AM"
+            -   (Ulangi contoh pesan untuk menunjukkan percakapan, termasuk pesan yang lebih panjang dengan `max-width` pada bubble).
+        -   **Input Tersembunyi (Placeholders):**
+            -   `receiverIdPlaceholder` (value: "artist_id_placeholder")
+            -   `currentUserIdPlaceholder` (value: "current_user_id_placeholder")
+        -   **Input Group untuk Mengirim Pesan:**
+            -   Input teks `chatMessageInput` dengan placeholder "Type your message here...".
+            -   Tombol "Send" (`sendMessageButton`) dengan ikon paper plane.
+        -   Teks kecil (muted): "Press Enter to send message (optional feature)."
+-   **Skrip JavaScript (Placeholder):**
+    -   Referensi ke elemen DOM (chatBox, messageInput, sendMessageBtn).
+    -   Fungsi `appendMessage(senderName, message, isSender)` untuk menambahkan pesan ke chat box dengan styling yang sesuai (bubble dan timestamp).
+    -   Event listener untuk tombol "Send" yang memanggil `appendMessage` dan mensimulasikan balasan.
+    -   Event listener untuk input pesan agar bisa mengirim dengan tombol Enter.
+    -   Komentar placeholder untuk fungsionalitas Laravel Echo.
+    -   Pesan console log "Barebones chat script loaded...".
+---
+
+## 15. Chat Index Page (`resources/views/chat/index.blade.php`)
+
+-   **Judul Halaman:** "Recent Messages"
+-   **Daftar Grup Chat (`list-group`):**
+    -   **Item Chat (Contoh 1 - dengan pesan belum dibaca):**
+        -   Link (`list-group-item list-group-item-action`) ke halaman chat spesifik.
+        -   Layout flex `justify-content-between align-items-center`.
+        -   **Sisi Kiri (Info Pengguna & Pesan):**
+            -   Layout flex `align-items-center` untuk avatar dan nama.
+                -   Avatar Placeholder (gambar bulat 40x40).
+                -   Nama Pengguna Chat (Tebal, H5): "Artist User One"
+            -   Pesan Terakhir (teks muted): "Okay, I will start working on the sketch soon!"
+        -   **Sisi Kanan (Waktu & Notifikasi):**
+            -   Waktu Pesan Terakhir (kecil, muted): "2 hours ago"
+            -   Badge Jumlah Pesan Belum Dibaca (bg-primary, rounded-pill): "3"
+    -   **Item Chat (Contoh 2 - pesan panjang):**
+        -   Sama seperti di atas, dengan nama pengguna dan pesan terakhir yang berbeda.
+        -   Pesan terakhir yang lebih panjang untuk melihat bagaimana teksnya terpotong atau wrap.
+        -   Tidak ada badge jika tidak ada pesan belum dibaca.
+    -   **Item Chat (Contoh 3 - tidak ada pesan belum dibaca):**
+        -   Sama seperti di atas.
+    -   **Placeholder Jika Tidak Ada Chat (Tampil jika `$groupedChats` kosong):**
+        -   Area dengan ikon komentar dan teks: "No recent messages. Start a conversation..."
+-   **Paginasi (Opsional, Placeholder, tampil jika banyak chat):**
+    -   Navigasi paginasi standar Bootstrap.
+---
+
+## 16. Create Commission Page (`resources/views/commissions/create.blade.php`)
+
+-   **Tata Letak:** Kontainer utama, baris justify-content-center, kolom `col-md-8 col-lg-7`.
+-   **Kartu Pembuatan Komisi:**
+    -   **Header Kartu (bg-primary, text-white):**
+        -   Judul H3: "Create New Commission" (dengan ikon `fas fa-paint-brush`).
+    -   **Body Kartu (padding p-4):**
+        -   **Form Pembuatan Komisi:**
+            -   **Input Judul Komisi:**
+                -   Label (fw-bold): "Commission Title"
+                -   Input teks `title` dengan placeholder "e.g., Fantasy Character Illustration", contoh value "Sample Commission Title".
+                -   Teks bantuan (form-text text-muted): "A clear and concise title for your commission."
+                -   Area untuk pesan error validasi judul.
+            -   **Textarea Deskripsi:**
+                -   Label (fw-bold): "Description"
+                -   Textarea `description` (4 baris) dengan placeholder, contoh value "This is a sample description...".
+                -   Area untuk pesan error validasi deskripsi.
+            -   **Input Total Harga (IDR):**
+                -   Label (fw-bold): "Total Price (IDR)"
+                -   Input group dengan prefix "Rp".
+                -   Input number `total_price` dengan placeholder "e.g., 500000", contoh value "750000", atribut `min="0" step="1000"`.
+                -   Area untuk pesan error validasi harga.
+            -   **Select Link ke Layanan (Opsional):**
+                -   Label (fw-bold): "Link to Existing Service (Optional)"
+                -   Select `service_id` (form-select) dengan opsi default "-- Select a Service (if applicable) --".
+                -   Contoh opsi layanan: "Detailed Character Art (Rp750.000)" (selected), "Chibi Icon (Rp150.000)".
+                -   Contoh opsi jika tidak ada layanan: "You have no available services to link." (disabled).
+                -   Teks bantuan: "If this commission is based on one of your listed services."
+            -   **Select Status Awal Komisi:**
+                -   Label (fw-bold): "Initial Status"
+                -   Select `commission_status` (form-select) dengan opsi:
+                    -   "Available (Open for Orders)" (selected)
+                    -   "Pending Details (Contact for Quote)"
+                    -   "Closed (Not Taking Orders Currently)"
+                -   Area untuk pesan error validasi status.
+            -   **Input Upload Gambar (Contoh/Referensi):**
+                -   Label (fw-bold): "Upload Image (Example/Reference)"
+                -   Input file `image` dengan atribut `accept="image/png, image/jpeg, image/gif"`.
+                -   Teks bantuan: "Max file size: 2MB. Allowed types: JPG, PNG, GIF."
+                -   Placeholder preview gambar (`imagePreview`) dengan `src` default dan style.
+            -   **Area Pesan Error Form General (Placeholder):**
+                -   Alert danger: "Please correct the errors above."
+            -   **Tombol Aksi (Layout d-grid gap-2):**
+                -   Tombol Submit "Create Commission" (btn-primary btn-lg, dengan ikon `fas fa-check-circle`).
+                -   Tombol "Cancel" (btn-outline-secondary, dengan ikon `fas fa-times-circle`, link ke daftar komisi artis).
+-   **Skrip JavaScript (Placeholder):**
+    -   Event listener untuk input gambar (`image`) yang mengubah `src` dari `imagePreview` saat file dipilih.
+---
+
+## 17. Edit Commission Page (`resources/views/commissions/edit.blade.php`)
+
+-   **Tata Letak:** Kontainer utama, baris justify-content-center, kolom `col-md-8 col-lg-7`.
+-   **Kartu Edit Komisi:**
+    -   **Header Kartu (bg-success, text-white):**
+        -   Judul H3: "Edit Commission" (dengan ikon `fas fa-edit`).
+    -   **Body Kartu (padding p-4):**
+        -   **Form Edit Komisi:**
+            -   Method spoofing `@method('PUT')`.
+            -   **Input Judul Komisi:**
+                -   Label (fw-bold): "Commission Title"
+                -   Input teks `title` dengan value contoh "Existing Commission Title - Updated".
+                -   Teks bantuan.
+                -   Area untuk pesan error validasi.
+            -   **Textarea Deskripsi:**
+                -   Label (fw-bold): "Description"
+                -   Textarea `description` (4 baris) dengan value contoh "This is the updated description...".
+                -   Area untuk pesan error validasi.
+            -   **Input Total Harga (IDR):**
+                -   Label (fw-bold): "Total Price (IDR)"
+                -   Input group dengan prefix "Rp".
+                -   Input number `total_price` dengan value contoh "950000".
+                -   Area untuk pesan error validasi.
+            -   **Select Link ke Layanan (Opsional):**
+                -   Label (fw-bold): "Link to Existing Service (Optional)"
+                -   Select `service_id` dengan contoh opsi dan satu opsi terpilih ("Premium Full Illustration (Rp950.000)").
+                -   Teks bantuan.
+            -   **Select Status Komisi:**
+                -   Label (fw-bold): "Status"
+                -   Select `commission_status` dengan berbagai opsi status (Available, Pending Details, Ordered - Pending Artist Action, Artist Accepted, In Progress (selected), Submitted for Client Review, Needs Revision, Completed, Closed, Cancelled).
+                -   Area untuk pesan error validasi.
+            -   **Input Upload Gambar Baru (Opsional):**
+                -   Label (fw-bold): "Upload New Image (Optional)"
+                -   Input file `image`.
+                -   Teks bantuan: "Max file size: 2MB. Replaces current image if a new one is uploaded."
+                -   Area untuk menampilkan gambar saat ini (`currentImagePreview`) dan preview gambar baru (`newImagePreview`, awalnya tersembunyi).
+            -   **Area Pesan Error Form General (Placeholder):**
+                -   Alert danger: "Please correct the errors above."
+            -   **Tombol Aksi (Layout d-grid gap-2, margin atas):**
+                -   Tombol Submit "Update Commission" (btn-success btn-lg, dengan ikon `fas fa-save`).
+                -   Tombol "Cancel" (btn-outline-secondary, dengan ikon `fas fa-times-circle`, link ke halaman detail komisi atau daftar komisi).
+-   **Skrip JavaScript (Placeholder):**
+    -   Event listener untuk input gambar (`image`) yang mengubah `src` dari `newImagePreview` dan menampilkannya saat file baru dipilih.
+*Outline ini akan dilanjutkan untuk view lainnya.*
+---
+
+## 18. Commissions Index Page (`resources/views/commissions/index.blade.php`)
+
+-   **Judul Halaman:** "All Commissions" (dengan ikon `fas fa-list-alt`).
+-   **Tombol Aksi Utama:** "Create New Commission" (btn-primary, dengan ikon `fas fa-plus-circle`, tampil jika user terautentikasi).
+-   **Pesan Notifikasi (Placeholder):**
+    -   Area untuk pesan sukses dan error.
+-   **Bar Pencarian dan Filter (Placeholder):**
+    -   Input teks untuk pencarian (berdasarkan judul, artis).
+    -   Select untuk filter berdasarkan status (Available, Ordered, Completed, Closed).
+    -   Tombol "Apply Filters".
+-   **Kondisi: Tidak Ada Komisi:**
+    -   Placeholder dengan ikon `fas fa-folder-open` dan pesan "No commissions are currently available."
+-   **Kondisi: Ada Komisi (Tampilan Tabel):**
+    -   **Tabel Responsif (`table-hover align-middle`):**
+        -   **Header Tabel (`table-light`):**
+            -   Preview (Gambar)
+            -   Title/Description
+            -   Artist
+            -   Price (IDR)
+            -   Status
+            -   Actions (rata tengah)
+        -   **Body Tabel (Loop untuk setiap komisi):**
+            -   **Baris Komisi (Contoh 1 - Available):**
+                -   Preview: Gambar thumbnail komisi (80x60).
+                -   Title/Description: Judul tebal (link ke detail komisi), deskripsi singkat (muted).
+                -   Artist: Nama artis (link ke profil artis).
+                -   Price: "Rp750.000"
+                -   Status: Badge "Available" (bg-success).
+                -   Actions: Tombol "View" (btn-info, ikon `fas fa-eye`), "Edit" (btn-warning, ikon `fas fa-edit`, hanya jika pemilik), "Delete" (btn-danger, ikon `fas fa-trash-alt`, hanya jika pemilik, dengan konfirmasi).
+            -   **Baris Komisi (Contoh 2 - Ordered):**
+                -   Sama seperti di atas, status "Ordered" (bg-warning text-dark). Tombol Edit/Delete tidak ada jika bukan pemilik.
+            -   **Baris Komisi (Contoh 3 - Completed):**
+                -   Sama seperti di atas, status "Completed" (bg-primary). Tombol Edit/Delete tidak ada jika bukan pemilik.
+    -   **Navigasi Paginasi (Placeholder):**
+        -   Paginasi standar Bootstrap di tengah.
+---
+
+## 19. Commission Show Page (`resources/views/commissions/show.blade.php`)
+
+-   **Tata Letak:** Kontainer utama, baris justify-content-center, kolom `col-md-10 col-lg-9`.
+-   **Kondisi: Komisi Ditemukan:**
+    -   **Kartu Detail Komisi (shadow-lg):**
+        -   **Header Kartu (bg-dark text-white):**
+            -   Judul H3: "Commission: [Judul Komisi Singkat]" (contoh: "Detailed Fantasy Portrait").
+        -   **Body Kartu (padding p-4):**
+            -   **Baris Konten Utama (Kolom Gambar dan Info):**
+                -   **Kolom Kiri (Gambar, col-md-6, text-center):**
+                    -   Gambar Komisi (img-fluid rounded shadow-sm, max-height 400px, object-fit cover). Placeholder: `https://via.placeholder.com/400x300/007bff/ffffff?text=Commission+Artwork`.
+                    -   Pesan jika tidak ada gambar (tersembunyi secara default).
+                -   **Kolom Kanan (Info Detail, col-md-6):**
+                    -   Judul H4 Komisi (contoh: "Detailed Fantasy Portrait of Your Character").
+                    -   Artist: Nama artis (link ke profil artis).
+                    -   Status: Badge berwarna (contoh: "Available" - bg-success).
+                    -   Price: Harga (fw-bold fs-5 text-primary, contoh: "Rp1.500.000").
+                    -   Posted: Tanggal pembuatan (contoh: "January 15, 2024").
+                    -   Loves: Jumlah loves (contoh: "125").
+                    -   **Tombol Aksi (border-top, padding atas):**
+                        -   Tombol "Love" (btn-outline-danger btn-sm, ikon `fas fa-heart`, teks "Love (125)"). Akan berubah menjadi "Loved" dan btn-danger jika sudah di-love.
+                        -   Tombol "Order This Commission" (btn-primary btn-sm, ikon `fas fa-shopping-cart`, tampil jika status "Available" dan bukan pemilik).
+                        -   Tombol "Edit Commission" (btn-warning btn-sm, ikon `fas fa-edit`, tampil jika pemilik, tersembunyi secara default untuk placeholder).
+            -   Pemisah (`<hr class="my-4">`).
+            -   **Deskripsi Lengkap Komisi:**
+                -   Judul H5: "Full Description:"
+                -   Paragraf deskripsi lengkap.
+    -   **Bagian Review (Kartu terpisah, shadow-sm):**
+        -   **Header Kartu (bg-light):**
+            -   Judul H4: "Reviews ([Jumlah Review])" (dengan ikon `fas fa-star`).
+        -   **Body Kartu:**
+            -   **Item Review (Loop, contoh 2 review):**
+                -   Kartu di dalam kartu (mb-3).
+                -   Judul Review (H6).
+                -   Rating Bintang (ikon `fas fa-star` dan `far fa-star`, text-warning).
+                -   Teks Review.
+                -   Info Pengulas (kecil, muted): "By: [Nama Pengulas] on [Tanggal]".
+            -   Pesan jika tidak ada review (tersembunyi secara default).
+    -   **Bagian Tinggalkan Review (Kartu terpisah, shadow-sm, tampil jika user terautentikasi dan memenuhi syarat):**
+        -   **Header Kartu (bg-light):**
+            -   Judul H5: "Leave a Review" (dengan ikon `fas fa-pencil-alt`).
+        -   **Body Kartu:**
+            -   **Form Review:**
+                -   Textarea "Your Review" (3 baris, placeholder). Area untuk pesan error.
+                -   Select "Rating" (Pilih Rating, 1-5 Bintang). Area untuk pesan error.
+                -   Tombol "Submit Review" (btn-success, ikon `fas fa-paper-plane`).
+-   **Kondisi: Komisi Tidak Ditemukan:**
+    -   Placeholder dengan ikon `fas fa-exclamation-triangle` dan pesan "The requested commission could not be found."
+    -   Tombol "Back to Commissions".
+-   **Skrip JavaScript (Placeholder):**
+    -   Event listener untuk tombol "Love" yang mengubah tampilan tombol dan jumlah loves (simulasi tanpa AJAX).
+---
+
+## 20. App Layout (`resources/views/layouts/app.blade.php`)
+
+-   **Struktur HTML Dasar:**
+    -   `<!doctype html>` dengan `lang` dari konfigurasi aplikasi.
+    -   **Head:**
+        -   Meta charset, viewport, CSRF token (placeholder).
+        -   Title: `config('app.name', 'Bergambar') - Barebones`.
+        -   Font: DNS prefetch untuk fonts.bunny.net, link ke font Nunito.
+        -   Font Awesome CDN.
+        -   Bootstrap CSS CDN.
+        -   Placeholder untuk skrip Vite/app.js (dikomentari, menggunakan CDN untuk JS Bootstrap).
+        -   **Style Internal (Placeholder):**
+            -   Styling dasar untuk `body` (font, background, padding-top).
+            -   Styling dasar untuk `navbar` (logo, link, hover, active).
+            -   Styling dasar untuk `dropdown-item:active`.
+            -   Styling dasar untuk `card-header`.
+            -   Contoh styling untuk `.btn-primary` dan hover.
+            -   Placeholder untuk `.hero-text-placeholder`.
+-   **Body:**
+    -   Div `#app`.
+    -   **Navbar (fixed-top, bg-white, shadow-sm):**
+        -   Kontainer.
+        -   Brand/Logo: Placeholder gambar logo (link ke `#`).
+        -   Tombol Toggler Navbar.
+        -   Div Collapse Navbar (`navbarSupportedContent`):
+            -   **Navigasi Kiri (`navbar-nav me-auto`):**
+                -   Link "Home" (ikon `fas fa-home`, aktif jika route `/`).
+                -   Link "Artists" (ikon `fas fa-palette`, aktif jika route `artists*`).
+                -   Link "Commissions" (ikon `fas fa-file-signature`, aktif jika route `commissions*`, tampil jika user terautentikasi - disimulasikan selalu tampil untuk barebones).
+            -   **Navigasi Kanan (`navbar-nav ms-auto`):**
+                -   **Link Autentikasi (Placeholder, toggle display berdasarkan status auth):**
+                    -   Link "Login" (ikon `fas fa-sign-in-alt`, tersembunyi secara default).
+                    -   Link "Register" (ikon `fas fa-user-plus`, tersembunyi secara default).
+                -   **Tampilan User Terautentikasi (Placeholder, tampil secara default untuk barebones):**
+                    -   Link "Chat" (ikon `fas fa-comments`, dengan badge notifikasi contoh).
+                    -   **Dropdown User:**
+                        -   Toggle Dropdown: Avatar placeholder (gambar bulat 30x30), "User Name Placeholder".
+                        -   Menu Dropdown (rata kanan, shadow):
+                            -   "My Profile" (ikon `fas fa-user-circle`).
+                            -   "Dashboard" (ikon `fas fa-tachometer-alt`).
+                            -   Separator.
+                            -   Link Artist: "My Artist Orders", "My Services", "My Commissions (as Artist)" (dengan ikon masing-masing).
+                            -   Separator.
+                            -   Link Klien: "My Orders (as Client)" (ikon `fas fa-shopping-bag`).
+                            -   Separator.
+                            -   "Logout" (ikon `fas fa-sign-out-alt`, text-danger, dengan form logout placeholder).
+    -   **Konten Utama (`main class="py-4"`):**
+        -   `@yield('content')`
+    -   **Footer (Placeholder, bg-light, text-center, text-muted, border-top):**
+        -   Kontainer.
+        -   Copyright: "&copy; [Tahun] Bergambar - Barebones Version. All Rights Reserved."
+        -   Link inline: "Privacy Policy", "Terms of Service", "Contact Us".
+    -   `@stack('scripts')` untuk skrip spesifik halaman.
+---
+
+## 21. Create Order for Commission Page (`resources/views/orders/create_for_commission.blade.php`)
+
+-   **Tata Letak:** Kontainer utama, baris justify-content-center, kolom `col-md-10 col-lg-9`.
+-   **Kartu Order Komisi (shadow-lg):**
+    -   **Header Kartu (bg-primary text-white):**
+        -   Judul H3: "Order Commission: [Judul Komisi Singkat]" (dengan ikon `fas fa-shopping-cart`). Contoh: "Sci-Fi Character Concept".
+    -   **Body Kartu (padding p-4):**
+        -   **Baris Konten Utama (Kolom Gambar dan Info):**
+            -   **Kolom Kiri (Gambar, col-md-5, text-center):**
+                -   Gambar Komisi (img-fluid rounded shadow, max-height 350px, object-fit contain). Placeholder: `https://via.placeholder.com/350x280/6c757d/ffffff?text=Commission+Example`.
+                -   Pesan jika tidak ada gambar (tersembunyi).
+            -   **Kolom Kanan (Info Detail, col-md-7):**
+                -   Judul H4 Komisi (contoh: "Sci-Fi Character Concept Art").
+                -   Artist: Nama artis (link ke profil artis).
+                -   Description: Deskripsi singkat komisi.
+                -   Price: Harga (H2 fw-bold text-success, contoh: "Rp2.000.000").
+                -   Teks Persetujuan (text-muted small): "By proceeding, you agree to the artist's terms of service and our platform's policies."
+                -   **Tombol Aksi (border-top, padding atas, mt-4):**
+                    -   **Untuk User Terautentikasi:**
+                        -   Tombol "Proceed to Order" (btn-lg btn-primary, ikon `fas fa-credit-card`, mentrigger modal).
+                        -   Tombol "Contact Artist" (btn-lg btn-outline-secondary, ikon `fas fa-comments`).
+                    -   **Untuk User Tamu (tersembunyi secara default):**
+                        -   Pesan Lead: "Login or Register to order this commission." (dengan link).
+        -   **Bagian Opsional: Komisi Populer Lainnya dari Artis (Placeholder):**
+            -   Judul H4: "Other Commissions by [Nama Artis]"
+            -   Baris dengan beberapa kartu komisi lain (gambar, judul, harga, tombol "View Details").
+-   **Modal Pembayaran (Placeholder, `paymentModalPlaceholder`):**
+    -   Dialog Modal (modal-dialog-centered modal-lg).
+    -   **Header Modal (bg-primary text-white):**
+        -   Judul H5: "Confirm Order & Secure Payment" (ikon `fas fa-lock`).
+        -   Tombol Close (btn-close-white).
+    -   **Body Modal (padding p-4):**
+        -   **Baris Ringkasan Order dan QR Code:**
+            -   **Kolom Kiri (Ringkasan, col-md-7):**
+                -   Judul H5: "Order Summary:"
+                -   Detail Komisi: Judul, Artist, Buyer.
+                -   Pemisah (`<hr>`).
+                -   Total Harga (fs-4 fw-bold text-success).
+                -   Pesan simulasi pembayaran (small text-muted).
+            -   **Kolom Kanan (Metode Pembayaran, col-md-5, text-center):**
+                -   Judul H6: "Simulated Payment Method:"
+                -   Gambar QR Code Placeholder (180x180).
+                -   Pesan instruksi scan.
+        -   Pemisah (`<hr>`).
+        -   **Form Konfirmasi Pembayaran:**
+            -   Tombol "Confirm Payment & Place Order" (btn-lg btn-success, d-grid, ikon `fas fa-check-circle`).
+        -   Tombol "Cancel" (btn-outline-secondary w-100 mt-2, data-bs-dismiss="modal").
+---
+
+## 22. Client Orders Index Page (`resources/views/orders/index.blade.php`)
+
+-   **Tata Letak:** Kontainer utama, baris justify-content-center, kolom `col-md-12`.
+-   **Kartu Daftar Pesanan (shadow-sm):**
+    -   **Header Kartu (bg-info text-white):**
+        -   Judul H3: "My Orders (as Client)" (dengan ikon `fas fa-receipt`).
+    -   **Body Kartu (padding p-4):**
+        -   **Pesan Notifikasi (Placeholder):**
+            -   Area untuk pesan sukses dan error.
+        -   **Bar Pencarian dan Filter (Placeholder):**
+            -   Input teks untuk pencarian (berdasarkan judul komisi, artis).
+            -   Select untuk filter berdasarkan status pesanan (Paid, Artist Accepted, In Progress, Submitted for Review, Needs Revision, Completed, Cancelled).
+            -   Tombol "Apply" (dengan ikon `fas fa-filter`).
+        -   **Kondisi: Tidak Ada Pesanan:**
+            -   Placeholder dengan ikon `fas fa-shopping-basket` dan pesan "You haven't placed any orders yet."
+            -   Tombol "Browse Commissions".
+        -   **Kondisi: Ada Pesanan (Tampilan Tabel):**
+            -   **Tabel Responsif (`table-hover align-middle`):**
+                -   **Header Tabel (`table-light`):**
+                    -   Order ID
+                    -   Commission (Judul/Deskripsi Singkat)
+                    -   Artist
+                    -   Price
+                    -   Order Status
+                    -   Date Placed
+                    -   Actions (rata tengah)
+                -   **Body Tabel (Loop untuk setiap pesanan):**
+                    -   **Baris Pesanan (Contoh 1 - In Progress):**
+                        -   Order ID: `ORD-2024-001` (dalam tag `<code>`).
+                        -   Commission: Judul tebal (link ke detail komisi), deskripsi singkat (muted).
+                        -   Artist: Nama artis (link ke profil artis).
+                        -   Price: "Rp2.000.000"
+                        -   Order Status: Badge "In Progress" (bg-warning text-dark).
+                        -   Date Placed: "01 Mar 2024, 10:30"
+                        -   Actions: Tombol "View Order Details" (btn-info, ikon `fas fa-eye`), "Contact Artist" (btn-outline-secondary, ikon `fas fa-comments`).
+                    -   **Baris Pesanan (Contoh 2 - Completed):**
+                        -   Sama seperti di atas, status "Completed" (bg-success).
+                        -   Actions: Tombol "View Order Details", Tombol "Leave a Review" (btn-outline-warning, ikon `fas fa-star`).
+                    -   **Baris Pesanan (Contoh 3 - Submitted for Review):**
+                        -   Sama seperti di atas, status "Submitted for Review" (bg-primary).
+            -   **Navigasi Paginasi (Placeholder):**
+                -   Paginasi standar Bootstrap di tengah.
+*Outline ini akan dilanjutkan untuk view lainnya.*

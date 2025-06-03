@@ -43,15 +43,22 @@
             console.log('Listening to channel: chat.' + receiverId);
 
             // Mendengarkan channel 'chat.{receiverId}'
-            window.Echo.channel('chat.' + receiverId)
+            window.Echo.private('chat.' + receiverId) // Use .private() for private channels
                 .listen('MessageSent', (event) => {
                     console.log('New message received:', event);
                     let messageBox = document.querySelector('.chat-box');
                     // Cek apakah pengirim adalah pengguna yang sedang login
-                    if (event.message.sender_id === {{ auth()->id() }}) {
-                        messageBox.innerHTML += `<p><strong>You:</strong> ${event.message.message}</p>`;
+                    // Note: auth()->id() might not be directly available here if not passed explicitly.
+                    // However, the original code had it, so keeping it for now.
+                    // A better approach would be to pass current user ID via JS variable.
+                    if (event.message.sender_id == {{ auth()->id() }}) { // Compare with current auth user ID
+                        // Message sent by current user, already handled by the AJAX success
+                        // We might not need to do anything here if the sender's own message is already appended
+                        // Or, if we want to ensure it's displayed via broadcast for consistency:
+                        // messageBox.innerHTML += `<p><strong>You:</strong> ${event.message.message}</p>`;
                     } else {
-                        messageBox.innerHTML += `<p><strong>${event.message.sender_name}:</strong> ${event.message.message}</p>`;
+                        // Message sent by the other user
+                        messageBox.innerHTML += `<p><strong>${event.sender_name}:</strong> ${event.message.message}</p>`; // Access sender_name directly from event
                     }
                     messageBox.scrollTop = messageBox.scrollHeight; // Scroll ke bawah saat pesan baru diterima
                 });
