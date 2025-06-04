@@ -321,28 +321,14 @@ php artisan migrate --seed
 ```
    *(Ensure relevant seeders like `UserSeeder`, `ArtistSeeder`, etc., are correctly configured in `DatabaseSeeder.php` if you need specific initial data.)*
 
-**e. Compile Frontend Assets (Vite):**
-   The main Laravel application uses Vite for frontend asset bundling.
-   ```bash
-   npm install
-   # or if you prefer pnpm and have it installed globally:
-   # pnpm install
-   
-   # Run the Vite development server (for hot module replacement during development)
-   npm run dev
-   # or for pnpm:
-   # pnpm dev
-   ```
-   *(This command should typically be run in a separate terminal window from `php artisan serve`.)*
-
-**f. Start the Laravel Development Server:**
+**e. Start the Laravel Development Server:**
    *   **For Laragon:**
-        *   Ensure Laragon is running and your project is correctly configured as a virtual host (e.g., pointing to `http://bergambar.test/`). You typically start services via the Laragon application ("Start All"). The Vite dev server (from step e) should also be running.
+        *   Ensure Laragon is running and your project is correctly configured as a virtual host (e.g., pointing to `http://bergambar.test/`). You typically start services via the Laragon application ("Start All").
    *   **For XAMPP (or manual `php artisan serve`):**
         ```bash
         php artisan serve
         ```
-        The Laravel application will usually be available at `http://localhost:8000`. The Vite dev server (from step e) should also be running.
+        The Laravel application will usually be available at `http://localhost:8000`.
 
 ### 3. Frontend Setup (Next.js Admin Panel)
 
@@ -388,7 +374,7 @@ pnpm dev
 
 ### 4. Accessing the Application
 
-*   **Main Laravel Application:** Access it via the URL configured in your Laravel `.env` (`APP_URL`) and your web server setup (e.g., `http://bergambar.test/` for Laragon, or `http://localhost:8000` for `php artisan serve`).
+*   **Main Laravel Application:** Access it via the URL configured in your Laravel `.env` (`APP_URL`) and your web server setup (e.g., `http://bergambar.test/` for Laragon). For XAMPP with `php artisan serve`, ensure you use `http://localhost:8000` (not `http://127.0.0.1:8000`) to avoid potential session or CSRF token issues.
 *   **Next.js Admin Panel:** Access it via the URL configured in `admin-panel/.env.local` (`NEXT_PUBLIC_APP_URL`), typically `http://localhost:3000` or `http://localhost:3001`.
 
 **Additional Notes:**
