@@ -249,52 +249,126 @@ Pengembangan proyek ini akan mengikuti pendekatan bertahap seperti yang diuraika
 *   **Fase 3:** Pengembangan Fitur yang Belum Selesai/Direncanakan
 *   **Fase 4:** Penyempurnaan dan Pengujian
 
-## Instalasi dan Pengaturan
+## Prerequisites
 
-1.  **Clone repository:**
-    ```bash
-    git clone <URL_REPOSITORY_ANDA>
-    cd <NAMA_DIREKTORI_PROYEK>
-    ```
-2.  **Install dependensi Composer:**
-    ```bash
-    composer install
-    ```
-3.  **Salin file environment:**
-    ```bash
-    cp .env.example .env
-    ```
-4.  **Konfigurasi file `.env`:**
-    *   Atur `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`, dll., sesuai dengan pengaturan database lokal Anda.
-    *   Atur `APP_KEY` (atau generate di langkah berikutnya).
-    *   Konfigurasi pengaturan lain yang relevan seperti mail, queue, dll.
-5.  **Generate application key:**
-    ```bash
-    php artisan key:generate
-    ```
-6.  **Jalankan migrasi database dan seeder (jika ada):**
-    ```bash
-    php artisan migrate
-    ```
-    Jika Anda ingin mengisi data awal, jalankan seeder (pastikan seeder relevan telah dibuat dan didaftarkan di `DatabaseSeeder.php`):
-    ```bash
-    php artisan db:seed
-    ```
-    Seeder yang mungkin relevan berdasarkan struktur proyek: `UserSeeder`, `ArtistSeeder`, `CategorySeeder`, `ServiceSeeder`, `CommissionSeeder`.
-7.  **Install dependensi NPM dan compile aset (jika menggunakan Vite/Mix):**
-    ```bash
-    npm install
-    npm run dev
-    ```
-8.  **Jalankan development server:**
-    ```bash
-    php artisan serve
-    ```
-    Aplikasi akan tersedia di `http://localhost:8000` (atau port lain jika ditentukan).
+Before you begin, ensure you have the following installed on your system:
+*   PHP (version compatible with Laravel 11, e.g., PHP >= 8.2)
+*   Composer
+*   Node.js (LTS version recommended)
+*   pnpm (for the Next.js admin panel, as per project logs)
+*   A database server (e.g., MySQL, MariaDB)
+*   Git
 
-**Catatan Tambahan:**
-*   Untuk fungsionalitas chat real-time, Anda perlu mengkonfigurasi driver broadcasting (misalnya Pusher, Ably, atau Redis dengan Socket.IO) di file `.env` dan menjalankan queue worker jika diperlukan.
-*   Pastikan environment lokal Anda (PHP, Composer, Node.js, Database Server) memenuhi persyaratan Laravel 11.
+## Setup and Running the Project
+
+Follow these steps to get the project up and running on your local machine.
+
+### 1. Clone the Repository
+
+```bash
+git clone <URL_REPOSITORY_ANDA>
+cd <NAMA_DIREKTORI_PROYEK>
+```
+
+### 2. Backend Setup (Laravel)
+
+These steps are performed in the root directory of the project.
+
+**a. Install PHP Dependencies:**
+```bash
+composer install
+```
+
+**b. Configure Environment:**
+   *   The project includes example environment files for different setups:
+        *   [`./.env.laragon.example`](./.env.laragon.example:1): For Laragon users.
+        *   [`./.env.xampp.example`](./.env.xampp.example:1): For XAMPP users (using `php artisan serve`).
+   *   Copy the example file relevant to your setup to `.env`:
+        *   For Laragon: `cp .env.laragon.example .env`
+        *   For XAMPP: `cp .env.xampp.example .env`
+   *   Open the `.env` file and configure it:
+        *   **Database:** Set `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` according to your local database configuration. Ensure the database exists.
+        *   **APP_URL:**
+            *   For Laragon, it's likely pre-configured (e.g., `http://bergambar.test/`).
+            *   For XAMPP with `php artisan serve`, it should be `http://localhost:8000`.
+        *   Review other settings like `MAIL_HOST` if you plan to test email functionalities.
+
+**c. Generate Application Key:**
+```bash
+php artisan key:generate
+```
+
+**d. Run Database Migrations and Seeders:**
+   This will create the necessary tables and populate them with initial data.
+```bash
+php artisan migrate --seed
+```
+   *(Ensure relevant seeders like `UserSeeder`, `ArtistSeeder`, etc., are correctly configured in `DatabaseSeeder.php` if you need specific initial data.)*
+
+**e. Start the Laravel Development Server:**
+   *   **For Laragon:**
+        *   Ensure Laragon is running and your project is correctly configured as a virtual host (e.g., pointing to `http://bergambar.test/`). You typically start services via the Laragon application ("Start All").
+   *   **For XAMPP (or manual `php artisan serve`):**
+        ```bash
+        php artisan serve
+        ```
+        The Laravel application will usually be available at `http://localhost:8000`.
+
+### 3. Frontend Setup (Next.js Admin Panel)
+
+The admin panel is a Next.js application located in the `admin-panel/` directory.
+
+**a. Navigate to the Admin Panel Directory:**
+```bash
+cd admin-panel
+```
+
+**b. Install JavaScript Dependencies:**
+   The project uses `pnpm` for the admin panel.
+```bash
+pnpm install
+```
+
+**c. Configure Admin Panel Environment:**
+   *   An example environment file is provided at [`admin-panel/.env.local.example`](admin-panel/.env.local.example:1).
+   *   Copy this file to `admin-panel/.env.local`:
+        ```bash
+        cp .env.local.example .env.local
+        ```
+   *   Open `admin-panel/.env.local` and uncomment/configure the variables based on your backend setup:
+        *   **If your Laravel backend is running via Laragon (e.g., at `http://bergambar.test/`):**
+            ```env
+            NEXT_PUBLIC_APP_URL=http://localhost:3000
+            NEXT_PUBLIC_LARAVEL_PROXY_DESTINATION=http://bergambar.test/
+            NEXT_PUBLIC_LARAVEL_ROOT_VIA_PROXY=/api-proxy
+            ```
+        *   **If your Laravel backend is running via XAMPP with `php artisan serve` (e.g., at `http://localhost:8000`):**
+            ```env
+            NEXT_PUBLIC_APP_URL=http://localhost:3001 # Or your preferred port for Next.js
+            NEXT_PUBLIC_LARAVEL_PROXY_DESTINATION=http://localhost:8000
+            NEXT_PUBLIC_LARAVEL_ROOT_VIA_PROXY=/api-proxy
+            ```
+        *   **Note:** `NEXT_PUBLIC_APP_URL` is the URL where the Next.js admin panel itself will run. Ensure the port doesn't conflict with other services.
+
+**d. Start the Next.js Development Server:**
+```bash
+pnpm dev
+```
+   The Next.js admin panel will typically be available at the URL specified in `NEXT_PUBLIC_APP_URL` (e.g., `http://localhost:3000` or `http://localhost:3001`).
+
+### 4. Accessing the Application
+
+*   **Main Laravel Application:** Access it via the URL configured in your Laravel `.env` (`APP_URL`) and your web server setup (e.g., `http://bergambar.test/` for Laragon, or `http://localhost:8000` for `php artisan serve`).
+*   **Next.js Admin Panel:** Access it via the URL configured in `admin-panel/.env.local` (`NEXT_PUBLIC_APP_URL`), typically `http://localhost:3000` or `http://localhost:3001`.
+
+**Additional Notes:**
+*   **Real-time Chat (Pusher):** For full real-time chat functionality, you'll need to:
+    *   Configure Pusher (or an alternative like Ably/Soketi) credentials in your Laravel `.env` file (`PUSHER_APP_ID`, `PUSHER_APP_KEY`, `PUSHER_APP_SECRET`, `PUSHER_APP_CLUSTER`).
+    *   Set `BROADCAST_DRIVER=pusher` in Laravel's `.env`.
+    *   Ensure `App\Providers\BroadcastServiceProvider::class` is uncommented in `config/app.php`.
+    *   Define broadcast authentication routes in `routes/channels.php`.
+    *   Run `php artisan queue:work` if you're queueing broadcasts.
+*   Ensure your local development environment (PHP, Composer, Node.js, Database Server) meets the requirements of Laravel 11 and the Next.js version used.
 
 ## Cara Berkontribusi
 

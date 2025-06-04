@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useEffect } from 'react'; // Added useEffect
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -17,13 +17,14 @@ export default function LoginPage() {
   const { login, user } = useAuth();
   const router = useRouter();
 
-  // If user is already logged in and is an admin, redirect to dashboard
-  if (user && user.role === 'admin') {
-    router.replace('/admin/dashboard'); // Or your default admin page
-    return null; // Render nothing while redirecting
-  }
-  // If user is logged in but not admin, perhaps redirect to a general user page or show an error
-  // For now, we'll let the AdminLayout handle non-admin users trying to access /admin routes
+  useEffect(() => {
+    // If user is already logged in and is an admin, redirect to dashboard
+    if (user && user.role === 'admin') {
+      router.replace('/admin/dashboard'); // Or your default admin page
+    }
+    // If user is logged in but not admin, perhaps redirect to a general user page or show an error
+    // For now, we'll let the AdminLayout handle non-admin users trying to access /admin routes
+  }, [user, router]);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -49,6 +50,11 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   };
+
+  // If already redirecting, don't render the form
+  if (user && user.role === 'admin') {
+    return null; // Or a loading spinner
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">

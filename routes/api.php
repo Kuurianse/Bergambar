@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\Admin\CommissionController as AdminCommissionContro
 use App\Http\Controllers\Api\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Api\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Api\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Api\Admin\DashboardController as AdminDashboardController; // Added DashboardController
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -27,6 +28,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Admin API routes
 Route::middleware('auth:sanctum')->prefix('v1/admin')->name('admin.api.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard.index');
+
     // User Management
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
     // Add other admin user routes here later (e.g., update, store, destroy)

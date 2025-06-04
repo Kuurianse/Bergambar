@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useAuth } from "@/context/AuthContext" // Import useAuth
 import { SidebarTrigger } from "@/components/ui/sidebar"
 
 interface AdminHeaderProps {
@@ -20,6 +21,7 @@ interface AdminHeaderProps {
 }
 
 export function AdminHeader({ user }: AdminHeaderProps) {
+  const { logout } = useAuth(); // Get logout function
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
       <SidebarTrigger className="-ml-1" />
@@ -50,10 +52,20 @@ export function AdminHeader({ user }: AdminHeaderProps) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => console.log("Profile clicked")}>
+              Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => console.log("Settings clicked")}>
+              Settings
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Log out</DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={async () => {
+                await logout();
+              }}
+            >
+              Log out
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

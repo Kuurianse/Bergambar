@@ -218,5 +218,34 @@ Dokumen ini mencatat fitur-fitur utama dan pencapaian sejak integrasi panel admi
         - Jalankan `php artisan queue:work` jika menggunakan antrian untuk broadcast.
 - **Pengembangan Panel Admin (Lanjutan):**
     - Catatan: Sebagian besar fungsionalitas panel admin Next.js telah dikembangkan (item #1-11). Namun, beberapa halaman inti masih memerlukan implementasi atau integrasi penuh.
-    - **Halaman Dashboard Admin ([`admin-panel/app/admin/dashboard/page.tsx`](admin-panel/app/admin/dashboard/page.tsx:1)):** (Tertunda - Menunggu spesifikasi/implementasi)
+    - **Halaman Dashboard Admin ([`admin-panel/app/admin/dashboard/page.tsx`](admin-panel/app/admin/dashboard/page.tsx:1)):** (Selesai - Terintegrasi dengan API Backend)
     - **Halaman Manajemen Pesanan Admin ([`admin-panel/app/admin/orders/page.tsx`](admin-panel/app/admin/orders/page.tsx:1)):** (Tertunda - Menunggu spesifikasi/implementasi)
+
+## 15. Integrasi Halaman Dashboard Admin (Selesai)
+- **Implementasi Fitur Dashboard Admin:**
+    - **Backend (Laravel):**
+        - Membuat [`app/Http/Controllers/Api/Admin/DashboardController.php`](app/Http/Controllers/Api/Admin/DashboardController.php:1) dengan metode `index` untuk mengambil statistik:
+            - Total pengguna, artis, komisi, dan pesanan.
+            - 5 pengguna terbaru.
+            - 5 komisi terbaru (termasuk nama artis dan judul layanan).
+        - Menambahkan rute API `GET /api/v1/admin/dashboard` di [`routes/api.php`](routes/api.php:1).
+        - Membuat migrasi baru untuk menambahkan kolom `artist_id` ke tabel `commissions` ([`database/migrations/YYYY_MM_DD_HHMMSS_add_artist_id_to_commissions_table.php`](database/migrations/YYYY_MM_DD_HHMMSS_add_artist_id_to_commissions_table.php:1)).
+        - Memperbarui model [`app/Models/Commission.php`](app/Models/Commission.php:1) untuk menyertakan `artist_id` dalam `$fillable` dan menambahkan relasi `artist()`.
+    - **Frontend (Next.js - `admin-panel`):**
+        - Menambahkan fungsi `fetchDashboardStats` di [`admin-panel/lib/apiClient.ts`](admin-panel/lib/apiClient.ts:1) untuk mengambil data dari backend.
+        - Mendefinisikan tipe `DashboardStatsResponse`, `RecentUser`, dan `RecentCommission` di [`admin-panel/lib/types.ts`](admin-panel/lib/types.ts:1).
+        - Memperbarui halaman dashboard ([`admin-panel/app/admin/dashboard/page.tsx`](admin-panel/app/admin/dashboard/page.tsx:1)) untuk menggunakan `fetchDashboardStats`, menampilkan data statistik dan aktivitas terbaru dari API, serta menangani state loading dan error.
+    - **Penyelesaian Masalah (Troubleshooting):**
+        - Memperbaiki error render React di halaman login ([`admin-panel/app/login/page.tsx`](admin-panel/app/login/page.tsx:1)) dengan memindahkan logika redirect ke dalam `useEffect`.
+        - Mengatasi error migrasi "Duplicate column name 'slug'" dengan membuat migrasi penambahan slug di tabel `categories` menjadi kondisional ([`database/migrations/2025_06_04_192430_add_slug_to_categories_table.php`](database/migrations/2025_06_04_192430_add_slug_to_categories_table.php:1)).
+        - Memperbaiki tampilan harga komisi di dashboard (menggunakan `total_price` dari controller).
+        - Memperbaiki tampilan nama artis "by N/A" di dashboard dengan mengupdate [`database/seeders/CommissionSeeder.php`](database/seeders/CommissionSeeder.php:1) untuk memastikan `artist_id` diisi dengan benar pada saat pembuatan komisi.
+
+## 16. Integrasi Navbar Panel Admin (Dasar - Selesai)
+- **Implementasi Fitur Dasar Navbar:**
+    - **Frontend (Next.js - `admin-panel`):**
+        - Mengintegrasikan komponen `AdminHeader` ([`admin-panel/components/admin/admin-header.tsx`](admin-panel/components/admin/admin-header.tsx:1)) ke dalam layout utama admin ([`admin-panel/app/admin/layout.tsx`](admin-panel/app/admin/layout.tsx:1)).
+        - Menampilkan informasi pengguna (nama, email) di header, diambil dari `AuthContext`.
+        - Mengimplementasikan fungsionalitas "Log out" pada dropdown pengguna menggunakan fungsi `logout` dari `AuthContext`.
+        - Menyediakan placeholder (log ke konsol) untuk item "Profile" dan "Settings" pada dropdown pengguna.
+        - Fitur Search dan Notifications pada navbar saat ini bersifat visual placeholder.

@@ -161,4 +161,21 @@ export const fetchAdminOrder = async (orderId: number): Promise<Order> => {
 //   return response.data.data; // Expects { data: Order }
 // };
 
+// --- Dashboard ---
+// Define DashboardStatsResponse in types.ts
+// export interface DashboardStatsResponse {
+//   totalUsers: number;
+//   totalArtists: number;
+//   totalCommissions: number;
+//   totalOrders: number;
+//   recentUsers: User[]; // Assuming User type is already defined
+//   recentCommissions: Commission[]; // Assuming Commission type is already defined
+// }
+import { DashboardStatsResponse } from './types'; // Import the new type
+
+export const fetchDashboardStats = async (): Promise<DashboardStatsResponse> => {
+  const response = await apiClient.get(`/api-proxy/api/v1/admin/dashboard`);
+  return response.data; // Expects the full dashboard stats object
+};
+
 export default apiClient;

@@ -14,7 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->string('slug')->unique()->after('description')->nullable(); // Add nullable for existing records, make unique
+            if (!Schema::hasColumn('categories', 'slug')) {
+                $table->string('slug')->unique()->after('description')->nullable(); // Add nullable for existing records, make unique
+            }
         });
     }
 
@@ -26,7 +28,11 @@ return new class extends Migration
     public function down()
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->dropColumn('slug');
+            if (Schema::hasColumn('categories', 'slug')) {
+                // To drop a unique constraint before dropping the column, if it was applied
+                // $table->dropUnique('categories_slug_unique'); // Default unique index name
+                $table->dropColumn('slug');
+            }
         });
     }
 };

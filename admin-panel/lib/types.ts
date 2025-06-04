@@ -154,3 +154,30 @@ export interface PaginatedOrdersResponse extends PaginatedResponse<Order> {}
 //   comment: string | null;
 //   created_at: string;
 // }
+
+// --- Dashboard Types ---
+export interface RecentUser {
+  id: number;
+  name: string;
+  email: string;
+  created_at: string;
+}
+
+export interface RecentCommission {
+  id: number;
+  title: string;
+  artist_name: string | null;
+  service_title?: string | null; // Optional as it might not always be present
+  status: string;
+  price: number | string; // Match Commission type
+  created_at: string;
+}
+
+export interface DashboardStatsResponse {
+  totalUsers: number;
+  totalArtists: number;
+  totalCommissions: number;
+  totalOrders: number;
+  recentUsers: RecentUser[];
+  recentCommissions: RecentCommission[];
+}

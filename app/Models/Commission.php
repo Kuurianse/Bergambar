@@ -10,7 +10,8 @@ class Commission extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'user_id', // This is the client/customer
+        'artist_id', // This is the artist performing the commission
         'title', // Added title
         'status',
         'total_price',
@@ -20,9 +21,14 @@ class Commission extends Model
     ];
     
     
-    public function user()
+    public function user() // Client/Customer
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function artist() // Artist performing the work
+    {
+        return $this->belongsTo(Artist::class, 'artist_id');
     }
 
     public function loves()
