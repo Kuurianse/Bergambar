@@ -183,7 +183,7 @@ erDiagram
         int commission_id FK
         string status
         decimal total_price
-        text delivery_link nullable
+        text delivery_link "nullable"
         timestamp created_at
         timestamp updated_at
     }
