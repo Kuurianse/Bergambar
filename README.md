@@ -385,16 +385,3 @@ pnpm dev
     *   Define broadcast authentication routes in `routes/channels.php`.
     *   Run `php artisan queue:work` if you're queueing broadcasts.
 *   Ensure your local development environment (PHP, Composer, Node.js, Database Server) meets the requirements of Laravel 11 and the Next.js version used.
-
-## Cara Berkontribusi
-
-Terima kasih atas minat Anda untuk berkontribusi pada proyek ini! Saat ini, panduan kontribusi formal belum ditetapkan. Namun, Anda dapat memulai dengan:
-1.  Melakukan fork pada repository.
-2.  Membuat branch baru untuk fitur atau perbaikan bug Anda.
-3.  Melakukan commit pada perubahan Anda.
-4.  Membuat Pull Request ke branch utama.
-
-Pastikan untuk mengikuti standar coding yang ada dan memberikan deskripsi yang jelas mengenai perubahan yang Anda ajukan.
-
----
-*Dokumen ini dihasilkan berdasarkan analisis dari file-file perencanaan proyek.*
