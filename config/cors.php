@@ -15,20 +15,22 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie', 'login', 'logout'], // Added login/logout for SPA auth
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    // For development, be specific. For production, use your actual frontend domain.
+    // Consider moving this to your .env file: ALLOWED_ORIGINS=http://localhost:3000,https://your-admin-domain.com
+    'allowed_origins' => explode(',', env('ALLOWED_ORIGINS', 'http://localhost:3000')),
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
+    'allowed_headers' => ['*'], // Or be more specific: ['Content-Type', 'X-Requested-With', 'Accept', 'Authorization', 'X-XSRF-TOKEN']
 
     'exposed_headers' => [],
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    'supports_credentials' => true, // Crucial for Sanctum SPA authentication
 
 ];

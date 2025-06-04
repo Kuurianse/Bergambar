@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens; // Add this line
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use HasApiTokens, Notifiable; // Add HasApiTokens here
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'username', 'bio', 'profile_picture', 'role', // Pastikan 'username' ditambahkan
+        'name', 'email', 'password', 'username', 'bio', 'profile_picture', 'role', 'email_verified_at', // Pastikan 'username' ditambahkan
     ];
 
     /**
@@ -69,5 +70,17 @@ class User extends Authenticatable
     public function artist()
     {
         return $this->hasOne(Artist::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($user) {
+            // Check if the user has an artist profile and delete it
+            if ($user->artist) {
+                $user->artist->delete();
+            }
+        });
     }
 }

@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'sanctum' => [ // Or you can name this 'api' and set 'driver' => 'sanctum'
+            'driver' => 'sanctum',
+            'provider' => 'users', // Optional: if you want to allow token lookups against users provider
+        ],
     ],
 
     /*

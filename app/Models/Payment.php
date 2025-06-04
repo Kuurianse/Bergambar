@@ -15,7 +15,15 @@ class Payment extends Model
         'payment_method',
         'amount',
         'payment_status',
-        'payment_date'
+        'payment_date',
+        'notes', // Added notes as per PaymentResource
+    ];
+
+    protected $casts = [
+        'payment_date' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'amount' => 'decimal:2', // Assuming amount should be treated as decimal
     ];
 
     public function commission()

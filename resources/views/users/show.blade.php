@@ -130,7 +130,8 @@
                             </a>
                         </div>
                         <div class="col-md-8">
-                            <h4 class="text-black">Username: {{ $user->username }}</h4>
+                            <h4 class="text-black">Name: {{ $user->name }}</h4>
+                            <p class="text-black"><strong>Username:</strong> {{ $user->username }}</p>
                             <p class="text-black"><strong>Email:</strong> {{ $user->email }}</p>
                             <p class="text-black"><strong>Bio:</strong> {{ $user->bio ? $user->bio : 'Belum ada bio.' }}</p>
                             <div class="d-flex justify-content-end align-items-center">

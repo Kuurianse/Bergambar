@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
             'bio' => 'Overseeing the platform.',
             'password' => Hash::make('password123'),
             'role' => 'admin',
+            'email_verified_at' => now(), // Mark admin as verified/active
         ]);
 
         // Buat beberapa artist (User accounts that will have Artist profiles)
@@ -28,6 +29,7 @@ class UserSeeder extends Seeder
             'bio' => 'Digital illustrator focusing on fantasy characters and vibrant scenes.',
             'password' => Hash::make('password123'),
             'role' => 'user', // Role is 'user', artist-specific data is in Artist model
+            'email_verified_at' => now(), // Mark as verified/active
         ]);
 
         User::create([
@@ -37,6 +39,7 @@ class UserSeeder extends Seeder
             'bio' => 'Composer creating epic scores for indie games.',
             'password' => Hash::make('password123'),
             'role' => 'user',
+            'email_verified_at' => now(), // Mark as verified/active
         ]);
 
         // Buat user biasa
@@ -47,6 +50,7 @@ class UserSeeder extends Seeder
             'bio' => 'Collector of unique digital art.',
             'password' => Hash::make('password123'),
             'role' => 'user',
+            'email_verified_at' => now(), // Mark as verified/active
         ]);
     }
 }
