@@ -17,19 +17,30 @@ Dokumen analisis dan perencanaan lebih detail dapat ditemukan di:
 
 Berikut adalah fitur-fitur utama yang saat ini sudah berjalan atau fungsionalitas backend-nya sebagian besar telah ada:
 
-*   **Autentikasi Pengguna:** Registrasi, login, dan fungsionalitas reset password standar Laravel.
-*   **Halaman Sambutan:** Menampilkan daftar komisi yang tersedia untuk umum.
-*   **Fitur "Suka" (Love) pada Komisi:** Pengguna dapat menyukai/membatalkan suka pada komisi, dan jumlah suka akan diperbarui.
-*   **Ulasan dan Rating Komisi:** Pengguna dapat menambahkan ulasan beserta rating (1-5 bintang) untuk komisi yang telah selesai.
-*   **Chat Real-time:**
-    *   Backend telah siap dengan event broadcasting (`MessageSent`).
-    *   Frontend ([`resources/views/chat/chat.blade.php`](resources/views/chat/chat.blade.php:1)) telah diimplementasikan menggunakan Laravel Echo dan Pusher untuk menerima dan menampilkan pesan baru secara real-time tanpa perlu refresh halaman.
-    *   Pengguna dapat melihat daftar percakapan dan mengirim pesan.
-*   **Daftar Seniman (Dasar):** Menampilkan pengguna yang memiliki komisi (dianggap sebagai seniman).
-*   **Halaman Detail Seniman (Dasar):** Menampilkan informasi dasar seniman dan komisi yang mereka miliki.
-*   **Manajemen Komisi oleh Pengguna:** Pengguna dapat membuat, melihat, mengedit, dan menghapus komisi milik mereka sendiri. Komisi dapat ditautkan ke layanan spesifik yang ditawarkan oleh seniman.
-*   **Manajemen Layanan oleh Seniman:** Seniman dapat melakukan operasi CRUD (Create, Read, Update, Delete) pada layanan yang mereka tawarkan. Halaman detail publik untuk setiap layanan juga tersedia dan dapat diakses dari profil artis.
-*   **Dasar Manajemen Pesanan oleh Seniman:** Seniman memiliki halaman untuk melihat daftar komisi mereka yang telah dipesan (`/artist/orders`). Mereka dapat melihat detail setiap pesanan dan melakukan aksi dasar untuk mengubah status komisi (misalnya, menerima pesanan, mengirim karya untuk review via link eksternal).
+*   **Autentikasi Pengguna (Laravel & Admin Panel):**
+    *   Laravel: Registrasi, login, dan fungsionalitas reset password standar.
+    *   Admin Panel (Next.js): Login khusus admin, pengelolaan sesi via AuthContext, rute terproteksi.
+*   **Halaman Sambutan (Laravel):** Menampilkan daftar komisi yang tersedia untuk umum.
+*   **Fitur "Suka" (Love) pada Komisi (Laravel):** Pengguna dapat menyukai/membatalkan suka pada komisi.
+*   **Ulasan dan Rating Komisi (Laravel):** Pengguna dapat menambahkan ulasan beserta rating.
+*   **Chat Real-time (Laravel & Blade):**
+    *   Backend siap dengan event broadcasting ([`app/Events/MessageSent.php`](app/Events/MessageSent.php:1)).
+    *   Frontend ([`resources/views/chat/chat.blade.php`](resources/views/chat/chat.blade.php:1)) menggunakan Laravel Echo dan Pusher untuk pesan real-time.
+*   **Manajemen Komisi oleh Pengguna (Laravel):** CRUD untuk komisi milik pengguna.
+*   **Manajemen Layanan oleh Seniman (Laravel):** CRUD penuh untuk layanan yang ditawarkan seniman.
+*   **Dasar Manajemen Pesanan oleh Seniman (Laravel):** Seniman dapat melihat daftar pesanan dan mengubah status komisi.
+*   **Panel Admin Komprehensif (Next.js - `admin-panel/`):**
+    *   **Dashboard:** Menampilkan statistik (total pengguna, artis, komisi, pesanan) dan aktivitas terbaru (pengguna & komisi terbaru) via API ([`admin-panel/app/admin/dashboard/page.tsx`](admin-panel/app/admin/dashboard/page.tsx:1)).
+    *   **Manajemen Pengguna:** Fungsionalitas CRUD penuh (daftar, lihat detail, buat, edit, hapus pengguna) ([`admin-panel/app/admin/users/`](admin-panel/app/admin/users/)).
+    *   **Manajemen Artis:**
+        *   Promosikan pengguna menjadi artis.
+        *   Daftar artis dengan paginasi dan detail ([`admin-panel/app/admin/artists/page.tsx`](admin-panel/app/admin/artists/page.tsx:1)).
+        *   Edit detail artis (portfolio, rating, status verifikasi) ([`admin-panel/app/admin/artists/[id]/edit/page.tsx`](admin-panel/app/admin/artists/[id]/edit/page.tsx:1)).
+        *   Toggle status verifikasi artis.
+    *   **Manajemen Kategori:** Fungsionalitas CRUD penuh (daftar, buat, edit, hapus kategori) ([`admin-panel/app/admin/categories/`](admin-panel/app/admin/categories/)).
+    *   **Manajemen Komisi (Read-Only):** Daftar komisi dengan paginasi dan lihat detail komisi ([`admin-panel/app/admin/commissions/`](admin-panel/app/admin/commissions/)).
+    *   **Manajemen Layanan (Read-Only):** Daftar layanan dengan paginasi, sorting, dan detail ([`admin-panel/app/admin/services/page.tsx`](admin-panel/app/admin/services/page.tsx:1)).
+    *   **Struktur & Navigasi:** Sidebar ([`admin-panel/components/admin/admin-sidebar.tsx`](admin-panel/components/admin/admin-sidebar.tsx:1)), header ([`admin-panel/components/admin/admin-header.tsx`](admin-panel/components/admin/admin-header.tsx:1)) dengan informasi pengguna, tombol logout fungsional, dan placeholder untuk pencarian, notifikasi, profil, dan pengaturan.
 
 ## Isu dan Bug yang Diketahui
 
@@ -49,13 +60,18 @@ Beberapa isu dan bug yang telah teridentifikasi dan memerlukan perhatian:
 
 Fitur-fitur berikut telah dimulai namun belum sepenuhnya fungsional atau terintegrasi:
 
-*   **Profil Seniman Tingkat Lanjut:** Model `Artist` dan tabel `artists` ada. `ArtistController` telah di-refactor untuk menggunakan model `Artist`. View `artists.index` dan `artists.show` telah diperbarui untuk menampilkan detail lebih kaya (`is_verified`, `rating` jika ada) dan alur pembuatan/pengelolaan profil artis dari halaman profil pengguna telah ditambahkan. *(Status Fitur Rating: Implementasi input rating (1-5 bintang) pada form review, validasi, dan penyimpanan rating di controller, serta penampilan rating pada daftar ulasan telah SELESAI. Pesan UI terkait juga sudah dalam Bahasa Indonesia)*. Aspek pengelolaan `is_verified` dan kalkulasi `rating` otomatis untuk seniman masih memerlukan pengembangan lebih lanjut (kemungkinan via panel admin atau sistem).
-*   **Manajemen Layanan oleh Seniman:** *(Status: SELESAI)* Fungsionalitas CRUD penuh untuk layanan oleh seniman telah diimplementasikan. Seniman dapat membuat, melihat, mengedit, dan menghapus layanan mereka. Halaman detail publik untuk layanan juga tersedia dan tertaut dari profil artis. Komisi dapat ditautkan ke layanan saat pembuatan/pengeditan.
-*   **Pelacakan Pembayaran Detail:** Model `Payment` dan tabel `payments` ada, namun alur pemesanan saat ini hanya menyederhanakan status order menjadi 'paid' tanpa integrasi gateway pembayaran atau penggunaan model `Payment` secara detail.
-*   **Chat Real-time (Frontend):** *(Status: SELESAI)* Implementasi sisi klien (Laravel Echo dan Pusher di [`resources/views/chat/chat.blade.php`](resources/views/chat/chat.blade.php:1)) untuk pengalaman chat real-time telah selesai. Pesan baru muncul tanpa refresh.
-*   **Panel Admin:** Fungsionalitas admin yang komprehensif untuk mengelola pengguna, seniman, komisi, dll., belum dikembangkan secara menyeluruh.
-*   **Persistensi Detail Pesanan:** ~~`OrderController@confirmPayment` belum menyimpan `total_price` ke dalam tabel `orders`.~~ *(Status: TERATASI. Metode `confirmPayment` di `OrderController` sudah menyimpan `total_price` saat membuat order baru).*
-*   **Relasi Model yang Hilang:** ~~Beberapa relasi penting (seperti `orders()`, `reviews()`, `messages()`) belum didefinisikan di model `User`.~~ *(Status: TERATASI. Relasi-relasi yang diperlukan seperti `orders()`, `reviews()`, `messagesSent()`, `messagesReceived()`, dan `lovedCommissions()` sudah ada di model `User`)*.
+*   **Profil Seniman Tingkat Lanjut:**
+    *   Model `Artist` ([`app/Models/Artist.php`](app/Models/Artist.php:1)) dan tabel `artists` ada. `ArtistController` (Laravel) telah di-refactor.
+    *   View `artists.index` dan `artists.show` (Laravel) telah diperbarui.
+    *   Status verifikasi (`is_verified`) kini dapat dikelola melalui Panel Admin (Next.js) ([`admin-panel/app/admin/artists/page.tsx`](admin-panel/app/admin/artists/page.tsx:1)).
+    *   *(Status Fitur Rating: Implementasi input rating (1-5 bintang) pada form review, validasi, dan penyimpanan rating di controller, serta penampilan rating pada daftar ulasan telah SELESAI. Pesan UI terkait juga sudah dalam Bahasa Indonesia)*.
+    *   *(Pengembangan Lanjutan: Kalkulasi `rating` otomatis untuk seniman, integrasi lebih dalam antara profil Laravel dan data di Panel Admin).*
+*   **Pelacakan Pembayaran Detail:** Model `Payment` ([`app/Models/Payment.php`](app/Models/Payment.php:1)) dan tabel `payments` ada. Alur pemesanan saat ini menyederhanakan status order menjadi 'paid'. Pembuatan record `Payment` disimulasikan saat konfirmasi pembayaran ([`app/Http/Controllers/OrderController.php`](app/Http/Controllers/OrderController.php:1)), namun integrasi gateway pembayaran penuh dan penggunaan detail model `Payment` belum ada.
+*   **Panel Admin (Next.js) - Fitur Lanjutan:**
+    *   **Manajemen Pesanan Admin:** Halaman untuk admin mengelola semua pesanan ([`admin-panel/app/admin/orders/page.tsx`](admin-panel/app/admin/orders/page.tsx:1)) masih tertunda implementasinya (sesuai log #14).
+    *   **Fungsionalitas Penuh Navbar:** Fitur Pencarian dan Notifikasi di navbar admin ([`admin-panel/components/admin/admin-header.tsx`](admin-panel/components/admin/admin-header.tsx:1)) saat ini adalah placeholder visual. Halaman Profil dan Pengaturan Admin juga belum dibuat dan linknya bersifat placeholder.
+*   **Persistensi Detail Pesanan:** ~~`OrderController@confirmPayment` belum menyimpan `total_price` ke dalam tabel `orders`.~~ *(Status: TERATASI. Metode `confirmPayment` di [`app/Http/Controllers/OrderController.php`](app/Http/Controllers/OrderController.php:1) sudah menyimpan `total_price` saat membuat order baru).*
+*   **Relasi Model yang Hilang:** ~~Beberapa relasi penting (seperti `orders()`, `reviews()`, `messages()`) belum didefinisikan di model `User`.~~ *(Status: TERATASI. Relasi-relasi yang diperlukan seperti `orders()`, `reviews()`, `messagesSent()`, `messagesReceived()`, dan `lovedCommissions()` sudah ada di model [`app/Models/User.php`](app/Models/User.php:1))*.
 *   **Inkonsistensi Penggunaan `name` vs. `username`:** ~~Pada tabel `users`, perlu ada standarisasi penggunaan antara `name` dan `username`.~~ *(Status: TERATASI. `UserController@update` telah dimodifikasi untuk memungkinkan pembaruan field `name` selain `username`, menyelaraskannya dengan form registrasi dan edit yang sudah ada. Kedua field kini dapat dikelola).*
 
 ## Fitur yang Direncanakan & Pengembangan Selanjutnya
