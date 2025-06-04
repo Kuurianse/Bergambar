@@ -321,14 +321,28 @@ php artisan migrate --seed
 ```
    *(Ensure relevant seeders like `UserSeeder`, `ArtistSeeder`, etc., are correctly configured in `DatabaseSeeder.php` if you need specific initial data.)*
 
-**e. Start the Laravel Development Server:**
+**e. Compile Frontend Assets (Vite):**
+   The main Laravel application uses Vite for frontend asset bundling.
+   ```bash
+   npm install
+   # or if you prefer pnpm and have it installed globally:
+   # pnpm install
+   
+   # Run the Vite development server (for hot module replacement during development)
+   npm run dev
+   # or for pnpm:
+   # pnpm dev
+   ```
+   *(This command should typically be run in a separate terminal window from `php artisan serve`.)*
+
+**f. Start the Laravel Development Server:**
    *   **For Laragon:**
-        *   Ensure Laragon is running and your project is correctly configured as a virtual host (e.g., pointing to `http://bergambar.test/`). You typically start services via the Laragon application ("Start All").
+        *   Ensure Laragon is running and your project is correctly configured as a virtual host (e.g., pointing to `http://bergambar.test/`). You typically start services via the Laragon application ("Start All"). The Vite dev server (from step e) should also be running.
    *   **For XAMPP (or manual `php artisan serve`):**
         ```bash
         php artisan serve
         ```
-        The Laravel application will usually be available at `http://localhost:8000`.
+        The Laravel application will usually be available at `http://localhost:8000`. The Vite dev server (from step e) should also be running.
 
 ### 3. Frontend Setup (Next.js Admin Panel)
 
