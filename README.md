@@ -8,11 +8,6 @@ Platform Komisi Karya Seni Bergambar adalah aplikasi web yang dibangun menggunak
 
 Proyek ini memiliki struktur dasar yang fungsional untuk beberapa fitur inti. Namun, terdapat beberapa bug kritis yang perlu segera ditangani, fitur yang belum sepenuhnya terimplementasi, dan beberapa area yang memerlukan pengembangan lebih lanjut untuk mencapai fungsionalitas penuh dan pengalaman pengguna yang optimal. Rencana pengembangan terstruktur telah diidentifikasi untuk mengatasi isu-isu ini dan menambahkan fitur-fitur baru.
 
-Dokumen analisis dan perencanaan lebih detail dapat ditemukan di:
-*   [`project_analysis_and_plan.md`](project_analysis_and_plan.md)
-*   [`artist_order_management_plan.md`](artist_order_management_plan.md)
-*   [`fix_order_creation_plan.md`](fix_order_creation_plan.md)
-
 ## Fitur Utama (Telah Diimplementasikan atau Sebagian Besar Fungsional)
 
 Berikut adalah fitur-fitur utama yang saat ini sudah berjalan atau fungsionalitas backend-nya sebagian besar telah ada:

@@ -1,82 +1,56 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
 
-@section('content')
-<!-- Assuming a consistent background color is handled by layouts.app or a global CSS -->
-<div class="container" style="margin-top: 5%;">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card"> <!-- Removed inline style, assuming card styling is global -->
-                <div class="card-header">{{ __('Login') }}</div> <!-- Removed inline style -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/loginRegister.css') }}">
+    <title>Login | Register</title>
+</head>
 
-                <div class="card-body"> <!-- Removed inline style -->
-                    <form method="POST" action="#"> <!-- Action set to # for barebones -->
-                        @csrf
+<body>
 
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="user@example.com" required autocomplete="email" autofocus placeholder="Enter your email">
-                                <!-- Placeholder for email error -->
-                                <span class="invalid-feedback" role="alert" style="display: none;">
-                                    <strong>Email is required and must be a valid email address.</strong>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required autocomplete="current-password" placeholder="Enter your password" value="password">
-                                <!-- Placeholder for password error -->
-                                <span class="invalid-feedback" role="alert" style="display: none;">
-                                    <strong>Password is required.</strong>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" checked>
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row mb-3">
-                             <div class="col-md-8 offset-md-4">
-                                <!-- Placeholder for general login error -->
-                                <div class="alert alert-danger" role="alert" style="display: none;">
-                                    Invalid login credentials. Please try again.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                <a class="btn btn-link" href="#"> <!-- Href set to # -->
-                                    {{ __('Forgot Your Password?') }}
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="row mt-3">
-                            <div class="col-md-8 offset-md-4">
-                                <a class="btn btn-link" href="#"> <!-- Href set to # -->
-                                    {{ __('Don\'t have an account? Register here') }}
-                                </a>
-                            </div>
-                        </div>
-                    </form>
+    <div class="container" id="container">
+        <div class="form-container sign-up">
+            <form method="POST" action="{{ route('register') }}">
+                @csrf
+                <h1>Create Account</h1>
+                <input type="text" name="username" placeholder="Username" class="email" value="{{ old('username') }}" required autocomplete="username" autofocus>
+                <input type="text" name="name" placeholder="Name" class="email" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required autocomplete="email">
+                <input type="password" name="password" placeholder="Password" required autocomplete="new-password">
+                <input type="password" name="password_confirmation" placeholder="Confirm Password" required autocomplete="new-password">
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+        <div class="form-container sign-in">
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+                <h1>Sign In</h1>
+                <input type="email" name="email" placeholder="Email" class="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                <input type="password" name="password" placeholder="Password" required autocomplete="current-password">
+                <a href="{{ route('password.request') }}">Forget Your Password?</a>
+                <button type="submit">Sign In</button>
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>Welcome Back!</h1>
+                    <p>Enter your personal details to use all of site features</p>
+                    <button class="hidden" id="login">Sign In</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Register with your personal details to use all of site features</p>
+                    <button class="hidden" id="register">Sign Up</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
-@endsection
+
+    <script src="{{ asset('js/loginRegister.js') }}"></script>
+</body>
+
+</html>

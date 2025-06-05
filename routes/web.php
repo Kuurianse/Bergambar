@@ -10,6 +10,7 @@ use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\HomeController;
 
 /*
 |---------------------------------------------------------------------------
@@ -41,7 +42,7 @@ Route::get('/profile', [UserController::class, 'profile'])->middleware('auth')->
 // Aktifkan semua rute autentikasi Laravel (login, register, dll.)
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
 Route::get('/commissions', [CommissionController::class, 'index'])->name('commissions.index');
