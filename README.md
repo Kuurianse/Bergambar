@@ -371,6 +371,7 @@ pnpm dev
 
 *   **Main Laravel Application:** Access it via the URL configured in your Laravel `.env` (`APP_URL`) and your web server setup (e.g., `http://bergambar.test/` for Laragon). For XAMPP with `php artisan serve`, ensure you use `http://localhost:8000` (not `http://127.0.0.1:8000`) to avoid potential session or CSRF token issues.
 *   **Next.js Admin Panel:** Access it via the URL configured in `admin-panel/.env.local` (`NEXT_PUBLIC_APP_URL`), typically `http://localhost:3000` or `http://localhost:3001`.
+    *   **Penting:** Aplikasi admin tidak memiliki halaman utama di `/`. Anda harus langsung mengakses halaman login di **`http://localhost:3000/login`**. Mencoba mengakses root URL akan menghasilkan error 404.
 
 **Additional Notes:**
 *   **Real-time Chat (Pusher):** For full real-time chat functionality, you'll need to:
