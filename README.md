@@ -373,7 +373,23 @@ pnpm dev
 *   **Next.js Admin Panel:** Access it via the URL configured in `admin-panel/.env.local` (`NEXT_PUBLIC_APP_URL`), typically `http://localhost:3000` or `http://localhost:3001`.
     *   **Penting:** Aplikasi admin tidak memiliki halaman utama di `/`. Anda harus langsung mengakses halaman login di **`http://localhost:3000/login`**. Mencoba mengakses root URL akan menghasilkan error 404.
 
-**Additional Notes:**
+### 5. Akun Default
+
+Setelah menjalankan `php artisan migrate --seed`, beberapa akun pengguna akan dibuat secara otomatis. Anda dapat menggunakan kredensial berikut untuk login dan menguji fungsionalitas aplikasi:
+
+*   **Admin (untuk Admin Panel & Laravel):**
+    *   **Email:** `admin@example.com`
+    *   **Password:** `password123`
+
+*   **Artis (untuk aplikasi Laravel):**
+    *   **Email:** `alya.putri@example.com`
+    *   **Password:** `password123`
+
+*   **Pengguna Biasa (untuk aplikasi Laravel):**
+    *   **Email:** `citra.d@example.com`
+    *   **Password:** `password123`
+
+### 6. Additional Notes
 *   **Real-time Chat (Pusher):** For full real-time chat functionality, you'll need to:
     *   Configure Pusher (or an alternative like Ably/Soketi) credentials in your Laravel `.env` file (`PUSHER_APP_ID`, `PUSHER_APP_KEY`, `PUSHER_APP_SECRET`, `PUSHER_APP_CLUSTER`).
     *   Set `BROADCAST_DRIVER=pusher` in Laravel's `.env`.
