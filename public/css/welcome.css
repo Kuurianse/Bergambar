@@ -1,178 +1,447 @@
-/* public/css/style.css */
+:root {
+  --primary-color: #171717;
+  --background-color: #f2f2f2;
+  --heading-color: #111827;
+  --text-color: #57606e;
+  --header-color: #000000; /* hitam */
 
+  font-size: 62.5%; /* Ini akan membuat 1rem = 10px pada browser default 16px */
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
 body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #f8f9fa; /* Light gray background for the page */
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  /* font-family: 'Poppins', sans-serif; */
+  font-family: "Jost", sans-serif;
+  font-size: 2.2rem;
+  color: var(--text-color);
 }
 
-.page-container {
-    flex: 1;
+/* Header */
+header {
+  /* border: 1px solid red; */
+  color: var(--header-color);
+  padding: 1.6rem 3.2rem;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 138.1rem;
+  /* HAPUS: margin: auto; */ /* Ini hanya akan bekerja jika ada max-width */
+  margin: auto;
+  background-color: white;
+  border-radius: 20rem;
+  align-items: center;
 }
 
-/* Navbar */
-.navbar {
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
+header nav ul {
+  display: flex;
+  gap: 3.2rem;
+  list-style: none;
+}
+header nav ul li {
+  /* border: 1px solid black; */
+  /* display: flex; */
+}
+header nav ul li a {
+  text-decoration: none;
+  color: var(--header-color);
+  font-weight: 400;
+  font-size: 1.6rem;
+}
+li .btn-container {
+  display: flex;
+  gap: 1.6rem;
+}
+header nav ul li .login-btn {
+  color: black;
+  padding: 0.8rem 2rem;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  font-weight: 500;
+  background-color: white;
 }
 
-.navbar-brand img {
-    transition: transform 0.3s ease;
+header nav ul li .register-btn {
+  color: white;
+  padding: 0.8rem 2rem;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(0, 0, 0, 0);
+  font-weight: 500;
+  background-color: var(--primary-color);
 }
 
-.navbar-brand img:hover {
-    transform: scale(1.05);
+/* --- ANIMATION --- */
+header.sticky {
+  position: fixed;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95%;
+  z-index: 1000;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: top 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.nav-link {
-    font-weight: 500;
-    color: #555;
-    transition: color 0.3s ease;
+header nav ul li a {
+  position: relative;
+  transition: color 0.3s ease;
 }
 
-.nav-link:hover,
-.nav-link.active {
-    color: #007bff; /* Bootstrap primary color */
+header nav ul li a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 50%;
+  background-color: var(--primary-color);
+  transition: all 0.3s ease-in-out;
+  transform: translateX(-50%);
 }
 
-.navbar-toggler {
-    border: none;
-}
-.navbar-toggler:focus {
-    box-shadow: none;
+header nav ul li a:hover::after,
+header nav ul li a.active::after {
+  width: 100%;
 }
 
-.dropdown-menu {
-    border-radius: 0.5rem;
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+header nav ul li a.active {
+  font-weight: 600;
 }
 
-.dropdown-item:active {
-    background-color: #007bff;
-    color: white;
+header nav ul li .login-btn:hover {
+  background-color: var(--primary-color);
+  color: white;
+  transition: all 0.3s ease-in-out;
+}
+
+header nav ul li .register-btn:hover {
+  background-color: white;
+  color: black;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease-in-out;
+}
+section.hero {
+  background-color: var(--background-color);
+  height: 100vh;
+  padding: 3.3rem;
+  display: flex;
+  flex-direction: column;
+  /* text-align: center; */
+}
+
+.hero .logo {
+  font-size: 2.3rem;
+  font-weight: 600;
 }
 
 /* Hero Section */
-.hero-section {
-    background-color: #e9ecef; /* Slightly different light background */
-    /* Jika Anda memiliki gambar latar belakang spesifik:
-    background: url('../assets/your-hero-background.jpg') no-repeat center center;
-    background-size: cover;
-    color: white; /* Ganti warna teks jika background gelap */
-    */
+.hero-container {
+  /* border: 1px solid black; */
+  display: flex;
+  /* justify-content: space-between; */
+  max-width: 138.1rem;
+  margin: auto;
+
+  /* Ini penting agar hero-container mengambil sisa ruang yang tersedia
+     setelah header, dan kemudian menengahkan dirinya di ruang itu. */
+  flex-grow: 1; /* Memungkinkan hero-container untuk mengambil semua ruang sisa */
+
+  align-items: center;
+  justify-content: center;
+  gap: 10.5rem;
 }
 
-.hero-section h1 {
-    color: #343a40; /* Darker heading */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.9rem;
+  max-width: 67.2rem;
+}
+.hero-content h1 {
+  font-size: 6.4rem;
+  font-weight: 600;
+  color: var(--heading-color);
+}
+.hero-content p {
+  font-size: 2.2rem;
+  color: var(--text-color);
+  line-height: 1.4;
 }
 
-.hero-section .lead {
-    color: #6c757d; /* Muted text color */
+/* --- BUTTON CONTAINER --- */
+.hero-content .btn-container {
+  display: flex;
+  justify-content: space-between;
+  max-width: 34rem;
 }
 
-.hero-section .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-    padding: 0.75rem 1.5rem;
-    font-size: 1.1rem;
-}
-.hero-section .btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+/* --- BASE BUTTON STYLES (Properti yang Sama untuk Semua Tombol) --- */
+.btn-container .btn {
+  /* .btn di dalam .btn-container */
+  border-radius: 0.6rem;
+  font-size: 1.6rem;
+  font-weight: 500;
+  text-decoration: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Penting untuk fleksibilitas di dalam flex container */
+  flex-shrink: 0;
+  flex-grow: 0;
 }
 
-.hero-section .btn-outline-secondary {
-    padding: 0.75rem 1.5rem;
-    font-size: 1.1rem;
-    color: #007bff;
-    border-color: #007bff;
+/* --- BUTTON VARIATIONS (Properti Unik) --- */
+
+.btn-container .browse-btn {
+  padding: 1.2rem 2rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
-.hero-section .btn-outline-secondary:hover {
-    background-color: #007bff;
-    color: white;
+.btn-container .view-btn {
+  padding: 1.2rem 2.5rem;
+  background-color: white;
+  color: var(--primary-color);
+  border: 1px solid rgba(218, 218, 218, 0.6);
 }
 
-.hero-section img {
-    max-height: 400px; /* Batasi tinggi gambar hero agar tidak terlalu besar */
-    object-fit: cover; /* Agar gambar tidak terdistorsi */
+.hero-image img {
+  border-radius: 4rem;
+  width: 60rem;
+  height: 60rem;
+  object-fit: cover;
+  display: block;
+  /* Tambahkan transisi jika ada perubahan ukuran untuk efek visual */
+  transition: width 0.3s ease, height 0.3s ease;
 }
 
+/* Featured Section  */
 
-/* Commission Section */
-.commission-section {
-    background-color: #ffffff; /* White background for this section */
+.featured {
+  /* border: 1px solid red; */
+  padding: 4.3rem;
 }
-
-.commission-section h2 {
-    color: #343a40;
-}
-
-.commission-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: none; /* Hilangkan border default card */
-    border-radius: 0.75rem; /* Border radius lebih besar */
+.featured-container {
+  /* border: 1px solid red; */
+  max-width: 150.3rem;
+  margin: auto;
 }
 
-.commission-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0.75rem 1.5rem rgba(0,0,0,0.1);
+.featured-header {
+  margin-bottom: 3rem;
+}
+.featured-header h2 {
+  font-size: 3.3rem;
+  font-weight: 600;
+  color: var(--heading-color);
+}
+.featured-header p {
+  font-size: 1.8rem;
+  color: var(--text-color);
+  line-height: 1.4;
 }
 
-.commission-card-img {
-    height: 200px; /* Atur tinggi gambar card yang seragam */
-    object-fit: cover; /* Pastikan gambar terisi tanpa distorsi */
-    border-top-left-radius: 0.75rem;
-    border-top-right-radius: 0.75rem;
+.cards-grid-container {
+  /* border: 1px solid black; */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 kolom dengan lebar yang sama */
+  grid-template-rows: repeat(
+    3,
+    minmax(40.6rem, auto)
+  ); /* Tinggi minimal 40.6rem, bisa otomatis jika konten lebih banyak */
+  gap: 3rem 2.4rem; /* row-gap column-gap */
+  max-width: 150.3rem;
+  margin: auto;
 }
 
-.commission-card .card-body {
-    padding: 1.25rem;
+.card {
+  border: 1px solid rgba(227, 227, 227, 1);
+  /* height: 40.6rem; */
+  border-radius: 1rem;
+  overflow: hidden;
+  position: relative; /* Untuk posisi absolut di dalamnya */
+  display: flex;
+  flex-direction: column;
+}
+.tag-completed {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  border-radius: 1.1rem;
+  background-color: var(--primary-color);
+
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: white;
+  padding: 0.1rem 1rem;
 }
 
-.commission-card .card-title a {
-    color: #333;
-    text-decoration: none;
-    font-weight: 600;
+.card-text {
+  padding: 1.7rem;
+  /* position: relative;  */
+  /* Untuk posisi absolut harga dan btn details */
 }
 
-.commission-card .card-title a:hover {
-    color: #007bff;
+.card-image-placeholder {
+  width: 100%;
+  height: 27.3rem;
+  background-color: #e0e0e0;
+}
+.card-title {
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 1.4;
+}
+.card-author {
+  margin-top: 0.5rem;
+  font-size: 1.6rem;
+  font-weight: 400;
+
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.card-like {
+  margin-top: 2rem;
+  /* margin-left: 1.1rem; */
+  font-size: 1.6rem;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: black;
 }
 
-.commission-card .price-tag {
-    color: #28a745; /* Green color for price */
-    font-size: 1.1rem;
+.priceBtn-absolute {
+  position: absolute;
+  bottom: 0.8rem;
+  right: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+.card-price {
+  justify-content: right;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--primary-color);
+}
+.card-details-btn {
+  padding: 0.8rem 1.4rem;
+  border-radius: 0.6rem;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 400;
+  text-decoration: none;
+  border: none;
+  transition: background-color 0.3s ease;
 }
 
-.love-section i {
-    font-size: 1.2rem;
-}
-.love-section .bi-heart-fill {
-    color: #dc3545; /* Bootstrap danger color for filled heart */
-}
-.love-section .bi-heart {
-    color: #6c757d; /* Muted color for outline heart */
+.card-details-btn:hover {
+  background-color: rgba(23, 23, 23, 0.9);
+  cursor: pointer;
 }
 
 /* Footer */
 footer {
-    background-color: #343a40; /* Bootstrap dark color */
-}
-footer p {
-    margin-bottom: 0.25rem;
+  max-width: 156.7rem;
+  margin: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 3.2rem;
+  padding: 3.2rem;
 }
 
-/* Utility */
-.stretched-link::after {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1;
-    content: "";
+.upper {
+  background-color: rgba(23, 23, 23, 0.1);
+  height: 1px;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+}
+.bottom .logo {
+  font-size: 2.3rem;
+  font-weight: 600;
+  color: black;
+}
+.bottom .copyright {
+  font-size: 1.4rem;
+  color: black;
+}
+
+/* Untuk layar sedang (misalnya, tablet - sekitar 1024px atau kurang) */
+@media (max-width: 1024px) {
+  .cards-grid-container {
+    grid-template-columns: repeat(2, 1fr); /* Ubah menjadi 2 kolom */
+    max-width: 90rem; /* Sesuaikan max-width container untuk tablet */
+    /* gap bisa tetap sama, atau disesuaikan jika perlu */
+  }
+
+  .card-image-placeholder {
+    height: 20rem; /* Sesuaikan tinggi gambar agar tidak terlalu besar di tablet */
+  }
+}
+/* Di layar yang lebih kecil, kecilkan ukuran gambar */
+@media (max-width: 768px) {
+  /* Contoh breakpoint untuk tablet/ponsel */
+  .hero-image img {
+    width: 30rem; /* Kecilkan menjadi 30rem */
+    height: 30rem;
+  }
+  .cards-grid-container {
+    grid-template-columns: 1fr; /* Ubah menjadi 1 kolom */
+    max-width: 45rem; /* Batasi lebar container untuk ponsel */
+    /* padding: 0 1.5rem; /* Mungkin kurangi padding horizontal untuk ponsel */
+  }
+
+  .card {
+    /* Hapus height eksplisit atau gunakan auto, agar kartu menyesuaikan tinggi konten */
+    height: auto;
+  }
+
+  .card-image-placeholder {
+    height: 18rem; /* Sesuaikan tinggi gambar lagi untuk ponsel */
+  }
+
+  /* Untuk tombol di dalam card, bisa jadi flex-wrap untuk stack jika sempit */
+  .card-info {
+    flex-wrap: wrap; /* Tombol bisa turun baris jika tidak muat */
+    gap: 1rem; /* Tambahkan gap antar item jika wrap */
+    justify-content: center; /* Pusatkan item saat wrap */
+  }
+  .card-details-btn {
+    width: 100%; /* Tombol bisa mengisi lebar penuh jika di satu kolom */
+  }
+
+  /* Menyesuaikan ukuran font dasar di layar kecil untuk semua elemen yang pakai rem */
+  :root {
+    font-size: 58%; /* Contoh: 1rem = 5.8px, semua ukuran rem akan sedikit lebih kecil */
+  }
+}
+
+/* Untuk layar yang sangat kecil (misal ponsel) */
+@media (max-width: 480px) {
+  .hero-image img {
+    width: 20rem; /* Atau gunakan unit persen untuk lebih fleksibel */
+    height: 20rem;
+    /* width: 80vw; */ /* Contoh penggunaan viewport unit */
+    /* height: 80vw; */
+  }
+  .cards-grid-container {
+    padding: 0 1rem; /* Kurangi padding container lagi */
+  }
 }

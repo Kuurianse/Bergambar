@@ -115,6 +115,8 @@ class CommissionSeeder extends Seeder
 
     private function createSpecificCommissions()
     {
+        $placeholderImage = 'assets/image.jpg'; // Path relative to public folder
+
         $alyartUser = User::where('email', 'alya.putri@example.com')->first();
         $budisoundUser = User::where('email', 'budi.s@example.com')->first();
 
@@ -135,30 +137,30 @@ class CommissionSeeder extends Seeder
             if ($alyasPortraitService) {
                 Commission::firstOrCreate(
                     ['artist_id' => $alyasArtistId, 'service_id' => $alyasPortraitService->id, 'description' => 'Detailed bust-up of original character "Elara" with floral background.'],
-                    ['user_id' => $clientForAlya, 'title' => 'OC Elara Bust-up', 'status' => 'completed', 'total_price' => $alyasPortraitService->price, 'image' => 'seed_images/elara_commission.jpg']
+                    ['user_id' => $clientForAlya, 'title' => 'OC Elara Bust-up', 'status' => 'completed', 'total_price' => $alyasPortraitService->price, 'image' => $placeholderImage]
                 );
             }
             Commission::firstOrCreate(
                 ['artist_id' => $alyasArtistId, 'description' => 'Fantasy Landscape - "The Crystal Caves of Eldoria"'],
-                ['user_id' => $clientForAlya, 'title' => 'Crystal Caves Landscape', 'status' => 'pending', 'total_price' => 950000, 'image' => 'seed_images/crystal_caves.jpg']
+                ['user_id' => $clientForAlya, 'title' => 'Crystal Caves Landscape', 'status' => 'pending', 'total_price' => 950000, 'image' => $placeholderImage]
             );
             Commission::firstOrCreate(
                 ['artist_id' => $alyasArtistId, 'description' => 'Chibi version of Link from Zelda'],
-                ['user_id' => $clientForAlya, 'title' => 'Chibi Link (Zelda)', 'status' => 'needs_revision', 'total_price' => 350000, 'image' => 'seed_images/chibi_link.jpg']
-            ); // Changed status for variety
+                ['user_id' => $clientForAlya, 'title' => 'Chibi Link (Zelda)', 'status' => 'needs_revision', 'total_price' => 350000, 'image' => $placeholderImage]
+            );
             Commission::firstOrCreate(
                 ['artist_id' => $alyasArtistId, 'description' => 'Set of 3 custom Twitch emotes (Hype, Sad, Love)'],
-                ['user_id' => $clientForAlya, 'title' => 'Twitch Emote Set (3)', 'status' => 'completed', 'total_price' => 450000, 'image' => 'seed_images/emote_set.png']
+                ['user_id' => $clientForAlya, 'title' => 'Twitch Emote Set (3)', 'status' => 'completed', 'total_price' => 450000, 'image' => $placeholderImage]
             );
             Commission::firstOrCreate(
                 ['artist_id' => $alyasArtistId, 'description' => 'Illustrated banner for YouTube gaming channel "PixelPlay"'],
-                ['user_id' => $clientForAlya, 'title' => 'PixelPlay YouTube Banner', 'status' => 'completed', 'total_price' => 600000, 'image' => 'seed_images/pixelplay_banner.jpg']
-            ); // Changed status for variety
+                ['user_id' => $clientForAlya, 'title' => 'PixelPlay YouTube Banner', 'status' => 'completed', 'total_price' => 600000, 'image' => $placeholderImage]
+            );
             if ($alyasConceptService) {
                 Commission::firstOrCreate(
                     ['artist_id' => $alyasArtistId, 'service_id' => $alyasConceptService->id, 'description' => 'Concept art for a mythical Griffin'],
-                    ['user_id' => $clientForAlya, 'title' => 'Mythical Griffin Concept', 'status' => 'completed', 'total_price' => $alyasConceptService->price, 'image' => 'seed_images/griffin_concept.jpg']
-                ); // Changed status for variety
+                    ['user_id' => $clientForAlya, 'title' => 'Mythical Griffin Concept', 'status' => 'completed', 'total_price' => $alyasConceptService->price, 'image' => $placeholderImage]
+                );
             }
         }
 
@@ -176,29 +178,29 @@ class CommissionSeeder extends Seeder
             if ($budisLofiService) {
                 Commission::firstOrCreate(
                     ['artist_id' => $budisArtistId, 'service_id' => $budisLofiService->id, 'description' => 'Custom Lo-fi track for "Relaxing Rain" animation video.'],
-                    ['user_id' => $clientForBudi, 'title' => 'Lo-fi for Relaxing Rain', 'status' => 'completed', 'total_price' => $budisLofiService->price]
+                    ['user_id' => $clientForBudi, 'title' => 'Lo-fi for Relaxing Rain', 'status' => 'completed', 'total_price' => $budisLofiService->price, 'image' => $placeholderImage]
                 );
             }
             Commission::firstOrCreate(
                 ['artist_id' => $budisArtistId, 'description' => 'Sound design for a short indie game trailer "Galaxy Runner" (30s)'],
-                ['user_id' => $clientForBudi, 'title' => 'Galaxy Runner Trailer SFX', 'status' => 'pending', 'total_price' => 1500000]
+                ['user_id' => $clientForBudi, 'title' => 'Galaxy Runner Trailer SFX', 'status' => 'pending', 'total_price' => 1500000, 'image' => $placeholderImage]
             );
             Commission::firstOrCreate(
                 ['artist_id' => $budisArtistId, 'description' => 'Intro/Outro jingle for "Tech Review Today" podcast (15 seconds)'],
-                ['user_id' => $clientForBudi, 'title' => 'Tech Review Podcast Jingle', 'status' => 'accepted', 'total_price' => 400000]
+                ['user_id' => $clientForBudi, 'title' => 'Tech Review Podcast Jingle', 'status' => 'accepted', 'total_price' => 400000, 'image' => $placeholderImage]
             );
             Commission::firstOrCreate(
                 ['artist_id' => $budisArtistId, 'description' => 'Pack of 10 unique UI sound effects for "TaskMaster" mobile app'],
-                ['user_id' => $clientForBudi, 'title' => 'TaskMaster App UI SFX (10)', 'status' => 'completed', 'total_price' => 700000]
+                ['user_id' => $clientForBudi, 'title' => 'TaskMaster App UI SFX (10)', 'status' => 'completed', 'total_price' => 700000, 'image' => $placeholderImage]
             );
             Commission::firstOrCreate(
                 ['artist_id' => $budisArtistId, 'description' => '5-minute ambient background track for "Mindful Moments" meditation app'],
-                ['user_id' => $clientForBudi, 'title' => 'Mindful Moments Ambient Track', 'status' => 'pending', 'total_price' => 900000]
+                ['user_id' => $clientForBudi, 'title' => 'Mindful Moments Ambient Track', 'status' => 'pending', 'total_price' => 900000, 'image' => $placeholderImage]
             );
             if ($budisOrchestralService) {
                  Commission::firstOrCreate( // Price override for a longer version
                     ['artist_id' => $budisArtistId, 'service_id' => $budisOrchestralService->id, 'description' => 'Epic battle theme loop (extended 60 seconds version)'],
-                    ['user_id' => $clientForBudi, 'title' => 'Epic Battle Loop (Extended)', 'status' => 'accepted', 'total_price' => 1000000]
+                    ['user_id' => $clientForBudi, 'title' => 'Epic Battle Loop (Extended)', 'status' => 'accepted', 'total_price' => 1000000, 'image' => $placeholderImage]
                 );
             }
         }

@@ -7,7 +7,7 @@
             <!-- Column for Commission Image -->
             <div class="col-md-5 text-center mb-4 mb-md-0">
                 @if($order->commission && $order->commission->image)
-                    <img src="{{ asset('storage/' . $order->commission->image) }}" alt="{{ $order->commission->title }}" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+                    <img src="{{ asset($order->commission->image) }}" alt="{{ $order->commission->title }}" class="img-fluid rounded" style="max-width: 100%; height: auto;">
                 @else
                     <p>No image available</p>
                 @endif
