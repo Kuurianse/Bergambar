@@ -137,6 +137,8 @@ section.hero {
 .hero .logo {
   font-size: 2.3rem;
   font-weight: 600;
+  text-decoration: none;
+  color: var(--heading-color);
 }
 
 /* Hero Section */

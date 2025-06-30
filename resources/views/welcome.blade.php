@@ -16,7 +16,7 @@
     <section class="hero">
         <!-- Navigation Bar -->
         <header>
-            <div class="logo">Bergambar</div>
+            <a href="/" class="logo" style="text-decoration: none; color: inherit; ">Bergambar</a>
             <nav>
                 <ul>
                     <li><a href="{{ route('artists.index') }}">Artists</a></li>

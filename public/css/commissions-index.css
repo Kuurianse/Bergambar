@@ -1,352 +1,356 @@
 :root {
-  --primary-color: #171717;
-  --background-color: #f2f2f2;
-  --heading-color: #111827;
-  --text-color: #57606e;
-  --header-color: #000000; /* hitam */
+    --primary-color: #171717;
+    --background-color: #f2f2f2;
+    --heading-color: #111827;
+    --text-color: #57606e;
+    --header-color: #000000; /* hitam */
 
-  font-size: 62.5%; /* Ini akan membuat 1rem = 10px pada browser default 16px */
+    font-size: 62.5%; /* Ini akan membuat 1rem = 10px pada browser default 16px */
 }
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 body {
-  /* font-family: 'Poppins', sans-serif; */
-  font-family: "Jost", sans-serif;
-  font-size: 2.2rem;
-  color: var(--text-color);
+    font-family: "Jost", sans-serif;
+    font-size: 2.2rem;
+    color: var(--text-color);
 }
 
 /* Header */
 header {
-  /* border: 1px solid red; */
-  color: var(--header-color);
-  padding: 1.6rem 3.2rem;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 150.9rem;
-  /* HAPUS: margin: auto; */ /* Ini hanya akan bekerja jika ada max-width */
-  margin: auto;
-  background-color: white;
-  border-radius: 20rem;
-  align-items: center;
+    color: var(--header-color);
+    padding: 1.6rem 3.2rem;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    display: flex;
+    /* justify-content: space-between; */
+    justify-content: space-between;
+    width: 100%;
+    max-width: 150.9rem;
+    /* HAPUS: margin: auto; */ /* Ini hanya akan bekerja jika ada max-width */
+    margin: auto;
+    background-color: white;
+    border-radius: 20rem;
+    align-items: center;
+}
+header nav {
+    display: flex;
+    align-items: center;
 }
 
 header nav ul {
-  display: flex;
-  gap: 3.2rem;
-  list-style: none;
+    display: flex;
+    gap: 3.2rem;
+    list-style: none;
+    align-items: center;
+    margin: 0; /* TAMBAHKAN INI: Menghilangkan margin default pada ul */
+    padding: 0; /* TAMBAHKAN INI: Menghilangkan padding default pada ul */
 }
 header nav ul li {
-  /* border: 1px solid black; */
-  /* display: flex; */
+    /* border: 1px solid black; */
+    display: flex;
+    align-items: center;
 }
 header nav ul li a {
-  text-decoration: none;
-  color: var(--header-color);
-  font-weight: 400;
-  font-size: 1.6rem;
+    text-decoration: none;
+    color: var(--header-color);
+    font-weight: 400;
+    font-size: 1.6rem;
 }
 li .btn-container {
-  display: flex;
-  gap: 1.6rem;
+    display: flex;
+    gap: 1.6rem;
+    align-items: center;
 }
 header nav ul li .login-btn {
-  color: black;
-  padding: 0.8rem 2rem;
-  border-radius: 0.6rem;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  font-weight: 500;
-  background-color: white;
+    color: black;
+    padding: 0.8rem 2rem;
+    border-radius: 0.6rem;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    font-weight: 500;
+    background-color: white;
 }
 
 header nav ul li .register-btn {
-  color: white;
-  padding: 0.8rem 2rem;
-  border-radius: 0.6rem;
-  border: 1px solid rgba(0, 0, 0, 0);
-  font-weight: 500;
-  background-color: var(--primary-color);
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 0.6rem;
+    border: 1px solid rgba(0, 0, 0, 0);
+    font-weight: 500;
+    background-color: var(--primary-color);
 }
 
 /* --- ANIMATION --- */
 header.sticky {
-  position: fixed;
-  top: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 95%;
-  z-index: 1000;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  transition: top 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    position: fixed;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: top 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 header nav ul li a {
-  position: relative;
-  transition: color 0.3s ease;
+    position: relative;
+    transition: color 0.3s ease;
 }
 
 header nav ul li a::after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 2px;
-  bottom: -5px;
-  left: 50%;
-  background-color: var(--primary-color);
-  transition: all 0.3s ease-in-out;
-  transform: translateX(-50%);
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 50%;
+    background-color: var(--primary-color);
+    transition: all 0.3s ease-in-out;
+    transform: translateX(-50%);
 }
 
 header nav ul li a:hover::after,
 header nav ul li a.active::after {
-  width: 100%;
+    width: 100%;
 }
 
 header nav ul li a.active {
-  font-weight: 600;
+    font-weight: 600;
 }
 
 header nav ul li .login-btn:hover {
-  background-color: var(--primary-color);
-  color: white;
-  transition: all 0.3s ease-in-out;
+    background-color: var(--primary-color);
+    color: white;
+    transition: all 0.3s ease-in-out;
 }
 
 header nav ul li .register-btn:hover {
-  background-color: white;
-  color: black;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease-in-out;
+    background-color: white;
+    color: black;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease-in-out;
 }
 
 section.hero {
-  background-color: white;
-  /* height: 100vh; */
-  padding: 3.3rem;
-  display: flex;
-  flex-direction: column;
-  /* gap: 4.7rem; */
-  /* text-align: center; */
+    background-color: white;
+    padding: 3.3rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .hero .logo {
-  font-size: 2.3rem;
-  font-weight: 600;
+    font-size: 2.3rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--heading-color);
 }
-
 
 /* Header */
 .header-upper {
-  /* border: solid 1px black; */
-  width: 100%;
-  max-width: 150.9rem;
-  margin: 0 auto;
-  margin-top: 4.7rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    /* border: solid 1px black; */
+    width: 100%;
+    max-width: 150.9rem;
+    margin: 0 auto;
+    margin-top: 4.7rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .left-header h1 {
-  /* border: 1px solid red; */
-  font-size: 3.5rem;
-  font-weight: 600;
-  color: var(--heading-color);
+    /* border: 1px solid red; */
+    font-size: 3.5rem;
+    font-weight: 600;
+    color: var(--heading-color);
 }
 .left-header p {
-  /* border: 1px solid blue; */
-  font-size: 1.8rem;
-  color: var(--text-color);
-  /* margin-top: 0.8rem; */
+    /* border: 1px solid blue; */
+    font-size: 1.8rem;
+    color: var(--text-color);
+    /* margin-top: 0.8rem; */
 }
 .right-create {
-  color: white;
-  background-color: var(--primary-color);
-  /* width: 100%; */
-  /* max-width: 18.7rem; */
-  border-radius: 6px;
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.8rem 1.9rem;
-  text-decoration: none;
+    color: white;
+    background-color: var(--primary-color);
+    /* width: 100%; */
+    /* max-width: 18.7rem; */
+    border-radius: 6px;
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1.9rem;
+    text-decoration: none;
 }
 
 .right-create svg {
-  fill: white;
+    fill: white;
 }
 
-.right-create p {
-  font-size: 1.4rem;
-  font-weight: 400;
+.right-create span {
+    font-size: 1.4rem;
+    font-weight: 400;
 }
-
 
 /* Featured Commissions Section  */
 
 .featured {
-  /* border: 1px solid red; */
-  /* padding: 4.3rem; */
-  margin-top: 3rem;
+    /* border: 1px solid red; */
+    /* padding: 4.3rem; */
+    margin-top: 3rem;
 }
 .featured-container {
-  /* border: 1px solid red; */
-  max-width: 150.3rem;
-  margin: auto;
+    /* border: 1px solid red; */
+    max-width: 150.3rem;
+    margin: auto;
 }
 
 .cards-grid-container {
-  /* border: 1px solid black; */
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 kolom dengan lebar yang sama */
-  grid-template-rows: repeat(
-    3,
-    minmax(40.6rem, auto)
-  ); /* Tinggi minimal 40.6rem, bisa otomatis jika konten lebih banyak */
-  gap: 3rem 2.4rem; /* row-gap column-gap */
-  max-width: 150.3rem;
-  margin: auto;
+    /* border: 1px solid black; */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 kolom dengan lebar yang sama */
+    grid-template-rows: repeat(
+        3,
+        minmax(40.6rem, auto)
+    ); /* Tinggi minimal 40.6rem, bisa otomatis jika konten lebih banyak */
+    gap: 3rem 2.4rem; /* row-gap column-gap */
+    max-width: 150.3rem;
+    margin: auto;
 }
 
 .card {
-  border: 1px solid rgba(227, 227, 227, 1);
-  background-color: white;
-  /* height: 40.6rem; */
-  border-radius: 1rem;
-  overflow: hidden;
-  position: relative; /* Untuk posisi absolut di dalamnya */
-  display: flex;
-  flex-direction: column;
+    border: 1px solid rgba(227, 227, 227, 1);
+    background-color: white;
+    /* height: 40.6rem; */
+    border-radius: 1rem;
+    overflow: hidden;
+    position: relative; /* Untuk posisi absolut di dalamnya */
+    display: flex;
+    flex-direction: column;
 }
 .tag-completed {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  border-radius: 1.1rem;
-  background-color: var(--primary-color);
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    border-radius: 1.1rem;
+    background-color: var(--primary-color);
 
-  font-size: 1.3rem;
-  font-weight: 500;
-  color: white;
-  padding: 0.1rem 1rem;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: white;
+    padding: 0.1rem 1rem;
 }
 
 .card-text {
-  padding: 1.7rem;
-  /* position: relative;  */
-  /* Untuk posisi absolut harga dan btn details */
+    padding: 1.7rem;
+    /* position: relative;  */
+    /* Untuk posisi absolut harga dan btn details */
 }
 
 .card-image-placeholder {
-  width: 100%;
-  height: 27.3rem;
-  background-color: #e0e0e0;
+    width: 100%;
+    height: 27.3rem;
+    background-color: #e0e0e0;
 }
 .card-title {
-  font-size: 1.6rem;
-  font-weight: 400;
-  line-height: 1.4;
+    font-size: 1.6rem;
+    font-weight: 400;
+    line-height: 1.4;
 }
 .card-author {
-  margin-top: 0.5rem;
-  font-size: 1.6rem;
-  font-weight: 400;
+    margin-top: 0.5rem;
+    font-size: 1.6rem;
+    font-weight: 400;
 
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
 }
 .card-like {
-  margin-top: 2rem;
-  /* margin-left: 1.1rem; */
-  font-size: 1.6rem;
-  font-weight: 400;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  color: black;
+    margin-top: 2rem;
+    /* margin-left: 1.1rem; */
+    font-size: 1.6rem;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: black;
+}
+.priceBtn-absolute {
+    position: absolute;
+    bottom: 0.8rem;
+    right: 1.3rem;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */ /* Hapus atau ubah baris ini */
+    align-items: flex-end; /* Tambahkan ini untuk meratakan item ke kanan */
+    gap: 0.4rem;
 }
 
-.priceBtn-absolute {
-  /* border: 1px solid red; */
-  position: absolute;
-  bottom: 0.8rem;
-  right: 1.3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.4rem;
-}
 .card-price {
-  justify-content: right;
-  font-size: 1.6rem;
-  font-weight: 500;
-  color: var(--primary-color);
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--primary-color);
 }
 .card-details-wrapper {
-  /* border: 1px solid black; */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.9rem;
-  /* margin-top: 1.5rem; */
+    /* border: 1px solid black; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.9rem;
+    /* margin-top: 1.5rem; */
 }
 .card-details-btn {
-  padding: 0.8rem 1.4rem;
-  border-radius: 0.6rem;
-  background-color: var(--primary-color);
-  color: white;
-  font-size: 1.4rem;
-  font-weight: 400;
-  text-decoration: none;
-  border: none;
-  transition: background-color 0.3s ease;
+    padding: 0.8rem 1.4rem;
+    border-radius: 0.6rem;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 400;
+    text-decoration: none;
+    border: none;
+    transition: background-color 0.3s ease;
 }
 .card-edit-btn,
 .card-delete-btn {
-  /* padding: 0.85rem; */
-  width: 4rem;
-  height: 3.7rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;  
-  border-radius: 0.6rem;
-  background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  color: white;
-  font-size: 1.4rem;
-  font-weight: 400;
-  text-decoration: none;
+    /* padding: 0.85rem; */
+    width: 4rem;
+    height: 3.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.6rem;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 400;
+    text-decoration: none;
 }
-.card-edit-btn svg, 
+.card-edit-btn svg,
 .card-delete-btn svg {
-  /* border: 1px solid black; */
+    /* border: 1px solid black; */
 }
 
 .card-view-btn {
-  padding: 0.8rem 1.4rem;
-  border-radius: 0.6rem;
-  background-color: var(--primary-color);
-  color: white;
-  font-size: 1.4rem;
-  font-weight: 400;
-  text-decoration: none;
-  border: none;
-  transition: background-color 0.3s ease;
+    padding: 0.8rem 1.4rem;
+    border-radius: 0.6rem;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 400;
+    text-decoration: none;
+    border: none;
+    transition: background-color 0.3s ease;
 }
 
 .card-details-btn:hover {
-  background-color: rgba(23, 23, 23, 0.9);
-  cursor: pointer;
+    background-color: rgba(23, 23, 23, 0.9);
+    cursor: pointer;
 }
 
 /* Pagination Styles */
@@ -358,10 +362,10 @@ section.hero {
     align-items: center;
 
     font-size: 1.7rem;
-    
+
     width: 100%;
     max-width: 1509px;
-    
+
     margin: 4rem auto 0;
 }
 
@@ -381,7 +385,7 @@ section.hero {
     font-size: 16px;
     /* Warna teks default untuk link pagination yang tidak aktif */
     color: var(--heading-color); /* Gunakan heading-color untuk teks link */
-    border-color: 1px solid rgba(0,0,0,0.15); /* Warna border default, bisa disesuaikan */
+    border-color: 1px solid rgba(0, 0, 0, 0.15); /* Warna border default, bisa disesuaikan */
     background-color: transparent; /* Latar belakang transparan untuk yang tidak aktif */
 }
 
@@ -399,12 +403,22 @@ section.hero {
     /* Variabel Bootstrap 5. Ubah nilai-nilai ini untuk mempengaruhi warna pagination */
     --bs-pagination-color: var(--heading-color); /* Warna teks default */
     --bs-pagination-bg: transparent; /* Latar belakang tombol default */
-    --bs-pagination-border-color: rgba(0,0,0,0.15); /* Warna border default */
+    --bs-pagination-border-color: rgba(
+        0,
+        0,
+        0,
+        0.15
+    ); /* Warna border default */
 
     /* Warna saat HOVER */
     --bs-pagination-hover-color: white; /* Warna teks saat hover */
     --bs-pagination-hover-bg: #171717; /* Latar belakang saat hover (warna kotak yang diminta) */
-    --bs-pagination-hover-border-color: rgba(0,0,0,0.15); /* Warna border saat hover */
+    --bs-pagination-hover-border-color: rgba(
+        0,
+        0,
+        0,
+        0.15
+    ); /* Warna border saat hover */
 
     /* Warna saat FOKUS (klik atau tab) */
     --bs-pagination-focus-color: white;
@@ -414,12 +428,22 @@ section.hero {
     /* Warna untuk halaman AKTIF */
     --bs-pagination-active-color: white; /* Warna teks halaman aktif */
     --bs-pagination-active-bg: #171717; /* Latar belakang halaman aktif (warna kotak yang diminta) */
-    --bs-pagination-active-border-color: rgba(0,0,0,0.15); /* Warna border halaman aktif */
+    --bs-pagination-active-border-color: rgba(
+        0,
+        0,
+        0,
+        0.15
+    ); /* Warna border halaman aktif */
 
     /* Warna untuk tombol DISABLED */
     --bs-pagination-disabled-color: #999; /* Warna teks tombol disabled */
     --bs-pagination-disabled-bg: #eee; /* Latar belakang tombol disabled */
-    --bs-pagination-disabled-border-color: rgba(0,0,0,0.15); /* Border tombol disabled */
+    --bs-pagination-disabled-border-color: rgba(
+        0,
+        0,
+        0,
+        0.15
+    ); /* Border tombol disabled */
 
     /* Sisa properti display dll. tidak perlu diubah */
     display: flex;
@@ -437,34 +461,34 @@ section.hero {
 
 /* Footer */
 footer {
-  /* border: 1px solid red; */
-  width: 100%;
-  max-width: 150.9rem;
-  margin: auto;
+    /* border: 1px solid red; */
+    width: 100%;
+    max-width: 150.9rem;
+    margin: auto;
 
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 
-  gap: 3.2rem;  
-  /* padding: 3.2rem; */
+    gap: 3.2rem;
+    /* padding: 3.2rem; */
 }
 
 .upper {
-  background-color: rgba(23, 23, 23, 0.1);
-  height: 1px;
-  margin-top: 5rem;
+    background-color: rgba(23, 23, 23, 0.1);
+    height: 1px;
+    margin-top: 5rem;
 }
 
 .bottom {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 .bottom .logo {
-  font-size: 2.3rem;
-  font-weight: 600;
-  color: black;
+    font-size: 2.3rem;
+    font-weight: 600;
+    color: black;
 }
 .bottom .copyright {
-  font-size: 1.4rem;
-  color: black;
+    font-size: 1.4rem;
+    color: black;
 }
