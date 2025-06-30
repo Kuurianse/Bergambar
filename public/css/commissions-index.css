@@ -349,6 +349,92 @@ section.hero {
   cursor: pointer;
 }
 
+/* Pagination Styles */
+/* Styling untuk container utama pagination */
+.pagination-container {
+    /* border: 1px solid red; */ /* Hapus ini setelah debugging */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-size: 1.7rem;
+    
+    width: 100%;
+    max-width: 1509px;
+    
+    margin: 4rem auto 0;
+}
+
+/* Styling untuk teks informasi pagination */
+.pagination-info {
+    font-size: 16px;
+    color: var(--text-color); /* Menggunakan warna teks dari root Anda */
+}
+
+/* Styling untuk wrapper tombol pagination (tidak perlu banyak perubahan di sini) */
+.pagination-buttons-wrapper {
+    /* Ini adalah wrapper untuk link pagination, tidak perlu display: flex di sini kecuali ada kebutuhan khusus */
+}
+
+/* Mengatur font-size untuk elemen link dalam pagination Bootstrap 5 */
+.pagination .page-link {
+    font-size: 16px;
+    /* Warna teks default untuk link pagination yang tidak aktif */
+    color: var(--heading-color); /* Gunakan heading-color untuk teks link */
+    border-color: 1px solid rgba(0,0,0,0.15); /* Warna border default, bisa disesuaikan */
+    background-color: transparent; /* Latar belakang transparan untuk yang tidak aktif */
+}
+
+/* Jika Anda juga ingin mengubah font size pada item span (misalnya, elipsis "...") */
+.pagination .page-item span {
+    font-size: 16px;
+    color: var(--heading-color); /* Warna teks untuk elipsis */
+}
+
+/* ========================================================= */
+/* KUSTOMISASI WARNA PAGINATION SESUAI PERMINTAAN */
+/* ========================================================= */
+
+.pagination {
+    /* Variabel Bootstrap 5. Ubah nilai-nilai ini untuk mempengaruhi warna pagination */
+    --bs-pagination-color: var(--heading-color); /* Warna teks default */
+    --bs-pagination-bg: transparent; /* Latar belakang tombol default */
+    --bs-pagination-border-color: rgba(0,0,0,0.15); /* Warna border default */
+
+    /* Warna saat HOVER */
+    --bs-pagination-hover-color: white; /* Warna teks saat hover */
+    --bs-pagination-hover-bg: #171717; /* Latar belakang saat hover (warna kotak yang diminta) */
+    --bs-pagination-hover-border-color: rgba(0,0,0,0.15); /* Warna border saat hover */
+
+    /* Warna saat FOKUS (klik atau tab) */
+    --bs-pagination-focus-color: white;
+    --bs-pagination-focus-bg: #171717;
+    --bs-pagination-focus-box-shadow: 0 0 0 0.25rem rgba(23, 23, 23, 0.25); /* Shadow fokus dengan opasitas dari warna kotak */
+
+    /* Warna untuk halaman AKTIF */
+    --bs-pagination-active-color: white; /* Warna teks halaman aktif */
+    --bs-pagination-active-bg: #171717; /* Latar belakang halaman aktif (warna kotak yang diminta) */
+    --bs-pagination-active-border-color: rgba(0,0,0,0.15); /* Warna border halaman aktif */
+
+    /* Warna untuk tombol DISABLED */
+    --bs-pagination-disabled-color: #999; /* Warna teks tombol disabled */
+    --bs-pagination-disabled-bg: #eee; /* Latar belakang tombol disabled */
+    --bs-pagination-disabled-border-color: rgba(0,0,0,0.15); /* Border tombol disabled */
+
+    /* Sisa properti display dll. tidak perlu diubah */
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+}
+
+/* Pastikan border-radius diterapkan dengan benar */
+.page-item:first-child .page-link {
+    border-radius: 5px 0 0 5px;
+}
+.page-item:last-child .page-link {
+    border-radius: 0 5px 5px 0;
+}
+
 /* Footer */
 footer {
   /* border: 1px solid red; */
@@ -366,7 +452,7 @@ footer {
 .upper {
   background-color: rgba(23, 23, 23, 0.1);
   height: 1px;
-  margin-top: 10rem;
+  margin-top: 5rem;
 }
 
 .bottom {

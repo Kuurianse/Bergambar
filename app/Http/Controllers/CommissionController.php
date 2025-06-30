@@ -15,7 +15,7 @@ class CommissionController extends Controller
     public function index()
     {
         // Memuat data commission beserta relasi user
-        $commissions = Commission::with('user')->latest()->paginate(10); // Added latest() and paginate()
+        $commissions = Commission::with('user')->latest()->paginate(9); // Added latest() and paginate()
         // Memuat data commission berdasarkan user yang sedang login - This line was removed to show all commissions
         // $commissions = Commission::where('user_id', Auth::id())->get();
         return view('commissions.index', compact('commissions'));
