@@ -1,0 +1,186 @@
+:root {
+  --primary-color: #171717;
+  --background-color: #f2f2f2;
+  --heading-color: #111827;
+  --text-color: #57606e;
+  --header-color: #000000; /* hitam */
+
+  font-size: 62.5%; /* Ini akan membuat 1rem = 10px pada browser default 16px */
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: "Jost", sans-serif;
+  font-size: 2.2rem;
+  color: var(--text-color);
+}
+
+/* Header */
+header {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+
+  /* --- UBAH INI UNTUK MEMBERIKAN JARAK DARI ATAS --- */
+  top: 3.3rem; /* Mengatur posisi 3.3rem dari bagian atas viewport */
+  /* ------------------------------------------------ */
+
+  color: var(--header-color);
+  padding: 1.6rem 3.2rem;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: space-between;
+  width: 95%;
+  /* max-width: 150.9rem; */
+  max-width: 156rem;
+  background-color: white;
+  border-radius: 20rem;
+  align-items: center;
+  z-index: 1000; /* Penting agar header muncul di atas konten lain */
+}
+
+header nav {
+  display: flex;
+  align-items: center;
+}
+
+header nav ul {
+  display: flex;
+  gap: 3.2rem;
+  list-style: none;
+  align-items: center;
+  margin: 0; /* TAMBAHKAN INI: Menghilangkan margin default pada ul */
+  padding: 0; /* TAMBAHKAN INI: Menghilangkan padding default pada ul */
+}
+header nav ul li {
+  /* border: 1px solid black; */
+  display: flex;
+  align-items: center;
+}
+header nav ul li a {
+  text-decoration: none;
+  color: var(--header-color);
+  font-weight: 400;
+  font-size: 1.6rem;
+}
+li .btn-container {
+  display: flex;
+  gap: 1.6rem;
+  align-items: center;
+}
+header nav ul li .login-btn {
+  color: black;
+  padding: 0.8rem 2rem;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  font-weight: 500;
+  background-color: white;
+}
+
+header nav ul li .register-btn {
+  color: white;
+  padding: 0.8rem 2rem;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(0, 0, 0, 0);
+  font-weight: 500;
+  background-color: var(--primary-color);
+}
+
+/* --- ANIMATION --- */
+header.sticky {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95%;
+  z-index: 1000;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: top 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+header nav ul li a {
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+header nav ul li a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 50%;
+  background-color: var(--primary-color);
+  transition: all 0.3s ease-in-out;
+  transform: translateX(-50%);
+}
+
+header nav ul li a:hover::after,
+header nav ul li a.active::after {
+  width: 100%;
+}
+
+header nav ul li a.active {
+  font-weight: 600;
+}
+
+header nav ul li .login-btn:hover {
+  background-color: var(--primary-color);
+  color: white;
+  transition: all 0.3s ease-in-out;
+}
+
+header nav ul li .register-btn:hover {
+  background-color: white;
+  color: black;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease-in-out;
+}
+
+.logo {
+  font-size: 2.3rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--heading-color);
+}
+
+/* Footer */
+footer {
+  /* border: 1px solid red; */
+  width: 100%;
+  max-width: 150.9rem;
+  margin: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 3.2rem;
+  /* padding: 3.2rem; */
+  margin-bottom: 3.3rem;
+}
+
+.upper {
+  background-color: rgba(23, 23, 23, 0.1);
+  height: 1px;
+  margin-top: 5rem;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+}
+.bottom .logo {
+  font-size: 2.3rem;
+  font-weight: 600;
+  color: black;
+}
+.bottom .copyright {
+  font-size: 1.4rem;
+  color: black;
+}
