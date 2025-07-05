@@ -5,7 +5,8 @@
   --text-color: #57606e;
   --header-color: #000000; /* hitam */
 
-  font-size: 62.5%; /* Ini akan membuat 1rem = 10px pada browser default 16px */
+  /* Ini akan membuat 1rem = 10px pada browser default 16px */
+  font-size: 62.5%; 
 }
 * {
   margin: 0;
@@ -19,6 +20,13 @@ body {
   font-family: "Jost", sans-serif;
   font-size: 2.2rem;
   color: var(--text-color);
+}
+
+main {
+  margin-top: 16rem;
+  padding: 3.3rem;
+  
+  min-height: 85vh;
 }
 
 /* Header */
