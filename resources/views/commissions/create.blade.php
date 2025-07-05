@@ -3,8 +3,6 @@
 
 @section('content')
 <body style="background-color: #ffffff;">
-
-
     <div class="container d-flex justify-content-center align-items-center row-g-10">
         <div class="w-50">
             <h1 class="text-center text-black fs-1 p-4">Create New Commission</h1>

@@ -1,4 +1,6 @@
-/* main */
+/* :root {
+  font-size: 62.5%; 
+} */
 
 main {
   /* border: 1px solid black; */
@@ -9,6 +11,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 3rem;
+  width: 100%;
   max-width: 79.1rem;
   margin: auto;
 }

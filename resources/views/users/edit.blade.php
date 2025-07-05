@@ -1,5 +1,7 @@
 @extends('layouts.app')
-<div class="container mt-5">
+
+@section('content')
+<div class="container">
         <h2 class="text-black">Edit Profil</h2>
 
         <!-- Form Edit Profil -->
@@ -54,6 +56,4 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-@section('content')
 @endsection

@@ -37,7 +37,7 @@ class ChatController extends Controller
         })->orWhere(function($query) use ($artist) {
             $query->where('sender_id', $artist->id)
                 ->where('receiver_id', auth()->id());
-        })->get();
+        })->orderBy('created_at', 'asc')->get();
 
         return view('chat.chat', ['artist' => $artist, 'messages' => $messages]);
     }

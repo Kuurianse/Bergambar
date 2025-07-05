@@ -7,6 +7,8 @@
     <title>@yield('title')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
+    @vite(['resources/js/app.js'])
+    
     {{-- css --}}
     <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
@@ -19,21 +21,36 @@
 </head>
 <body>
     <header>
-        <a href="/" class="logo" style="text-decoration: none; color: inherit; ">Bergambar</a>
+        <a href="/" class="logo" style="text-decoration: none; color: inherit;">Bergambar</a>
         <nav>
             <ul>
                 <li><a href="{{ route('artists.index') }}">Artists</a></li>
                 @auth
                 <li><a href="{{ route('commissions.index') }}">Commissions</a></li>
                 <li><a href="{{ route('chat.index') }}">Chat</a></li>
+                <li> 
+                    <a href="#" class="others">
+                        Others 
+                        <span class="others-arrow">
+                            <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.3977 7.66292C7.17802 7.88259 6.82192 7.88259 6.60225 7.66292L0.867387 1.92804C0.64772 1.70837 0.64772 1.35227 0.867387 1.13259L1.13256 0.867393C1.35222 0.647718 1.70838 0.647718 1.92805 0.867393L6.99997 5.93934L12.0719 0.867393C12.2916 0.647718 12.6477 0.647718 12.8674 0.867393L13.1326 1.13259C13.3522 1.35227 13.3522 1.70837 13.1326 1.92804L7.3977 7.66292Z" fill="black"/>
+                            </svg>
+                        </span>
+                    </a>
+                    <!-- Dropdown UL sekarang menjadi sibling dari <a>, bukan di dalamnya -->
+                    <ul class="others-dropdown">
+                        <li><a href="{{ route('users.show', Auth::user()->id) }}">Edit Profile</a></li>
+                        <li><a href="{{ route('artist.orders.index') }}">Manage My Orders</a></li>
+                        <li><a href="{{ route('services.index') }}">Manage My Services</a></li>
+                        <li><a href="{{ route('orders.index') }}">My Orders (Client)</a></li>
+                    </ul>
+                </li>
                 @endauth
                 <li>
                     @auth
                     <div class="btn-container">
                         <a href="{{ route('users.show', Auth::user()->id) }}" class="login-btn">{{ Auth::user()->name }}</a>
-                        <a href="{{ route('logout') }}" class="register-btn" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Logout
-                        </a>
+                        <a href="{{ route('logout') }}" class="register-btn" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST">
                             @csrf
                         </form>

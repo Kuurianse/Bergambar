@@ -1,0 +1,217 @@
+main {
+  /* border: 1px solid red; */
+  /* padding: 3.3rem; */
+  /* min-height: 80vh; */
+  margin-top: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  max-width: 79.1rem;
+  margin: auto;
+}
+
+/* Heading */
+.heading {
+  /* border: 1px solid red; */
+  width: 100%;
+  max-width: 70rem;
+  margin-top: 10rem;
+}
+
+.heading h3 {
+  font-size: 3.5rem;
+  font-weight: 600;
+  color: var(--heading-color);
+}
+
+.heading p {
+  font-size: 1.8rem;
+  color: var(--text-color);
+}
+
+/* Reset dan Pengaturan Dasar Body */
+body {
+  color: #171717;
+  font-size: 1.6rem; /* Ukuran font default untuk body (16px) */
+}
+
+/* Kontainer Utama */
+.container {
+  /* border: 1px solid red; */
+  width: 100%;
+  max-width: 90rem; /* 900px */
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* Kontainer Obrolan Utama */
+.chat-container {
+  background-color: #ffffff;
+  border: 0.1rem solid #e5e7eb; /* 1px */
+  border-radius: 1.2rem; /* 12px */
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+/* Header Obrolan */
+.chat-header {
+  display: flex;
+  align-items: center;
+  padding: 1.6rem 2rem; /* 16px 20px */
+  border-bottom: 0.1rem solid #e5e7eb; /* 1px */
+}
+
+.back-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 1.2rem; /* 12px */
+  padding: 0.4rem; /* 4px */
+}
+
+.back-button svg {
+  width: 2.4rem; /* 24px */
+  height: 2.4rem; /* 24px */
+  color: #4b5563;
+}
+
+.profile-pic {
+  width: 4rem; /* 40px */
+  height: 4rem; /* 40px */
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  margin-right: 1.2rem; /* 12px */
+  background-image: url('https://placehold.co/40x40/E0E0E0/FFFFFF?text=A');
+}
+
+.contact-name {
+  font-weight: 600;
+  font-size: 1.8rem; /* Disesuaikan dari 1.1rem ke 1.8rem agar lebih proporsional */
+}
+
+/* Area Pesan */
+.messages-area {
+  /* border: 1px solid blue; */
+  flex-grow: 1;
+  padding: 2.4rem; /* 24px */
+  overflow-y: auto;
+  /* max-height: 37vh; */
+  max-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem; /* 16px */
+}
+
+.messages-area::-webkit-scrollbar {
+  width: 0.6rem; /* 6px */
+}
+
+.messages-area::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 0.3rem; /* 3px */
+}
+
+.messages-area::-webkit-scrollbar-track {
+  background-color: #f3f4f6;
+}
+
+/* Gelembung Pesan */
+.message {
+  display: flex;
+  max-width: 70%;
+  flex-direction: column;
+}
+
+.message-bubble {
+  padding: 1.2rem 1.6rem; /* 12px 16px */
+  border-radius: 1.8rem; /* 18px */
+  font-size: 1.5rem; /* Disesuaikan dari 0.95rem ke 1.5rem */
+  line-height: 1.4;
+}
+
+.message-time {
+  font-size: 1.2rem; /* Disesuaikan dari 0.75rem ke 1.2rem */
+  color: #6b7280;
+  margin-top: 0.6rem; /* 6px */
+}
+
+/* Pesan yang Diterima (kiri) */
+.message.received {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.message.received .message-bubble {
+  background-color: #f3f4f6;
+  color: #1f2937;
+  border-bottom-left-radius: 0.4rem; /* 4px */
+}
+
+.message.received .message-time {
+  margin-left: 0.4rem; /* 4px */
+}
+
+/* Pesan yang Dikirim (kanan) */
+.message.sent {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.message.sent .message-bubble {
+  background-color: #111827;
+  color: #ffffff;
+  border-bottom-right-radius: 0.4rem; /* 4px */
+}
+
+.message.sent .message-time {
+  margin-right: 0.4rem; /* 4px */
+}
+
+/* Area Input Pesan */
+.chat-input-area {
+  /* border: 1px solid green; */
+  display: flex;
+  align-items: center;
+  padding: 1.6rem 2rem; /* 16px 20px */
+  border-top: 0.1rem solid #e5e7eb; /* 1px */
+  gap: 1.2rem; /* 12px */
+}
+
+.chat-input-area input {
+  flex-grow: 1;
+  border: 0.1rem solid #d1d5db; /* 1px */
+  border-radius: 0.8rem; /* 8px */
+  padding: 1.2rem 1.6rem; /* 12px 16px */
+  font-size: 1.6rem; /* 16px */
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.chat-input-area input:focus {
+  border-color: #3b82f6;
+}
+
+.send-button {
+  background-color: #111827;
+  border: none;
+  border-radius: 0.8rem; /* 8px */
+  padding: 1rem; /* 10px */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.send-button svg {
+  width: 2.4rem; /* 24px */
+  height: 2.4rem; /* 24px */
+  color: #ffffff;
+}

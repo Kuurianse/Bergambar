@@ -15,42 +15,43 @@
 }
 html {
   scroll-behavior: smooth;
+  height: 100%; 
+  /* Pastikan html mengambil seluruh tinggi viewport */
 }
 body {
   font-family: "Jost", sans-serif;
   font-size: 2.2rem;
   color: var(--text-color);
+  min-height: 100%; /* Ubah ini dari 100vh menjadi 100% */
+  display: flex; /* Aktifkan Flexbox */
+  flex-direction: column; /* Atur orientasi menjadi kolom */
 }
 
 main {
   margin-top: 16rem;
   padding: 3.3rem;
-  
-  min-height: 85vh;
+  /* min-height: 85vh; */
+  flex-grow: 1; /* Ini adalah kuncinya: main akan mengambil sisa ruang yang tersedia */
 }
 
 /* Header */
 header {
+  flex-shrink: 0;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-
-  /* --- UBAH INI UNTUK MEMBERIKAN JARAK DARI ATAS --- */
-  top: 3.3rem; /* Mengatur posisi 3.3rem dari bagian atas viewport */
-  /* ------------------------------------------------ */
-
+  top: 3.3rem;
   color: var(--header-color);
   padding: 1.6rem 3.2rem;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
   width: 95%;
-  /* max-width: 150.9rem; */
   max-width: 156rem;
   background-color: white;
   border-radius: 20rem;
   align-items: center;
-  z-index: 1000; /* Penting agar header muncul di atas konten lain */
+  z-index: 1000;
 }
 
 header nav {
@@ -63,19 +64,23 @@ header nav ul {
   gap: 3.2rem;
   list-style: none;
   align-items: center;
-  margin: 0; /* TAMBAHKAN INI: Menghilangkan margin default pada ul */
-  padding: 0; /* TAMBAHKAN INI: Menghilangkan padding default pada ul */
+  margin: 0;
+  padding: 0;
 }
 header nav ul li {
-  /* border: 1px solid black; */
   display: flex;
   align-items: center;
+  /* PENTING: Menjadikan li sebagai container untuk dropdown */
+  position: relative; 
 }
 header nav ul li a {
   text-decoration: none;
   color: var(--header-color);
   font-weight: 400;
   font-size: 1.6rem;
+  display: flex; /* Agar SVG dan teks sejajar */
+  align-items: center;
+  gap: 0.8rem; /* Jarak antara teks dan ikon panah */
 }
 li .btn-container {
   display: flex;
@@ -117,7 +122,7 @@ header nav ul li a {
   transition: color 0.3s ease;
 }
 
-header nav ul li a::after {
+header nav ul li a:not(.login-btn):not(.register-btn)::after {
   content: "";
   position: absolute;
   width: 0;
@@ -158,13 +163,87 @@ header nav ul li .register-btn:hover {
   color: var(--heading-color);
 }
 
+/* === STYLING DROPDOWN YANG BARU === */
+
+/* 1. Sembunyikan dropdown secara default */
+.others-dropdown {
+  display: none;
+  position: absolute;
+  /* PERUBAHAN: Mengubah 'top' dari 150% menjadi 100%.
+    Ini akan menempatkan dropdown tepat di bawah elemen <li> induknya,
+    menghilangkan celah yang menyebabkan kursor kehilangan status hover.
+    Saya juga menambahkan sedikit padding-top agar tidak terlalu menempel.
+  */
+  top: 100%; 
+  padding-top: 1rem; /* Memberi sedikit jarak visual */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 1.2rem; /* Sudut lebih tumpul */
+  padding: 1rem;
+  list-style: none;
+  width: max-content; /* Lebar menyesuaikan konten */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+}
+
+/* 2. Tampilkan dropdown saat hover di 'li' */
+header nav ul li:hover .others-dropdown {
+  display: block;
+}
+
+/* 3. Styling untuk setiap item di dalam dropdown */
+.others-dropdown li a {
+  padding: 1rem 2rem;
+  white-space: nowrap; /* Agar teks tidak terpotong */
+  border-radius: 0.8rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Hapus garis bawah dari link di dalam dropdown */
+.others-dropdown li a::after {
+  display: none;
+}
+
+.others-dropdown li a:hover {
+  background-color: var(--background-color);
+  color: var(--primary-color);
+}
+
+/* Animasi panah saat dropdown aktif */
+header nav ul li:hover .others-arrow svg {
+  transform: rotate(180deg);
+}
+.others-arrow svg {
+  transition: transform 0.3s ease-in-out;
+}
+
+      
+/* .others {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+.others-dropdown {
+  position: absolute;
+  top: 1;
+  left: 0;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  color: black;
+  max-width: 18.9rem;
+  border-radius: 2.4rem;
+} */
+
 /* Footer */
 footer {
+  flex-shrink: 0; /* Mencegah footer mengecil */
   /* border: 1px solid red; */
   width: 100%;
-  max-width: 150.9rem;
+  max-width: 156.9rem;
   margin: auto;
-
+  padding: 0 3.3rem;
   display: flex;
   flex-direction: column;
 
