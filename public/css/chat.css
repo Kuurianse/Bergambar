@@ -17,7 +17,8 @@ main {
   /* border: 1px solid red; */
   width: 100%;
   max-width: 70rem;
-  margin-top: 10rem;
+  /* margin-top: 10rem; */
+  margin-top: 13rem;
 }
 
 .heading h3 {
@@ -96,6 +97,14 @@ body {
   font-size: 1.8rem; /* Disesuaikan dari 1.1rem ke 1.8rem agar lebih proporsional */
 }
 
+footer {
+  /* border: 1px solid red; */
+}
+
+.upper {
+  margin-top: 0;
+}
+
 /* Area Pesan */
 .messages-area {
   /* border: 1px solid blue; */
@@ -103,7 +112,7 @@ body {
   padding: 2.4rem; /* 24px */
   overflow-y: auto;
   /* max-height: 37vh; */
-  max-height: 50vh;
+  max-height: 40vh;
   display: flex;
   flex-direction: column;
   gap: 1.6rem; /* 16px */
