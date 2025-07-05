@@ -1,72 +1,81 @@
 @extends('layouts.app')
 
-@section('content')
-<div class="container my-5">
-    <h2>Kelola Pesanan Komisi Saya</h2>
+@section('css_tambahan')
+    <link rel="stylesheet" href="{{ asset('css/others.css') }}" />
+@endsection
 
+@section('content')
+<div class="page-wrapper">
+    <div class="page-header">
+        <h2>{{ __('Kelola Pesanan Komisi Saya') }}</h2>
+    </div>
+
+    {{-- Alert Messages --}}
     @if (session('success'))
-        <div class="alert alert-success">
+        <div class="alert-message success">
             {{ session('success') }}
         </div>
     @endif
     @if (session('error'))
-        <div class="alert alert-danger">
+        <div class="alert-message danger">
             {{ session('error') }}
         </div>
     @endif
     @if (session('info'))
-        <div class="alert alert-info">
+        <div class="alert-message info">
             {{ session('info') }}
         </div>
     @endif
 
     @if($commissionsWithOrders->isEmpty())
-        <p>Anda belum memiliki pesanan komisi aktif saat ini.</p>
+        <div class="empty-state">
+            <p>{{ __('Anda belum memiliki pesanan komisi aktif saat ini.') }}</p>
+        </div>
     @else
-        <div class="table-responsive">
-            <table class="table table-hover">
+        <div class="table-container">
+            <table class="data-table">
                 <thead>
                     <tr>
-                        <th>Judul Komisi</th>
-                        <th>Klien</th>
-                        <th>Tanggal Pesan</th>
-                        <th>Status Komisi</th>
-                        <th>Total Harga</th>
-                        <th>Aksi</th>
+                        <th>{{ __('Judul Komisi') }}</th>
+                        <th>{{ __('Klien') }}</th>
+                        <th>{{ __('Tanggal Pesan') }}</th>
+                        <th>{{ __('Status Komisi') }}</th>
+                        <th>{{ __('Total Harga') }}</th>
+                        <th>{{ __('Aksi') }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($commissionsWithOrders as $commission)
                         @php
-                            // Asumsi mengambil order pertama yang paid, karena controller sudah memfilter
+                            // Assuming taking the first paid order, as the controller already filters
                             $order = $commission->orders->firstWhere('status', 'paid');
                         @endphp
                         @if($order)
                             <tr>
                                 <td>
-                                    <a href="{{ route('commissions.show', $commission->id) }}" target="_blank">
+                                    <a href="{{ route('commissions.show', $commission->id) }}" target="_blank" class="table-link">
                                         {{ Str::limit($commission->title ?? $commission->description, 50) }}
                                     </a>
                                 </td>
                                 <td>{{ $order->user->name ?? $order->user->username ?? 'N/A' }}</td>
                                 <td>{{ $order->created_at->translatedFormat('d M Y, H:i') }}</td>
                                 <td>
-                                    <span class="badge 
+                                    <span class="status-badge 
                                         @switch($commission->status)
-                                            @case('ordered_pending_artist_action') bg-warning text-dark @break
-                                            @case('artist_accepted') bg-info text-dark @break
-                                            @case('in_progress') bg-primary @break
-                                            @case('submitted_for_client_review') bg-success @break
-                                            @case('needs_revision') bg-danger @break
-                                            @default bg-secondary @break
+                                            @case('ordered_pending_artist_action') warning @break
+                                            @case('artist_accepted') info @break
+                                            @case('in_progress') primary @break
+                                            @case('submitted_for_client_review') success @break
+                                            @case('needs_revision') danger @break
+                                            @default secondary @break
                                         @endswitch">
                                         {{ Str::ucfirst(str_replace('_', ' ', $commission->status)) }}
                                     </span>
                                 </td>
                                 <td>Rp{{ number_format($order->total_price, 0, ',', '.') }}</td>
-                                <td>
-                                    <a href="{{ route('artist.orders.show', $commission->id) }}" class="btn btn-sm btn-primary">
-                                        Kelola Pesanan
+                                <td class="actions-cell">
+                                    <a href="{{ route('artist.orders.show', $commission->id) }}" class="btn-action primary">
+                                        {{ __('Kelola Pesanan') }}
                                     </a>
                                 </td>
                             </tr>
@@ -75,7 +84,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="d-flex justify-content-center">
+        <div class="pagination-container">
             {{ $commissionsWithOrders->links() }}
         </div>
     @endif

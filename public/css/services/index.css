@@ -1,0 +1,481 @@
+main {
+  margin-top: 10rem;
+}
+
+footer .upper {
+  margin-top: 2rem;
+}
+
+/* Base Form Styling */
+.form-page-wrapper {
+  /* border: 1px solid black; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - var(--header-height) - var(--footer-height)); /* Sesuaikan dengan tinggi header/footer Anda */
+  padding: 2rem; /* 40px top/bottom, 20px left/right */
+}
+
+.form-card {
+  background-color: #ffffff;
+  border: 0.1rem solid #e2e8f0; /* 1px border */
+  border-radius: 0.8rem; /* 8px border radius */
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.05); /* Shadow lembut */
+  width: 100%;
+  max-width: 70rem; /* 700px max width */
+  overflow: hidden; /* Pastikan border-radius terlihat */
+}
+
+.form-card-header {
+  background-color: #f2f4f6; /* Warna header card */
+  padding: 2rem 2.4rem; /* 20px top/bottom, 24px left/right */
+  border-bottom: 0.1rem solid #e2e8f0;
+  font-size: 1.8rem; /* 18px */
+  font-weight: 600;
+  color: #333;
+}
+
+.form-card-header h2 {
+  margin: 0;
+  font-size: 2.2rem; /* 22px */
+  color: #1a202c;
+}
+
+.form-card-body {
+  padding: 3rem 2.4rem; /* 30px top/bottom, 24px left/right */
+}
+
+.form-group {
+  margin-bottom: 2rem; /* 20px gap between form groups */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.8rem; /* 8px gap between label and input */
+  font-size: 1.6rem; /* 16px */
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  padding: 1.2rem 1.6rem; /* 12px vertical, 16px horizontal */
+  border: 0.1rem solid #cbd5e0; /* 1px border */
+  border-radius: 0.6rem; /* 6px border radius */
+  font-size: 1.6rem; /* 16px */
+  color: #2d3748;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  box-sizing: border-box; /* Penting untuk width: 100% */
+}
+
+.form-input:focus {
+  border-color: #4299e1; /* Warna biru fokus */
+  box-shadow: 0 0 0 0.3rem rgba(66, 153, 225, 0.25); /* Shadow biru fokus */
+  outline: none;
+}
+
+.form-input.is-invalid {
+  border-color: #e53e3e; /* Warna merah untuk error */
+}
+
+.form-error-message {
+  font-size: 1.4rem; /* 14px */
+  color: #e53e3e;
+  margin-top: 0.4rem; /* 4px */
+  display: block;
+}
+
+/* Select Box Styling */
+.form-select-custom {
+  appearance: none; /* Menghilangkan default arrow */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23333' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1.2rem center; /* 12px dari kanan */
+  background-size: 1rem; /* Ukuran icon arrow */
+}
+
+/* Checkbox Styling */
+.form-check-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.form-checkbox {
+  margin-right: 1rem; /* 10px gap */
+  width: 2rem; /* 20px */
+  height: 2rem; /* 20px */
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.form-checkbox-label {
+  margin-bottom: 0; /* Override default label margin */
+  font-size: 1.6rem; /* 16px */
+  color: #4a5568;
+  cursor: pointer;
+}
+
+/* Button Styling */
+.form-actions {
+  display: flex;
+  justify-content: flex-end; /* Pindahkan tombol ke kanan */
+  gap: 1.6rem; /* 16px gap between buttons */
+  margin-top: 3rem; /* 30px top margin */
+}
+
+.btn-primary-custom,
+.btn-link-custom {
+  padding: 1.2rem 2.4rem; /* 12px vertical, 24px horizontal */
+  border-radius: 0.6rem; /* 6px */
+  font-size: 1.6rem; /* 16px */
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex; /* Untuk memastikan padding berlaku dengan benar */
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.btn-primary-custom {
+  background-color: #1a202c; /* Warna utama (gelap) */
+  color: #ffffff;
+  border: 0.1rem solid #1a202c;
+}
+
+.btn-primary-custom:hover {
+  background-color: #2d3748; /* Sedikit lebih gelap saat hover */
+}
+
+.btn-link-custom {
+  background-color: transparent;
+  color: #4a5568; /* Warna teks link */
+  border: 0.1rem solid transparent; /* Border transparan agar padding sama */
+}
+
+.btn-link-custom:hover {
+  color: #2d3748;
+  background-color: #edf2f7; /* Latar belakang ringan saat hover */
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .form-card {
+      margin: 0 1.5rem; /* Margin di sisi pada layar kecil */
+  }
+
+  .form-card-header,
+  .form-card-body {
+      padding: 2rem 1.6rem; /* Sedikit kurang padding di layar kecil */
+  }
+
+  .form-group label {
+      font-size: 1.5rem; /* Sedikit lebih kecil untuk label */
+  }
+
+  .form-input {
+      font-size: 1.5rem; /* Sedikit lebih kecil untuk input */
+      padding: 1rem 1.4rem;
+  }
+
+  .form-actions {
+      flex-direction: column; /* Tombol bertumpuk di layar kecil */
+      gap: 1rem;
+  }
+
+  .btn-primary-custom,
+  .btn-link-custom {
+      width: 100%; /* Tombol memenuhi lebar */
+  }
+}
+
+/* --- Global Page Wrapper --- */
+.btn-primary-custom {
+  /* color: #171717; */
+  background-color: #171717
+}
+
+.page-wrapper {
+    max-width: 100rem; /* 1000px */
+    margin: 4rem auto; /* 40px top/bottom, auto left/right */
+    padding: 0 2rem; /* 20px padding left/right */
+}
+
+/* --- Page Header (Title + Button) --- */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.4rem; /* 24px */
+    padding-bottom: 1.6rem; /* 16px */
+    border-bottom: 0.1rem solid #e2e8f0; /* 1px border */
+}
+
+.page-header h2 {
+    font-size: 3rem; /* 30px */
+    font-weight: 700;
+    color: #1a202c;
+    margin: 0;
+}
+
+/* --- Alert Messages --- */
+.alert-message {
+    padding: 1.6rem 2rem; /* 16px vertical, 20px horizontal */
+    margin-bottom: 2.4rem; /* 24px */
+    border-radius: 0.8rem; /* 8px */
+    font-size: 1.6rem; /* 16px */
+    line-height: 1.5;
+}
+
+.alert-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 0.1rem solid #c3e6cb;
+}
+
+.alert-message.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 0.1rem solid #bee5eb;
+}
+
+.alert-message.warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 0.1rem solid #ffeeba;
+}
+
+.alert-message.danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 0.1rem solid #f5c6cb;
+}
+
+.alert-message .alert-link {
+    font-weight: 600;
+    color: inherit; /* Warna link sama dengan teks alert */
+    text-decoration: underline;
+}
+
+/* --- Empty State --- */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem; /* 40px vertical, 20px horizontal */
+    background-color: #fcfcfc;
+    border: 0.1rem solid #e2e8f0;
+    border-radius: 0.8rem;
+    margin-top: 2rem;
+}
+
+.empty-state p {
+    font-size: 1.8rem; /* 18px */
+    color: #555;
+    margin-bottom: 1.6rem;
+}
+
+/* --- Table Styling --- */
+.table-container {
+    overflow-x: auto; /* Untuk responsivitas tabel di layar kecil */
+    background-color: #ffffff;
+    border: 0.1rem solid #e2e8f0;
+    border-radius: 0.8rem;
+    box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.03);
+    margin-bottom: 2rem; /* 20px */
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse; /* Menghilangkan border antar cell default */
+    font-size: 1.5rem; /* 15px */
+    color: #333;
+}
+
+.data-table th,
+.data-table td {
+    padding: 1.6rem 2rem; /* 16px vertical, 20px horizontal */
+    text-align: left;
+    border-bottom: 0.1rem solid #f0f4f8; /* 1px border tipis antar baris */
+}
+
+.data-table th {
+    background-color: #f8fbfc; /* Warna latar belakang header */
+    font-weight: 600;
+    color: #4a5568;
+    text-transform: uppercase;
+    font-size: 1.4rem; /* 14px */
+    letter-spacing: 0.05rem; /* Sedikit spasi antar huruf */
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none; /* Hilangkan border bawah di baris terakhir */
+}
+
+.data-table tbody tr:hover {
+    background-color: #fbfdff; /* Efek hover pada baris */
+}
+
+/* --- Table Specific Elements --- */
+.table-link {
+    color: #171717; /* Warna biru untuk link dalam tabel */
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.table-link:hover {
+    text-decoration: underline;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.6rem 1.2rem; /* 6px vertical, 12px horizontal */
+    border-radius: 0.4rem; /* 4px */
+    font-size: 1.2rem; /* 12px */
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-badge.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-badge.secondary {
+    background-color: #e2e8f0;
+    color: #4a5568;
+}
+
+/* --- Action Buttons in Table --- */
+.actions-cell {
+    white-space: nowrap; /* Mencegah tombol terpecah baris */
+}
+
+.btn-action {
+    padding: 0.8rem 1.2rem; /* 8px vertical, 12px horizontal */
+    border-radius: 0.5rem; /* 5px */
+    font-size: 1.4rem; /* 14px */
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 0.8rem; /* 8px spacing between buttons */
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.btn-action.edit {
+    background-color: #f6ad55; /* Orange */
+    color: #ffffff;
+    border: none;
+}
+
+.btn-action.edit:hover {
+    background-color: #ed8936;
+}
+
+.btn-action.delete {
+    background-color: #e53e3e; /* Red */
+    color: #ffffff;
+    border: none;
+}
+
+.btn-action.delete:hover {
+    background-color: #c53030;
+}
+
+.delete-form {
+    display: inline-block; /* Agar form delete inline dengan tombol lain */
+    margin: 0;
+}
+
+/* --- Pagination Styling (Override Bootstrap's if necessary) --- */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 2.4rem; /* 24px */
+}
+
+/* Jika Bootstrap pagination class `pagination` dan `page-item` digunakan */
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 0.8rem;
+    overflow: hidden;
+    border: 0.1rem solid #e2e8f0;
+}
+
+.page-item {
+    margin: 0;
+}
+
+.page-link {
+    display: block;
+    padding: 1rem 1.5rem; /* 10px vertical, 15px horizontal */
+    font-size: 1.6rem; /* 16px */
+    color: #4a5568;
+    text-decoration: none;
+    border-right: 0.1rem solid #e2e8f0;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.page-link:last-child {
+    border-right: none;
+}
+
+.page-item.active .page-link {
+    background-color: #1a202c;
+    color: #ffffff;
+    border-color: #1a202c;
+}
+
+.page-item.disabled .page-link {
+    color: #a0aec0;
+    pointer-events: none;
+    background-color: #f8fafc;
+}
+
+.page-item .page-link:hover:not(.active):not(.disabled) {
+    background-color: #edf2f7;
+    color: #2d3748;
+}
+
+/* --- Responsiveness for Table --- */
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.6rem; /* 16px */
+    }
+
+    .page-header h2 {
+        font-size: 2.6rem; /* 26px */
+    }
+
+    .table-container {
+        border-radius: 0; /* No border-radius on small screens for better edge-to-edge display */
+        border-left: none;
+        border-right: none;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 1.2rem 1.6rem; /* Less padding on smaller screens */
+        font-size: 1.4rem; /* 14px */
+    }
+
+    /* Stack actions on small screens if they become too cramped */
+    .actions-cell {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem; /* 8px */
+        align-items: flex-start;
+    }
+
+    .btn-action {
+        width: 100%; /* Make action buttons full width */
+        text-align: center;
+        margin-right: 0; /* Remove horizontal margin */
+    }
+
+    .delete-form {
+        width: 100%;
+    }
+}
