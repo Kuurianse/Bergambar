@@ -14,9 +14,9 @@
 
     <section class="chat">
       <div class="chats-container">
-        @forelse($groupedChats as $userId => $chats)
+        @forelse($chats as $chat)
             @php
-                $chatUser = \App\Models\User::find($userId);
+                $chatUser = $chat->sender_id == auth()->id() ? $chat->receiver : $chat->sender;
             @endphp
             <a href="{{ route('chat.show', $chatUser->id) }}" class="chat-card">
                 <div class="contact-info">
@@ -30,12 +30,12 @@
                     <div class="information">
                         <h3 class="name">{{ $chatUser->name }}</h3>
                         <p class="last-message">
-                            {{ $chats->last()->message }}
+                            {{ $chat->message }}
                         </p>
                     </div>
                 </div>
                 <div class="right-side">
-                    <div class="last-chat">{{ $chats->last()->created_at->diffForHumans() }}</div>
+                    <div class="last-chat">{{ $chat->created_at->diffForHumans() }}</div>
                     <div class="chat-svg">
                         <svg
                             width="19"
@@ -52,9 +52,16 @@
                     </div>
                 </div>
             </a>
-        @empty  
+        @empty
             <p class="chat-card">No chats available</p>
         @endforelse
       </div>
     </section>
+
+    <!-- Pagination -->
+    <div class="pagination-container">
+        <div class="pagination-buttons-wrapper">
+            {{ $chats->links() }}
+        </div>
+    </div>
 @endsection

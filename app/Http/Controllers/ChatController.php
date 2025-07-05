@@ -14,19 +14,23 @@ class ChatController extends Controller
     {
         $userId = Auth::id();
 
-        // Mengambil semua pesan yang berhubungan dengan user yang sedang login
-        $chats = Message::where('sender_id', $userId)
-                        ->orWhere('receiver_id', $userId)
+        // Subquery untuk mendapatkan pesan terakhir untuk setiap percakapan
+        $latestMessages = Message::select('id')
+            ->whereIn('id', function ($query) use ($userId) {
+                $query->selectRaw('MAX(id)')
+                    ->from('messages')
+                    ->where('sender_id', $userId)
+                    ->orWhere('receiver_id', $userId)
+                    ->groupByRaw('IF(sender_id = ?, receiver_id, sender_id)', [$userId]);
+            });
+
+        // Mengambil chat yang telah dipaginasi dengan relasi yang dibutuhkan
+        $chats = Message::whereIn('id', $latestMessages)
                         ->with(['sender', 'receiver'])
                         ->orderBy('created_at', 'desc')
-                        ->get();
+                        ->paginate(10); // Misalnya, 10 chat per halaman
 
-        // Mengelompokkan pesan berdasarkan pengguna yang di-chat
-        $groupedChats = $chats->groupBy(function($message) use ($userId) {
-            return $message->sender_id == $userId ? $message->receiver_id : $message->sender_id;
-        });
-
-        return view('chat.index', compact('groupedChats'));
+        return view('chat.index', compact('chats'));
     }
 
     public function show(User $artist)
