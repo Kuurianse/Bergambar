@@ -43,26 +43,12 @@ class CommissionController extends Controller
         $artistId = $user && $user->artist ? $user->artist->id : null;
 
         $validatedData = $request->validate([
-            'status' => 'required|string|in:pending,accepted,completed',
+            // Hapus 'status' dari validasi jika kamu tidak mengirimnya dari form
+            // atau atur default di sini jika perlu
             'total_price' => 'required|numeric|min:0',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'service_id' => [
-                'nullable',
-                'exists:services,id',
-                function ($attribute, $value, $fail) use ($artistId, $user) {
-                    if ($value) { // Only validate if service_id is provided
-                        if (!$user || !$user->artist) {
-                            $fail('You must have an artist profile to link a service.');
-                            return;
-                        }
-                        $service = Service::find($value);
-                        if (!$service || $service->artist_id !== $artistId) {
-                            $fail('The selected service is invalid or does not belong to you.');
-                        }
-                    }
-                },
-            ],
+            // Hapus 'service_id' dari validasi jika kamu tidak mengirimnya dari form
         ]);
 
         if ($request->hasFile('image')) {
@@ -72,10 +58,57 @@ class CommissionController extends Controller
 
         $validatedData['user_id'] = $user->id; // The user creating the commission is the artist
 
+        // Set nilai default untuk 'status' jika kamu menghapusnya dari form
+        $validatedData['status'] = 'pending'; // Contoh: set default ke 'pending'
+
+        // Jika kamu ingin service_id bisa kosong secara default atau tidak ada hubungannya
+        // kamu bisa hapus baris ini, atau pastikan nilainya null jika tidak ada di request
+        // $validatedData['service_id'] = $request->input('service_id'); // Jika kamu ingin mengirimnya sebagai null
+
         Commission::create($validatedData);
 
         return redirect()->route('commissions.index')->with('success', 'Commission berhasil ditambahkan!');
     }
+
+    // public function store(Request $request)
+    // {
+    //     $user = Auth::user();
+    //     $artistId = $user && $user->artist ? $user->artist->id : null;
+
+    //     $validatedData = $request->validate([
+    //         'status' => 'required|string|in:pending,accepted,completed',
+    //         'total_price' => 'required|numeric|min:0',
+    //         'description' => 'required|string',
+    //         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    //         'service_id' => [
+    //             'nullable',
+    //             'exists:services,id',
+    //             function ($attribute, $value, $fail) use ($artistId, $user) {
+    //                 if ($value) { // Only validate if service_id is provided
+    //                     if (!$user || !$user->artist) {
+    //                         $fail('You must have an artist profile to link a service.');
+    //                         return;
+    //                     }
+    //                     $service = Service::find($value);
+    //                     if (!$service || $service->artist_id !== $artistId) {
+    //                         $fail('The selected service is invalid or does not belong to you.');
+    //                     }
+    //                 }
+    //             },
+    //         ],
+    //     ]);
+
+    //     if ($request->hasFile('image')) {
+    //         $imagePath = $request->file('image')->store('commissions', 'public');
+    //         $validatedData['image'] = $imagePath;
+    //     }
+
+    //     $validatedData['user_id'] = $user->id; // The user creating the commission is the artist
+
+    //     Commission::create($validatedData);
+
+    //     return redirect()->route('commissions.index')->with('success', 'Commission berhasil ditambahkan!');
+    // }
 
     // Menampilkan detail commission
     public function show($id)
@@ -84,7 +117,6 @@ class CommissionController extends Controller
         return view('commissions.show', compact('commission'));
     }
 
-    // Menampilkan form untuk mengedit commission
     public function edit($id)
     {
         $commission = Commission::findOrFail($id);
@@ -95,18 +127,18 @@ class CommissionController extends Controller
             return redirect()->route('commissions.index')->with('error', 'Unauthorized action.');
         }
 
+        // Karena 'Link to Existing Service' akan dihapus, $services tidak lagi diperlukan
+        // Namun, jika nanti Anda ingin menambahkannya kembali, kode ini tetap berguna.
         $services = collect(); // Default to empty collection
-        // Ensure user has an artist profile to offer services to link commissions to
         if ($user && $user->artist) {
             $services = Service::where('artist_id', $user->artist->id)
-                                ->where('availability_status', true) // Only available services
+                                ->where('availability_status', true)
                                 ->orderBy('title')
                                 ->get();
         }
 
         return view('commissions.edit', compact('commission', 'services'));
     }
-
 
     // Mengupdate commission di database
     public function update(Request $request, $id)
@@ -115,27 +147,14 @@ class CommissionController extends Controller
         $artistId = $user && $user->artist ? $user->artist->id : null;
 
         $validatedData = $request->validate([
-            'title' => 'required|string|max:255', // Assuming title is also editable
-            'status' => 'required|string|in:pending,accepted,completed',
+            'title' => 'required|string|max:255',
+            // Hapus 'status' dari validasi karena tidak lagi ada di form
+            // 'status' => 'required|string|in:pending,accepted,completed', // Baris ini dihapus
             'total_price' => 'required|numeric|min:0',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'service_id' => [
-                'nullable',
-                'exists:services,id',
-                function ($attribute, $value, $fail) use ($artistId, $user) {
-                    if ($value) { // Only validate if service_id is provided
-                        if (!$user || !$user->artist) {
-                            $fail('You must have an artist profile to link a service.');
-                            return;
-                        }
-                        $service = Service::find($value);
-                        if (!$service || $service->artist_id !== $artistId) {
-                            $fail('The selected service is invalid or does not belong to you.');
-                        }
-                    }
-                },
-            ],
+            // Hapus 'service_id' dari validasi karena tidak lagi ada di form
+            // 'service_id' => [ ... ], // Blok ini dihapus
         ]);
 
         $commission = Commission::findOrFail($id);
@@ -155,11 +174,98 @@ class CommissionController extends Controller
             $validatedData['image'] = $imagePath;
         }
 
+        // Penting: Jika 'status' tidak lagi di-update dari form,
+        // Anda mungkin ingin menghapusnya dari $validatedData jika tidak ada di request
+        // atau memastikan ia memiliki nilai default jika diperlukan
+        // Jika Anda ingin status tetap bisa diubah oleh user tetapi melalui cara lain (misal: tombol action)
+        // maka Anda perlu implementasi logika perubahan status di tempat lain.
+        // Untuk saat ini, kita biarkan statusnya tidak berubah jika tidak ada di request.
+        // Jika Anda ingin selalu mengatur status ke nilai default saat update (jarang terjadi),
+        // Anda bisa tambahkan: $validatedData['status'] = 'nilai_default_anda';
+
         // Update data commission di database
         $commission->update($validatedData);
 
         return redirect()->route('commissions.show', $commission->id)->with('success', 'Commission berhasil diupdate!');
     }
+    
+    // Store update lama
+    // Menampilkan form untuk mengedit commission
+    // public function edit($id)
+    // {
+    //     $commission = Commission::findOrFail($id);
+    //     $user = Auth::user();
+
+    //     // Pastikan hanya user yang memiliki commission yang bisa mengedit
+    //     if ($commission->user_id !== $user->id) {
+    //         return redirect()->route('commissions.index')->with('error', 'Unauthorized action.');
+    //     }
+
+    //     $services = collect(); // Default to empty collection
+    //     // Ensure user has an artist profile to offer services to link commissions to
+    //     if ($user && $user->artist) {
+    //         $services = Service::where('artist_id', $user->artist->id)
+    //                             ->where('availability_status', true) // Only available services
+    //                             ->orderBy('title')
+    //                             ->get();
+    //     }
+
+    //     return view('commissions.edit', compact('commission', 'services'));
+    // }
+
+
+    // // Mengupdate commission di database
+    // public function update(Request $request, $id)
+    // {
+    //     $user = Auth::user();
+    //     $artistId = $user && $user->artist ? $user->artist->id : null;
+
+    //     $validatedData = $request->validate([
+    //         'title' => 'required|string|max:255', // Assuming title is also editable
+    //         'status' => 'required|string|in:pending,accepted,completed',
+    //         'total_price' => 'required|numeric|min:0',
+    //         'description' => 'required|string',
+    //         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    //         'service_id' => [
+    //             'nullable',
+    //             'exists:services,id',
+    //             function ($attribute, $value, $fail) use ($artistId, $user) {
+    //                 if ($value) { // Only validate if service_id is provided
+    //                     if (!$user || !$user->artist) {
+    //                         $fail('You must have an artist profile to link a service.');
+    //                         return;
+    //                     }
+    //                     $service = Service::find($value);
+    //                     if (!$service || $service->artist_id !== $artistId) {
+    //                         $fail('The selected service is invalid or does not belong to you.');
+    //                     }
+    //                 }
+    //             },
+    //         ],
+    //     ]);
+
+    //     $commission = Commission::findOrFail($id);
+
+    //     // Pastikan hanya user yang memiliki commission yang bisa mengedit
+    //     if ($commission->user_id !== $user->id) {
+    //         return redirect()->route('commissions.index')->with('error', 'Unauthorized action.');
+    //     }
+
+    //     // Mengelola upload gambar baru jika ada
+    //     if ($request->hasFile('image')) {
+    //         // Optionally, delete old image if it exists
+    //         // if ($commission->image) {
+    //         //     Storage::disk('public')->delete($commission->image);
+    //         // }
+    //         $imagePath = $request->file('image')->store('commissions', 'public');
+    //         $validatedData['image'] = $imagePath;
+    //     }
+
+    //     // Update data commission di database
+    //     $commission->update($validatedData);
+
+    //     return redirect()->route('commissions.show', $commission->id)->with('success', 'Commission berhasil diupdate!');
+    // }
 
     // Menghapus commission dari database
     public function destroy($id)

@@ -38,7 +38,7 @@
 
             <hr class="my-4">
 
-            @if($artist->services && $artist->services->count() > 0)
+            {{-- @if($artist->services && $artist->services->count() > 0)
             <h3 class="mt-4">Services Offered</h3>
             <div class="row">
                 @foreach($artist->services as $service)
@@ -56,7 +56,7 @@
                 @endforeach
             </div>
             <hr class="my-4">
-            @endif
+            @endif --}}
             
 
             <h3 class="mt-4">Commissions by {{ $artist->user->username }}</h3>

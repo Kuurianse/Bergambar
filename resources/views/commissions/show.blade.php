@@ -1,191 +1,251 @@
 @extends('layouts.app')
 
+@section('css_tambahan')
+    <link rel="stylesheet" href="{{ asset('css/others.css') }}" />
+@endsection
+
 @section('content')
-<div class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            @if($commission)
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Commission Details: {{ Str::limit($commission->description, 50) }}</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                @if($commission->image)
-                                    <img src="{{ asset('storage/' . $commission->image) }}" alt="Commission Image for {{ $commission->description }}" class="img-fluid rounded" style="max-height: 400px; width: 100%; object-fit: contain;">
-                                @else
-                                    <p>No image has been provided for this commission.</p>
-                                @endif
-                            </div>
-                            <div class="col-md-6">
-                                <h4>{{ $commission->description }}</h4>
-                                <p>
-                                    <strong>Artist:</strong> 
-                                    <a href="{{ route('artists.show', $commission->user->artist->id ?? $commission->user_id) }}"> {{-- Adjust if artist profile link differs --}}
-                                        {{ $commission->user->username ?? $commission->user->name ?? 'N/A' }}
-                                    </a>
-                                </p>
-                                <p><strong>Status:</strong>
-                                    @php
-                                        $badgeClass = 'bg-secondary'; // Default
-                                        switch ($commission->public_status) {
-                                            case 'Available':
-                                                $badgeClass = 'bg-success';
-                                                break;
-                                            case 'Ordered':
-                                                $badgeClass = 'bg-warning';
-                                                break;
-                                            case 'Completed':
-                                                $badgeClass = 'bg-primary';
-                                                break;
-                                            case 'Status Undefined':
-                                                $badgeClass = 'bg-danger';
-                                                break;
-                                        }
-                                    @endphp
-                                    <span class="badge {{ $badgeClass }}">{{ $commission->public_status }}</span>
-                                </p>
-                                <p><strong>Price:</strong> Rp{{ number_format($commission->total_price, 0, ',', '.') }}</p>
-                                <p><strong>Created:</strong> {{ $commission->created_at->format('F j, Y') }}</p>
-                                <p><strong>Loves:</strong> <span id="loveCount-{{$commission->id}}">{{ $commission->loved_count ?? 0 }}</span></p> {{-- Ensure span has ID for JS update --}}
+<div class="page-wrapper">
+    @if($commission)
+        <div class="page-header">
+            {{-- <h2>{{ __('Commission Title') }}: {{ $commission->title }}</h2> --}}
+            <h2>{{ $commission->title }}</h2>
+        </div>
 
-                                @auth
-                                <div class="mt-3">
-                                    {{-- Love Button --}}
-                                    <form action="{{ route('commissions.toggleLove', $commission->id) }}" method="POST" style="display: inline-block;" id="loveForm-{{$commission->id}}">
-                                        @csrf
-                                        <button type="submit" class="btn {{ $commission->loves->contains(Auth::user()) ? 'btn-danger' : 'btn-outline-danger' }} btn-sm love-button" data-commission-id="{{$commission->id}}">
-                                            <i class="fa fa-heart"></i> <span id="loveText-{{$commission->id}}">{{ $commission->loves->contains(Auth::user()) ? 'Loved' : 'Love' }}</span> (<span id="loveCountDisplay-{{$commission->id}}">{{ $commission->loved_count ?? 0 }}</span>)
-                                        </button>
-                                    </form>
-
-                                    {{-- Order Button --}}
-                                    @if(Auth::id() !== $commission->user_id && $commission->public_status == 'Available')
-                                        <a href="{{ route('commissions.order', $commission->id) }}" class="btn btn-primary btn-sm ms-2">Order This Commission</a>
-                                    @endif
-                                    {{-- Edit Button for Owner --}}
-                                    @if(Auth::id() == $commission->user_id)
-                                        <a href="{{ route('commissions.edit', $commission->id) }}" class="btn btn-warning btn-sm ms-2">Edit Commission</a>
-                                    @endif
-                                </div>
-                                @endauth
-                            </div>
-                        </div>
+        <div class="commission-detail-grid-public">
+            <div class="commission-image-section">
+                @if($commission->image)
+                    <img src="{{ asset('storage/' . $commission->image) }}" alt="Commission Image for {{ $commission->description }}" class="commission-display-image">
+                @else
+                    <div class="no-image-placeholder">
+                        <p>{{ __('No image has been provided for this commission.') }}</p>
                     </div>
+                @endif
+            </div>
+
+            <div class="commission-info-section">
+                <div class="card-section">
+                    <h3>{{ $commission->description }}</h3>
+                    <div class="detail-group">
+                        <p class="detail-label"><strong>{{ __('Artist') }}:</strong></p>
+                        <p class="detail-value">
+                            <a href="{{ route('artists.show', $commission->user->artist->id ?? $commission->user_id) }}" class="table-link">
+                                {{ $commission->user->username ?? $commission->user->name ?? 'N/A' }}
+                            </a>
+                        </p>
+                    </div>
+                    <div class="detail-group">
+                        <p class="detail-label"><strong>{{ __('Status') }}:</strong></p>
+                        <p class="detail-value">
+                            @php
+                                $badgeClass = 'secondary'; // Default
+                                switch ($commission->public_status) {
+                                    case 'Available':
+                                        $badgeClass = 'success';
+                                        break;
+                                    case 'Ordered':
+                                        $badgeClass = 'warning';
+                                        break;
+                                    case 'Completed':
+                                        $badgeClass = 'primary';
+                                        break;
+                                    case 'Status Undefined':
+                                        $badgeClass = 'danger';
+                                        break;
+                                }
+                            @endphp
+                            <span class="status-badge {{ $badgeClass }}">{{ $commission->public_status }}</span>
+                        </p>
+                    </div>
+                    <div class="detail-group">
+                        <p class="detail-label"><strong>{{ __('Price') }}:</strong></p>
+                        <p class="detail-value">Rp{{ number_format($commission->total_price, 0, ',', '.') }}</p>
+                    </div>
+                    <div class="detail-group">
+                        <p class="detail-label"><strong>{{ __('Created') }}:</strong></p>
+                        <p class="detail-value">{{ $commission->created_at->format('F j, Y') }}</p>
+                    </div>
+                    {{-- Perbarui ini untuk menggunakan ID yang unik jika perlu, atau gunakan .love-count-global jika ada di banyak tempat --}}
+                    <div class="detail-group">
+                        <p class="detail-label"><strong>{{ __('Loves') }}:</strong></p>
+                        <p class="detail-value"><span id="globalLoveCount-{{$commission->id}}">{{ $commission->loved_count ?? 0 }}</span></p>
+                    </div>
+
+                    @auth
+                    <div class="commission-action-buttons">
+                        {{-- Love Button --}}
+                        {{-- Menggunakan class `love-form` untuk identifikasi, dan `data-commission-id` pada tombol --}}
+                        <form action="{{ route('commissions.toggleLove', $commission->id) }}" method="POST" class="love-form">
+                            @csrf
+                            {{-- Ubah type menjadi button agar tidak submit form secara default --}}
+                            <button type="button" class="btn-action love-button
+                                {{ $commission->loves->contains(Auth::user()) ? 'danger' : 'outline-danger' }}"
+                                data-commission-id="{{$commission->id}}">
+                                {{-- Gunakan kondisi untuk ikon hati awal --}}
+                                <i class="fa-{{ $commission->loves->contains(Auth::user()) ? 'solid' : 'regular' }} fa-heart"></i>
+                                {{-- Spans for text and count are inside the button --}}
+                                <span class="love-text">{{ $commission->loves->contains(Auth::user()) ? 'Loved' : 'Love' }}</span>
+                                (<span class="love-count">{{ $commission->loved_count ?? 0 }}</span>)
+                            </button>
+                        </form>
+
+                        {{-- Order Button --}}
+                        @if(Auth::id() !== $commission->user_id && $commission->public_status == 'Available')
+                            <a href="{{ route('commissions.order', $commission->id) }}" class="btn-primary-custom">{{ __('Order This Commission') }}</a>
+                        @endif
+                        
+                        {{-- Edit Button for Owner --}}
+                        @if(Auth::id() == $commission->user_id)
+                            <a href="{{ route('commissions.edit', $commission->id) }}" class="btn-primary-custom edit-btn">{{ __('Edit Commission') }}</a>
+                        @endif
+                    </div>
+                    @endauth
                 </div>
+            </div>
+        </div>
 
-                <div class="mt-4">
-                    <h4>Reviews</h4>
+        <div class="comments-section-container">
+            <div class="card-section mt-4">
+                <h3>{{ __('Reviews') }}</h3>
+                <div class="comments-list">
                     @if($commission->reviews && $commission->reviews->count() > 0)
                         @foreach($commission->reviews as $review)
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <p class="card-text">{{ $review->review }}</p>
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <strong>{{ $review->user->username ?? $review->user->name ?? 'Unknown' }}</strong>
                                     @if($review->rating)
-                                    <p class="card-text">
-                                        <strong>Rating: {{ $review->rating }} / 5</strong>
-                                    </p>
+                                        <span class="review-rating">Rating: {{ $review->rating }} / 5</span>
                                     @endif
-                                    <p class="card-text">
-                                        <small class="text-muted">
-                                            Oleh: {{ $review->user->username ?? $review->user->name ?? 'Anonim' }}
-                                            pada {{ $review->created_at->translatedFormat('d M Y') }} {{-- Using translatedFormat for Indonesian date --}}
-                                        </small>
-                                    </p>
+                                    <span class="review-date">{{ $review->created_at->translatedFormat('d M Y') }}</span>
                                 </div>
+                                <p class="review-content">{{ $review->review }}</p>
                             </div>
                         @endforeach
                     @else
-                        <p>There are no reviews for this commission yet.</p>
+                        <p>{{ __('There are no reviews for this commission yet.') }}</p>
                     @endif
                 </div>
+            </div>
 
-                @auth
-                <div class="mt-4">
-                    <h5>Leave a Review</h5>
-                    <form action="{{ route('commissions.addReview', $commission->id) }}" method="POST">
-                        @csrf
-                        <div class="mb-3">
-                            <label for="review" class="form-label">Ulasan Anda</label>
-                            <textarea name="review" id="review" class="form-control @error('review') is-invalid @enderror" rows="3" placeholder="Tulis ulasan Anda..." required>{{ old('review') }}</textarea>
-                            @error('review')
-                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="rating" class="form-label">Rating</label>
-                            <select name="rating" id="rating" class="form-select @error('rating') is-invalid @enderror" required>
-                                <option value="">Pilih Rating</option>
-                                <option value="1" {{ old('rating') == '1' ? 'selected' : '' }}>1 Bintang</option>
-                                <option value="2" {{ old('rating') == '2' ? 'selected' : '' }}>2 Bintang</option>
-                                <option value="3" {{ old('rating') == '3' ? 'selected' : '' }}>3 Bintang</option>
-                                <option value="4" {{ old('rating') == '4' ? 'selected' : '' }}>4 Bintang</option>
-                                <option value="5" {{ old('rating') == '5' ? 'selected' : '' }}>5 Bintang</option>
-                            </select>
-                            @error('rating')
-                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                            @enderror
-                        </div>
-                        <button type="submit" class="btn btn-success">Kirim Ulasan</button>
-                    </form>
-                </div>
-                @endauth
-
-            @else
-                <p>The requested commission could not be found.</p>
-            @endif
+            @auth
+            <div class="card-section mt-4 add-comment-section">
+                <h4>{{ __('Leave a Review') }}</h4>
+                <form action="{{ route('commissions.addReview', $commission->id) }}" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="review">{{ __('Your Review') }}</label>
+                        <textarea name="review" id="review" class="form-input @error('review') is-invalid @enderror" rows="3" placeholder="{{ __('Write your review...') }}" required>{{ old('review') }}</textarea>
+                        @error('review')
+                            <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="rating">{{ __('Rating') }}</label>
+                        <select name="rating" id="rating" class="form-input form-select-custom @error('rating') is-invalid @enderror" required>
+                            <option value="">{{ __('Select Rating') }}</option>
+                            <option value="1" {{ old('rating') == '1' ? 'selected' : '' }}>1 {{ __('Star') }}</option>
+                            <option value="2" {{ old('rating') == '2' ? 'selected' : '' }}>2 {{ __('Stars') }}</option>
+                            <option value="3" {{ old('rating') == '3' ? 'selected' : '' }}>3 {{ __('Stars') }}</option>
+                            <option value="4" {{ old('rating') == '4' ? 'selected' : '' }}>4 {{ __('Stars') }}</option>
+                            <option value="5" {{ old('rating') == '5' ? 'selected' : '' }}>5 {{ __('Stars') }}</option>
+                        </select>
+                        @error('rating')
+                            <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                        @enderror
+                    </div>
+                    <div class="form-actions form-actions-single-button">
+                        <button type="submit" class="btn-primary-custom">{{ __('Submit Review') }}</button>
+                    </div>
+                </form>
+            </div>
+            @endauth
         </div>
-    </div>
+
+    @else
+        <div class="empty-state">
+            <p>{{ __('The requested commission could not be found.') }}</p>
+        </div>
+    @endif
 </div>
 
-{{-- Include Font Awesome if not already globally included --}}
-{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> --}}
-
-{{-- Basic AJAX for love button (optional, for better UX) --}}
 @push('scripts')
+{{-- Pastikan meta CSRF token ada di layout utama Anda, contoh: <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.love-button').forEach(button => {
         button.addEventListener('click', function (event) {
-            event.preventDefault();
+            event.preventDefault(); // Mencegah form submit default
+
             let form = this.closest('form');
             let commissionId = this.dataset.commissionId;
-            let loveCountSpan = document.getElementById('loveCount-' + commissionId);
+
+            // Dapatkan elemen-elemen yang akan diupdate
+            let iconElement = this.querySelector('i.fa');
+            let loveTextSpan = this.querySelector('.love-text');
+            let loveCountSpan = this.querySelector('.love-count'); // Ini adalah span di dalam tombol
+            let globalLoveCountSpan = document.getElementById('globalLoveCount-' + commissionId); // Ini adalah span di "Detail Group"
 
             fetch(form.action, {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                     'Accept': 'application/json',
+                    'Content-Type': 'application/json' // Tambahkan ini jika Anda mengirim body JSON
                 },
+                // Jika Anda tidak mengirim data lain selain token CSRF, body ini tidak perlu
+                // body: JSON.stringify({
+                //     _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                // })
             })
-            .then(response => response.json())
-            .then(data => {
-                let loveTextSpan = document.getElementById('loveText-' + commissionId); // For "Love" / "Loved" text
-                let loveCountDisplaySpan = document.getElementById('loveCountDisplay-' + commissionId); // For the count number
-
-                if (loveCountDisplaySpan) {
-                    loveCountDisplaySpan.textContent = data.loved_count;
+            .then(response => {
+                if (!response.ok) {
+                    // Tangani error HTTP, misal 401 Unauthorized
+                    if (response.status === 401) {
+                        alert('Anda harus login untuk melakukan aksi ini.');
+                        window.location.href = '/login'; // Redirect ke halaman login
+                    }
+                    throw new Error('Network response was not ok');
                 }
+                return response.json();
+            })
+            .then(data => {
+                // Update ikon hati
+                if (iconElement) {
+                    iconElement.classList.remove('fa-heart', 'fa-heart-o'); // Hapus keduanya
+                    iconElement.classList.add(data.loved ? 'fa-heart' : 'fa-heart-o'); // Tambahkan yang sesuai
+                }
+                
+                // Update teks "Love" / "Loved"
                 if (loveTextSpan) {
                     loveTextSpan.textContent = data.loved ? 'Loved' : 'Love';
                 }
+
+                // Update jumlah love di dalam tombol
+                if (loveCountSpan) {
+                    loveCountSpan.textContent = data.loved_count;
+                }
+
+                // Update jumlah love di bagian "Loves: X" (detail group)
+                if (globalLoveCountSpan) {
+                    globalLoveCountSpan.textContent = data.loved_count;
+                }
                 
-                // Change button style
+                // Ubah gaya tombol (warna background/border)
                 if(data.loved) {
-                    this.classList.remove('btn-outline-danger');
-                    this.classList.add('btn-danger');
+                    this.classList.remove('outline-danger');
+                    this.classList.add('danger');
                 } else {
-                    this.classList.remove('btn-danger');
-                    this.classList.add('btn-outline-danger');
+                    this.classList.remove('danger');
+                    this.classList.add('outline-danger');
                 }
             })
-            .catch(error => console.error('Error toggling love:', error));
+            .catch(error => {
+                console.error('Error toggling love:', error);
+                alert('Terjadi kesalahan saat mengubah status love. Silakan coba lagi.');
+            });
         });
     });
 });
 </script>
 @endpush
-
 @endsection

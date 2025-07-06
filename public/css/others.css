@@ -196,7 +196,8 @@ footer .upper {
     align-items: center;
     /* min-height: calc(100vh - var(--header-height) - var(--footer-height)); */ /* Sesuaikan dengan tinggi header/footer Anda jika perlu */
     padding: 4rem 2rem; /* 40px top/bottom, 20px left/right */
-    background-color: #f8fafc; /* Warna latar belakang ringan */
+    /* background-color: #f8fafc;  */
+    /* Warna latar belakang ringan */
 }
 
 .form-card {
@@ -840,6 +841,444 @@ footer .upper {
 .add-comment-section .ml-auto {
     margin-left: auto; /* Bootstrap utility override */
     margin-right: 0;
+}
+
+/* --- Additions for Commission Form Specifics --- */
+
+/* Adjust file input styling to match form-input */
+.form-file-input {
+    padding-top: 0.8rem; /* Adjusted for file input visual alignment */
+    padding-bottom: 0.8rem;
+    height: auto; /* Allow height to adjust based on content */
+}
+
+/* For forms with a single submit button, to center it */
+.form-actions-single-button {
+    justify-content: center; /* Center the button */
+    margin-top: 3.5rem; /* Slightly more margin for a single button form */
+}
+
+/* Ensure the submit button in this context is full width on small screens */
+@media (max-width: 768px) {
+    .form-actions-single-button .btn-primary-custom {
+        width: 100%;
+    }
+}
+
+/* --- Additions for Edit Commission Page --- */
+
+.current-image-preview {
+    margin-top: 1.5rem; /* 15px */
+    padding-top: 1.5rem;
+    border-top: 0.1rem solid #e2e8f0;
+}
+
+.current-image-preview p {
+    font-size: 1.5rem; /* 15px */
+    color: #4a5568;
+    margin-bottom: 0.8rem; /* 8px */
+}
+
+.commission-preview-image {
+    max-width: 20rem; /* 200px */
+    height: auto;
+    border-radius: 0.6rem;
+    border: 0.1rem solid #e2e8f0;
+    box-shadow: 0 0.2rem 0.5rem rgba(0,0,0,0.05);
+}
+
+/* Ensure the form-actions are not centered if there's a cancel button */
+/* This specific class `form-actions-single-button` (from create page)
+   would need to be absent from this page's form-actions div. */
+.form-actions {
+    justify-content: flex-end; /* Align buttons to the right (Update and Cancel) */
+}
+
+@media (max-width: 768px) {
+    .form-actions {
+        flex-direction: column; /* Stack buttons on small screens */
+        gap: 1rem; /* 10px gap */
+    }
+
+    .form-actions .btn-primary-custom,
+    .form-actions .btn-link-custom {
+        width: 100%; /* Make buttons full width */
+    }
+}
+
+/* --- Commission Detail Page (Public View) --- */
+.commission-detail-grid-public {
+    display: grid;
+    grid-template-columns: 2fr 3fr; /* Gambar 2/5, Info 3/5 */
+    gap: 3rem; /* 30px gap between columns */
+    margin-top: 3rem;
+}
+
+.commission-image-section {
+    background-color: #ffffff;
+    border: 0.1rem solid #e2e8f0;
+    border-radius: 0.8rem;
+    box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.03);
+    padding: 2.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40rem; /* Minimum height for image area */
+}
+
+.commission-display-image {
+    max-width: 100%;
+    height: auto;
+    max-height: 40rem; /* Sesuaikan dengan gaya yang diinginkan */
+    object-fit: contain; /* Memastikan gambar tidak terpotong */
+    border-radius: 0.6rem;
+}
+
+.commission-info-section {
+    /* Kolom untuk detail komisi */
+}
+
+.commission-info-section .card-section h3 {
+    font-size: 2.4rem; /* Lebih besar untuk judul utama komisi */
+    margin-bottom: 1.5rem;
+}
+
+.commission-info-section .detail-group .detail-label {
+    min-width: 10rem; /* Atur lebar minimal label agar rata */
+}
+
+
+/* --- Love & Order Buttons --- */
+.commission-action-buttons {
+    display: flex;
+    flex-wrap: wrap; /* Agar tombol bisa wrap */
+    gap: 1.2rem; /* 12px gap */
+    margin-top: 2.5rem; /* 25px dari info di atas */
+    padding-top: 2rem;
+    border-top: 0.1rem solid #e2e8f0;
+}
+
+/* Custom styles for love button */
+.love-button {
+    /* Menggunakan btn-action yang sudah ada */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem; /* 8px gap for icon and text */
+}
+
+.love-button .fa-heart {
+    font-size: 1.6rem; /* Ukuran ikon hati */
+}
+
+/* Specific colors for love button */
+.btn-action.danger { /* For 'Loved' state (filled heart) */
+    background-color: #dc3545; /* Bootstrap danger red */
+    color: #ffffff;
+    border-color: #dc3545;
+}
+
+.btn-action.danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.btn-action.outline-danger { /* For 'Love' state (outline heart) */
+    background-color: transparent;
+    color: #dc3545;
+    border: 0.1rem solid #dc3545;
+}
+
+.btn-action.outline-danger:hover {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+/* Ensure edit-btn specific styling applies */
+.btn-primary-custom.edit-btn {
+    background-color: #f6ad55; /* Orange for edit */
+    border-color: #f6ad55;
+}
+.btn-primary-custom.edit-btn:hover {
+    background-color: #ed8936;
+    border-color: #ed8936;
+}
+
+/* --- Reviews Section --- */
+/* The existing .comments-list, .review-item, .review-header, .review-content,
+   and .add-comment-section styles should already apply. */
+
+.review-item .review-rating {
+    font-size: 1.4rem;
+    color: #f39c12; /* Warna rating bintang */
+    font-weight: 600;
+    margin-left: 1rem;
+}
+
+/* Ensure form styles for review submission are consistent */
+.add-comment-section .form-group {
+    margin-bottom: 2rem; /* Match other form groups */
+}
+
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .commission-detail-grid-public {
+        grid-template-columns: 1fr; /* Satu kolom di layar kecil */
+        gap: 2rem;
+    }
+
+    .commission-image-section {
+        min-height: 25rem; /* Tinggi minimum lebih kecil */
+        padding: 1.6rem;
+    }
+
+    .commission-info-section .card-section h3 {
+        font-size: 2.2rem;
+    }
+
+    .commission-action-buttons {
+        flex-direction: column; /* Tombol aksi bertumpuk */
+        gap: 1rem;
+    }
+    
+    .commission-action-buttons .btn-action,
+    .commission-action-buttons .btn-primary-custom {
+        width: 100%;
+    }
+}
+
+/* --- Commission Order Page Specific Layout --- */
+.commission-order-grid {
+    display: grid;
+    grid-template-columns: 2fr 3fr; /* Gambar 2/5, Info 3/5 */
+    gap: 3rem; /* 30px gap between columns */
+    margin-top: 3rem;
+}
+
+.commission-image-area {
+    /* Reuses .commission-image-section styles from commissions.show */
+    background-color: #ffffff;
+    border: 0.1rem solid #e2e8f0;
+    border-radius: 0.8rem;
+    box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.03);
+    padding: 2.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40rem; /* Minimum height for image area */
+}
+
+.commission-order-info-area {
+    /* Kolom untuk detail komisi dan tombol aksi */
+}
+
+.commission-order-actions-area {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem; /* 12px gap between action buttons */
+    padding-top: 2rem; /* 20px padding from sections above */
+    border-top: 0.1rem solid #e2e8f0;
+    margin-top: 2.4rem;
+}
+
+/* Ensure these are using our custom button styles */
+.commission-order-actions-area .btn-primary-custom {
+    margin-right: 0 !important; /* Override me-2 / ms-2 from Bootstrap */
+}
+
+/* --- Modal Styling Overrides (for Payment Modal) --- */
+/* Custom width for modal */
+.modal-custom-width {
+    max-width: 50rem; /* 500px */
+    margin: 0 auto;
+}
+
+/* Custom modal content styling */
+.modal-content-custom {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 1rem; /* 10px */
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.modal-header-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 2.4rem; /* 20px vertical, 24px horizontal */
+    border-bottom: 0.1rem solid #e2e8f0;
+    background-color: #f8fbfc;
+}
+
+.modal-header-custom .modal-title {
+    font-size: 2.2rem; /* 22px */
+    color: #1a202c;
+    margin: 0;
+}
+
+.modal-header-custom .btn-close-custom {
+    background: none;
+    border: none;
+    font-size: 2.4rem; /* Ukuran silang */
+    color: #555;
+    cursor: pointer;
+    line-height: 1; /* Pastikan ikon silang terpusat */
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.modal-header-custom .btn-close-custom:hover {
+    opacity: 1;
+}
+
+.modal-body-custom {
+    padding: 2.4rem; /* 24px */
+    font-size: 1.6rem; /* 16px */
+    color: #333;
+}
+
+.modal-body-custom p {
+    margin-bottom: 1.2rem; /* 12px */
+}
+
+.modal-body-custom .detail-group {
+    margin-bottom: 0.8rem; /* Lebih sedikit margin di modal */
+}
+
+/* Payment QR Section */
+.payment-qr-section {
+    text-align: center;
+    margin: 3rem 0; /* 30px vertical margin */
+}
+
+.payment-qr-code {
+    max-width: 20rem; /* 200px */
+    height: auto;
+    display: block;
+    margin: 0 auto 1.5rem auto; /* 15px bottom margin */
+    border: 0.1rem solid #e2e8f0;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background-color: #ffffff;
+}
+
+.payment-qr-section p {
+    font-size: 1.5rem; /* 15px */
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.payment-qr-section small {
+    font-size: 1.3rem; /* 13px */
+    color: #777;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .commission-order-grid {
+        grid-template-columns: 1fr; /* Satu kolom di layar kecil */
+        gap: 2rem;
+    }
+
+    .commission-image-area {
+        min-height: 25rem; /* Tinggi minimum lebih kecil */
+        padding: 1.6rem;
+    }
+
+    .commission-order-info-area {
+        padding-top: 1.6rem;
+    }
+
+    .commission-order-actions-area {
+        gap: 1rem;
+        margin-top: 1.6rem;
+        padding-top: 1.6rem;
+    }
+
+    .commission-order-actions-area .btn-primary-custom,
+    .commission-order-actions-area .btn-link-custom {
+        width: 100%;
+    }
+
+    .modal-custom-width {
+        max-width: 90%; /* Lebih lebar di layar kecil */
+    }
+
+    .modal-header-custom {
+        padding: 1.6rem 2rem;
+    }
+
+    .modal-header-custom .modal-title {
+        font-size: 2rem;
+    }
+
+    .modal-body-custom {
+        padding: 1.6rem;
+    }
+
+    .payment-qr-code {
+        max-width: 15rem; /* Lebih kecil di layar kecil */
+    }
+}
+
+.btn-stroke-e3e3e3 {
+    border: 1px solid #e3e3e3;
+    color: #171717;
+}
+
+.btn-putih-white {
+    background-color: #ffffff;
+    color: #171717;
+}
+
+/* --- Additions for Edit Profile Page --- */
+
+.profile-picture-edit-preview {
+    margin-top: 1.5rem; /* 15px */
+    padding-top: 1.5rem;
+    border-top: 0.1rem solid #e2e8f0;
+}
+
+.profile-picture-edit-preview p {
+    font-size: 1.5rem; /* 15px */
+    color: #4a5568;
+    margin-bottom: 0.8rem; /* 8px */
+}
+
+.profile-preview-image {
+    max-width: 10rem; /* 100px */
+    height: auto;
+    border-radius: 0.6rem;
+    border: 0.1rem solid #e2e8f0;
+    box-shadow: 0 0.2rem 0.5rem rgba(0,0,0,0.05);
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    /* No specific new adjustments for this page beyond general form ones */
+    /* The .form-page-wrapper, .form-card, .form-group, etc. media queries will handle responsiveness */
+}
+
+/* --- Additions for Edit Artist Profile Page --- */
+
+.form-input-disabled {
+    background-color: #e9ecef; /* Warna latar belakang abu-abu untuk disabled/readonly */
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.form-text-hint {
+    font-size: 1.3rem; /* 13px */
+    color: #6c757d;
+    margin-top: 0.5rem; /* 5px */
+    display: block; /* Memastikan setiap hint ada di baris baru */
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    /* No specific new adjustments for this page beyond general form ones */
+    /* The .form-page-wrapper, .form-card, .form-group, etc. media queries will handle responsiveness */
 }
 
 /* ==========================================================================

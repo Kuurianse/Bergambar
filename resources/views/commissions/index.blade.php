@@ -68,7 +68,7 @@
                                         color: inherit;
                                     "
                                 >
-                                    {{ $commission->description }}
+                                    {{ $commission->title }}
                                 </a>
                             </h3>
                             <p class="card-author">
@@ -184,7 +184,7 @@
                                                     </svg>
                                                 </button>
                                             </form>
-                                            <a href="#" class="card-view-btn"
+                                            <a href="{{ route('commissions.show', $commission->id) }}" class="card-view-btn"
                                                 >View</a
                                             >
                                         </div>

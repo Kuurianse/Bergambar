@@ -1,69 +1,81 @@
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 @extends('layouts.app')
 
+@section('css_tambahan')
+    <link rel="stylesheet" href="{{ asset('css/others.css') }}" />
+@endsection
+
 @section('content')
-<body style="background-color: #ffffff;">
-    <div class="container d-flex justify-content-center align-items-center row-g-10">
-        <div class="w-50">
-            <h1 class="text-center text-black fs-1 p-4">Create New Commission</h1>
-
-    <form action="{{ route('commissions.store') }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    <div class="form-group">
-        <label for="description" class="text-black fs-3 p-3">Description</label>
-        <input type="text" class="form-control" name="description" id="description" required>
-    </div>
-
-    <div class="form-group">
-        <label for="total_price" class="text-black fs-3 p-3">Total Price</label>
-        <input type="number" class="form-control" name="total_price" id="total_price" required>
-    </div>
-
-    <div class="form-group">
-        <label for="service_id" class="text-black fs-3 p-3">Link to Existing Service (Optional)</label>
-        <select class="form-control @error('service_id') is-invalid @enderror" name="service_id" id="service_id">
-            <option value="">-- Select a Service --</option>
-            @if($services && count($services) > 0)
-                @foreach($services as $service)
-                    <option value="{{ $service->id }}" {{ old('service_id') == $service->id ? 'selected' : '' }}>
-                        {{ $service->title }} (Rp{{ number_format($service->price, 0, ',', '.') }})
-                    </option>
-                @endforeach
-            @else
-                <option value="" disabled>You have no available services to link.</option>
-            @endif
-        </select>
-        @error('service_id')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-    </div>
-
-    <div class="form-group">
-        <label for="status" class="text-black fs-3 p-3">Status</label>
-        <select class="form-control" name="status" id="status" required>
-            <option value="pending">Pending</option>
-            <option value="accepted">Accepted</option>
-            <option value="completed">Completed</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="image" class="text-black fs-3 p-3">Upload Image</label>
-        <input type="file" class="form-control" name="image" id="image">
-    </div>
-    <div class="container p-5 align-items-center position-relative ">
-        <button type="submit" class="btn btn-primary fs-4 position-absolute top-50 start-50 translate-middle fluid ">Submit</button>
-    </div>
-</form>
-
+<div class="form-page-wrapper">
+    <div class="form-card">
+        <div class="form-card-header">
+            <h2>{{ __('Create New Commission') }}</h2>
         </div>
+
+        <div class="form-card-body">
+            <form action="{{ route('commissions.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+
+                <div class="form-group">
+                    <label for="description">{{ __('Description') }}</label>
+                    <textarea id="description" class="form-input @error('description') is-invalid @enderror" name="description" rows="3" required>{{ old('description') }}</textarea>
+                    @error('description')
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="total_price">{{ __('Total Price') }}</label>
+                    <input id="total_price" type="number" class="form-input @error('total_price') is-invalid @enderror" name="total_price" value="{{ old('total_price') }}" required>
+                    @error('total_price')
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+                
+                {{-- Link to Existing Service (Optional) --}}
+                {{-- <div class="form-group">
+                    <label for="service_id">{{ __('Link to Existing Service (Optional)') }}</label>
+                    <select class="form-input form-select-custom @error('service_id') is-invalid @enderror" name="service_id" id="service_id">
+                        <option value="">-- {{ __('Select a Service') }} --</option>
+                        @if($services && count($services) > 0)
+                            @foreach($services as $service)
+                                <option value="{{ $service->id }}" {{ old('service_id') == $service->id ? 'selected' : '' }}>
+                                    {{ $service->title }} (Rp{{ number_format($service->price, 0, ',', '.') }})
+                                </option>
+                            @endforeach
+                        @else
+                            <option value="" disabled>{{ __('You have no available services to link.') }}</option>
+                        @endif
+                    </select>
+                    @error('service_id')
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="status">{{ __('Status') }}</label>
+                    <select class="form-input form-select-custom @error('status') is-invalid @enderror" name="status" id="status" required>
+                        <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>{{ __('Pending') }}</option>
+                        <option value="accepted" {{ old('status') == 'accepted' ? 'selected' : '' }}>{{ __('Accepted') }}</option>
+                        <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>{{ __('Completed') }}</option>
+                    </select>
+                    @error('status')
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div> --}}
+
+                <div class="form-group">
+                    <label for="image">{{ __('Upload Image') }}</label>
+                    <input type="file" class="form-input form-file-input @error('image') is-invalid @enderror" name="image" id="image">
+                    @error('image')
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+
+                <div class="form-actions form-actions-single-button">
+                    <button type="submit" class="btn-primary-custom">{{ __('Submit') }}</button>
+                </div>
+            </form>
         </div>
     </div>
-</body>
-    <!-- Footer
-    <footer class="position-absolute bottom-0 text-white py-3 w-100" style="background-color: #252539;">
-        <div class="container text-center">
-            <small>&copy; 2024 Bergambar. All Rights Reserved.</small>
-        </div>
-    </footer> -->
+</div>
 @endsection

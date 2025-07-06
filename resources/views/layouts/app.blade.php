@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
+    
+    {{-- HANYA PILIH SATU VERSI FONT AWESOME --}}
+    {{-- Pilihan A: Font Awesome 6 (Disarankan jika Anda ingin fitur terbaru) --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {{-- Pilihan B: Font Awesome 4.7.0 (Jika Anda hanya butuh ikon dasar dan ingin lebih ringan) --}}
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> --}}
     
     @vite(['resources/js/app.js'])
     
@@ -37,7 +42,6 @@
                             </svg>
                         </span>
                     </a>
-                    <!-- Dropdown UL sekarang menjadi sibling dari <a>, bukan di dalamnya -->
                     <ul class="others-dropdown">
                         <li><a href="{{ route('users.show', Auth::user()->id) }}">Edit Profile</a></li>
                         <li><a href="{{ route('artist.orders.index') }}">Manage My Orders</a></li>
@@ -70,7 +74,6 @@
         @yield('content')
     </main>
 
-    <!-- Footer -->
     <footer>
         <div class="upper"></div>
         <div class="bottom">
@@ -81,7 +84,10 @@
         </div>
     </footer>
 
-    <script src="{{ asset('js/love.js') }}"></script>
+    
+    <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    {{-- Pindahkan skrip ini ke setelah yield('scripts') jika Anda menggunakan push/stack --}}
+    <script src="{{ asset('js/love.js') }}"></script> 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const header = document.querySelector("header");
@@ -97,7 +103,25 @@
                     header.classList.remove("sticky");
                 }
             });
+            // Anda bisa menambahkan logika JavaScript lainnya di sini.
+            // Contoh untuk dropdown 'Others':
+            const othersLink = document.querySelector('.others');
+            const othersDropdown = document.querySelector('.others-dropdown');
+            if (othersLink && othersDropdown) {
+                othersLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    othersDropdown.classList.toggle('show'); // Tambahkan kelas 'show' untuk menampilkan dropdown
+                });
+
+                // Tutup dropdown jika klik di luar
+                document.addEventListener('click', function(e) {
+                    if (!othersLink.contains(e.target) && !othersDropdown.contains(e.target)) {
+                        othersDropdown.classList.remove('show');
+                    }
+                });
+            }
         });
     </script>
+    @stack('scripts') {{-- Pastikan ada @stack('scripts') di layout Anda agar @push('scripts') berfungsi --}}
 </body>
 </html>

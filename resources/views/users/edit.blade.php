@@ -1,59 +1,79 @@
 @extends('layouts.app')
 
+@section('css_tambahan')
+    <link rel="stylesheet" href="{{ asset('css/others.css') }}" />
+@endsection
+
 @section('content')
-<div class="container">
-        <h2 class="text-black">Edit Profil</h2>
+<div class="form-page-wrapper">
+    <div class="form-card">
+        <div class="form-card-header">
+            <h2>{{ __('Edit Profil') }}</h2>
+        </div>
 
-        <!-- Form Edit Profil -->
-        <form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    @method('PUT') <!-- Menggunakan method PUT untuk update -->
+        <div class="form-card-body">
+            <form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT') <div class="form-group">
+                    <label for="username">{{ __('Username') }}</label>
+                    <input id="username" type="text" class="form-input @error('username') is-invalid @enderror" name="username" value="{{ old('username', $user->username) }}" required>
+                    @error('username')
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
 
-    <!-- Username -->
-    <div class="mb-3">
-        <label for="username" class="text-black p-2">Username</label>
-        <input type="text" name="username" id="username" class="form-control" value="{{ old('username', $user->username) }}" required>
+                <div class="form-group">
+                    <label for="name">{{ __('Name') }}</label>
+                    <input id="name" type="text" class="form-input @error('name') is-invalid @enderror" name="name" value="{{ old('name', $user->name) }}" required>
+                    @error('name')
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="email">{{ __('Email') }}</label>
+                    <input id="email" type="email" class="form-input @error('email') is-invalid @enderror" name="email" value="{{ old('email', $user->email) }}" required>
+                    @error('email')
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="password">{{ __('Password (Biarkan kosong jika tidak ingin mengubah)') }}</label>
+                    <input id="password" type="password" class="form-input @error('password') is-invalid @enderror" name="password">
+                    @error('password')
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">{{ __('Bio') }}</label>
+                    <textarea id="bio" class="form-input @error('bio') is-invalid @enderror" name="bio" rows="3">{{ old('bio', $user->bio) }}</textarea>
+                    @error('bio')
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="profile_picture">{{ __('Profile Picture') }}</label>
+                    <input type="file" name="profile_picture" id="profile_picture" class="form-input form-file-input @error('profile_picture') is-invalid @enderror">
+                    @error('profile_picture')
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+
+                    @if($user->profile_picture)
+                        <div class="current-image-preview profile-picture-edit-preview">
+                            <p>{{ __('Current Profile Picture') }}:</p>
+                            <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="Profile Picture" class="profile-preview-image">
+                        </div>
+                    @endif
+                </div>
+
+                <div class="form-actions form-actions-single-button">
+                    <button type="submit" class="btn-primary-custom">{{ __('Update') }}</button>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <!-- Name -->
-    <div class="mb-3">
-        <label for="name" class="text-black p-2">Name</label>
-        <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $user->name) }}" required>
-    </div>
-
-    <!-- Email -->
-    <div class="mb-3">
-        <label for="email" class="text-black p-2">Email</label>
-        <input type="email" name="email" id="email" class="form-control" value="{{ old('email', $user->email) }}" required>
-    </div>
-
-    <!-- Password (Opsional) -->
-    <div class="mb-3" >
-        <label for="password" class="text-black p-2">Password (Biarkan kosong jika tidak ingin mengubah)</label>
-        <input type="password" name="password" id="password" class="form-control">
-    </div>
-
-    <!-- Bio (Optional) -->
-    <div class="mb-3">
-        <label for="bio" class="text-black p-2">Bio</label>
-        <textarea name="bio" id="bio" class="form-control">{{ old('bio', $user->bio) }}</textarea>
-    </div>
-
-    <!-- Profile Picture -->
-    <div class="mb-3">
-        <label for="profile_picture" class="text-black p-2">Profile Picture</label>
-        <input type="file" name="profile_picture" id="profile_picture" class="form-control">
-
-        @if($user->profile_picture)
-            <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="Profile Picture" style="max-width: 100px; margin-top: 10px;">
-        @endif
-    </div>
-
-    <!-- Submit -->
-    <button type="submit" class="btn edit text-black p-2 fs-6 float-end">Update</button>
-</form>
-
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</div>
 @endsection

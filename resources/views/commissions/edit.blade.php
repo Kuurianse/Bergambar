@@ -1,77 +1,95 @@
 @extends('layouts.app')
 
+@section('css_tambahan')
+    <link rel="stylesheet" href="{{ asset('css/others.css') }}" />
+@endsection
+
 @section('content')
-    <h1>Edit Commission</h1>
-
-    <!-- Form untuk mengedit commission -->
-    <form action="{{ route('commissions.update', $commission->id) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PUT') <!-- Laravel membutuhkan method PUT/PATCH untuk update -->
-
-        <!-- Title -->
-        <div class="form-group">
-            <label for="title">Title</label>
-            <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" id="title" value="{{ old('title', $commission->title) }}" required>
-            @error('title')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
+<div class="form-page-wrapper">
+    <div class="form-card">
+        <div class="form-card-header">
+            <h2>{{ __('Edit Commission') }}</h2>
         </div>
 
-        <!-- Description -->
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea class="form-control @error('description') is-invalid @enderror" name="description" id="description" rows="3" required>{{ old('description', $commission->description) }}</textarea>
-            @error('description')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
+        <div class="form-card-body">
+            <form action="{{ route('commissions.update', $commission->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT') <div class="form-group">
+                    <label for="title">{{ __('Title') }}</label>
+                    <input id="title" type="text" class="form-input @error('title') is-invalid @enderror" name="title" value="{{ old('title', $commission->title) }}" required>
+                    @error('title')
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
 
-        <!-- Total Price -->
-        <div class="form-group">
-            <label for="total_price">Total Price</label>
-            <input type="number" class="form-control" name="total_price" id="total_price" value="{{ old('total_price', $commission->total_price) }}" required>
-        </div>
+                <div class="form-group">
+                    <label for="description">{{ __('Description') }}</label>
+                    <textarea id="description" class="form-input @error('description') is-invalid @enderror" name="description" rows="3" required>{{ old('description', $commission->description) }}</textarea>
+                    @error('description')
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
 
-        <!-- Link to Existing Service (Optional) -->
-        <div class="form-group">
-            <label for="service_id">Link to Existing Service (Optional)</label>
-            <select class="form-control @error('service_id') is-invalid @enderror" name="service_id" id="service_id">
-                <option value="">-- Select a Service --</option>
-                @if($services && count($services) > 0)
-                    @foreach($services as $service)
-                        <option value="{{ $service->id }}" {{ old('service_id', $commission->service_id) == $service->id ? 'selected' : '' }}>
-                            {{ $service->title }} (Rp{{ number_format($service->price, 0, ',', '.') }})
-                        </option>
-                    @endforeach
-                @else
-                    <option value="" disabled>You have no available services to link.</option>
-                @endif
-            </select>
-            @error('service_id')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
- 
-        <!-- Status -->
-        <div class="form-group">
-            <label for="status">Status</label>
-            <select class="form-control" name="status" id="status" required>
-                <option value="pending" {{ $commission->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                <option value="accepted" {{ $commission->status == 'accepted' ? 'selected' : '' }}>Accepted</option>
-                <option value="completed" {{ $commission->status == 'completed' ? 'selected' : '' }}>Completed</option>
-            </select>
-        </div>
+                <div class="form-group">
+                    <label for="total_price">{{ __('Total Price') }}</label>
+                    <input id="total_price" type="number" class="form-input @error('total_price') is-invalid @enderror" name="total_price" value="{{ old('total_price', $commission->total_price) }}" required>
+                    @error('total_price') {{-- Add error handling for total_price --}}
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
 
-        <!-- Image -->
-        <div class="form-group">
-            <label for="image">Upload New Image (optional)</label>
-            <input type="file" class="form-control" name="image" id="image">
-            @if($commission->image)
-                <p>Current Image:</p>
-                <img src="{{ asset('storage/' . $commission->image) }}" alt="Current Commission Image" style="width: 200px;">
-            @endif
-        </div>
+                
+                {{-- <div class="form-group">
+                    <label for="service_id">{{ __('Link to Existing Service (Optional)') }}</label>
+                    <select class="form-input form-select-custom @error('service_id') is-invalid @enderror" name="service_id" id="service_id">
+                        <option value="">-- {{ __('Select a Service') }} --</option>
+                        @if($services && count($services) > 0)
+                            @foreach($services as $service)
+                                <option value="{{ $service->id }}" {{ old('service_id', $commission->service_id) == $service->id ? 'selected' : '' }}>
+                                    {{ $service->title }} (Rp{{ number_format($service->price, 0, ',', '.') }})
+                                </option>
+                            @endforeach
+                        @else
+                            <option value="" disabled>{{ __('You have no available services to link.') }}</option>
+                        @endif
+                    </select>
+                    @error('service_id')
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+                
+                <div class="form-group">
+                    <label for="status">{{ __('Status') }}</label>
+                    <select class="form-input form-select-custom @error('status') is-invalid @enderror" name="status" id="status" required>
+                        <option value="pending" {{ old('status', $commission->status) == 'pending' ? 'selected' : '' }}>{{ __('Pending') }}</option>
+                        <option value="accepted" {{ old('status', $commission->status) == 'accepted' ? 'selected' : '' }}>{{ __('Accepted') }}</option>
+                        <option value="completed" {{ old('status', $commission->status) == 'completed' ? 'selected' : '' }}>{{ __('Completed') }}</option>
+                    </select>
+                    @error('status')
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div> --}}
 
-        <button type="submit" class="btn btn-primary">Update Commission</button>
-    </form>
+                <div class="form-group">
+                    <label for="image">{{ __('Upload New Image (optional)') }}</label>
+                    <input type="file" class="form-input form-file-input @error('image') is-invalid @enderror" name="image" id="image">
+                    @error('image')
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                    @if($commission->image)
+                        <div class="current-image-preview">
+                            <p>{{ __('Current Image') }}:</p>
+                            <img src="{{ asset('storage/' . $commission->image) }}" alt="{{ __('Current Commission Image') }}" class="commission-preview-image">
+                        </div>
+                    @endif
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary-custom">{{ __('Update Commission') }}</button>
+                    <a href="{{ url()->previous() }}" class="btn-link-custom">{{ __('Cancel') }}</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
