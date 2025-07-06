@@ -57,13 +57,9 @@ class OrderController extends Controller
         return view('orders.create_for_commission', compact('commission', 'artist'));
     }
 
-    // Handle payment confirmation and create the order
-    public function confirmPaymentAndCreateOrder(Commission $commission)
+    // Handle payment confirmation
+    public function confirmPayment(Commission $commission)
     {
-        if (!$commission) {
-            return redirect()->route('orders.index')->with('error', 'Commission not found.');
-        }
-
         // Create a new order entry
         $order = Order::create([ // Assign to $order
             'user_id' => Auth::id(),

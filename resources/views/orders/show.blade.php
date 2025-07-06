@@ -147,7 +147,9 @@
         </div>
     </div>
     @endif
-    <div class="card-section mt-4">
+
+    {{-- dikomen karna fitur komen belum bisa --}}
+    {{-- <div class="card-section mt-4">
         <h3>{{ __('Comments') }}</h3>
         <div class="comments-list">
             @if($order->commission && $order->commission->reviews->isNotEmpty())
@@ -155,7 +157,7 @@
                     <div class="review-item">
                         <div class="review-header">
                             <strong>{{ $review->user->username ?? $review->user->name ?? 'Unknown' }}</strong>
-                            {{-- Add rating display if available, e.g., <span class="rating">⭐️⭐️⭐️⭐️</span> --}}
+                            
                             <span class="review-date">{{ $review->created_at->format('d M Y') }}</span>
                         </div>
                         <p class="review-content">{{ $review->review }}</p>
@@ -179,7 +181,7 @@
                 </form>
             </div>
         @endauth
-    </div>
+    </div> --}}
 </div>
 
 {{-- Bootstrap JavaScript (if not already included in your layout) - Remove this line if it's already in layouts.app --}}

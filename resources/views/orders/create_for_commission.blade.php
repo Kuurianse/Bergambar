@@ -70,12 +70,12 @@
     @auth
     <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-custom-width"> {{-- Added custom class --}}
-            <div class="modal-content-custom"> {{-- Added custom class --}}
-                <div class="modal-header-custom"> {{-- Added custom class --}}
+            <div class="modal-content modal-content-custom"> {{-- Added custom class --}}
+                <div class="modal-header modal-header-custom"> {{-- Added custom class --}}
                     <h5 class="modal-title" id="paymentModalLabel">{{ __('Confirm Order & Payment') }}</h5>
-                    <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-custom" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body-custom"> {{-- Added custom class --}}
+                <div class="modal-body modal-body-custom"> {{-- Added custom class --}}
                     <p>{{ __('You are about to order the commission') }}: <strong>{{ $commission->description }}</strong></p>
                     <div class="detail-group">
                         <p class="detail-label"><strong>{{ __('Artist') }}:</strong></p>
@@ -96,9 +96,9 @@
                         <small class="text-muted">{{ __('(This is a simulated payment for demonstration purposes)') }}</small>
                     </div>
 
-                    <form action="{{ route('orders.confirmPayment', $commission->id) }}" method="POST">
+                    <form id="payment-form" action="{{ route('orders.confirmPayment', $commission->id) }}" method="POST">
                         @csrf
-                        <button type="submit" class="btn-primary-custom full-width-btn">{{ __('Confirm Payment & Place Order') }}</button>
+                        <button type="button" id="confirm-payment-btn" class="btn-primary-custom full-width-btn">{{ __('Confirm Payment & Place Order') }}</button>
                     </form>
                 </div>
             </div>
@@ -106,5 +106,18 @@
     </div>
     @endauth
 
-{{-- Note: Ensure Bootstrap JS bundle is loaded in layouts.app for modal functionality. --}}
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const confirmButton = document.getElementById('confirm-payment-btn');
+        const paymentForm = document.getElementById('payment-form');
+
+        if (confirmButton && paymentForm) {
+            confirmButton.addEventListener('click', function() {
+                paymentForm.submit();
+            });
+        }
+    });
+</script>
+@endpush
 @endsection

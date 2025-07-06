@@ -15,7 +15,7 @@
         <div class="commission-detail-grid-public">
             <div class="commission-image-section">
                 @if($commission->image)
-                    <img src="{{ asset('storage/' . $commission->image) }}" alt="Commission Image for {{ $commission->description }}" class="commission-display-image">
+                    <img src="{{ asset($commission->image) }}" alt="Commission Image for {{ $commission->description }}" class="commission-display-image">
                 @else
                     <div class="no-image-placeholder">
                         <p>{{ __('No image has been provided for this commission.') }}</p>
@@ -169,83 +169,6 @@
 </div>
 
 @push('scripts')
-{{-- Pastikan meta CSRF token ada di layout utama Anda, contoh: <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.love-button').forEach(button => {
-        button.addEventListener('click', function (event) {
-            event.preventDefault(); // Mencegah form submit default
-
-            let form = this.closest('form');
-            let commissionId = this.dataset.commissionId;
-
-            // Dapatkan elemen-elemen yang akan diupdate
-            let iconElement = this.querySelector('i.fa');
-            let loveTextSpan = this.querySelector('.love-text');
-            let loveCountSpan = this.querySelector('.love-count'); // Ini adalah span di dalam tombol
-            let globalLoveCountSpan = document.getElementById('globalLoveCount-' + commissionId); // Ini adalah span di "Detail Group"
-
-            fetch(form.action, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json' // Tambahkan ini jika Anda mengirim body JSON
-                },
-                // Jika Anda tidak mengirim data lain selain token CSRF, body ini tidak perlu
-                // body: JSON.stringify({
-                //     _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                // })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    // Tangani error HTTP, misal 401 Unauthorized
-                    if (response.status === 401) {
-                        alert('Anda harus login untuk melakukan aksi ini.');
-                        window.location.href = '/login'; // Redirect ke halaman login
-                    }
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Update ikon hati
-                if (iconElement) {
-                    iconElement.classList.remove('fa-heart', 'fa-heart-o'); // Hapus keduanya
-                    iconElement.classList.add(data.loved ? 'fa-heart' : 'fa-heart-o'); // Tambahkan yang sesuai
-                }
-                
-                // Update teks "Love" / "Loved"
-                if (loveTextSpan) {
-                    loveTextSpan.textContent = data.loved ? 'Loved' : 'Love';
-                }
-
-                // Update jumlah love di dalam tombol
-                if (loveCountSpan) {
-                    loveCountSpan.textContent = data.loved_count;
-                }
-
-                // Update jumlah love di bagian "Loves: X" (detail group)
-                if (globalLoveCountSpan) {
-                    globalLoveCountSpan.textContent = data.loved_count;
-                }
-                
-                // Ubah gaya tombol (warna background/border)
-                if(data.loved) {
-                    this.classList.remove('outline-danger');
-                    this.classList.add('danger');
-                } else {
-                    this.classList.remove('danger');
-                    this.classList.add('outline-danger');
-                }
-            })
-            .catch(error => {
-                console.error('Error toggling love:', error);
-                alert('Terjadi kesalahan saat mengubah status love. Silakan coba lagi.');
-            });
-        });
-    });
-});
-</script>
+    <script src="{{ asset('js/love.js') }}"></script>
 @endpush
 @endsection

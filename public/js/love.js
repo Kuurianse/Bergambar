@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Loop melalui setiap tombol dengan kelas 'love-button'
-    document.querySelectorAll('.love-button').forEach(button => {
+    document.querySelectorAll('form.love-form .love-button').forEach(button => {
         button.addEventListener('click', function (event) {
             event.preventDefault(); // Mencegah form submit default
 

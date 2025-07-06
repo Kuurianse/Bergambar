@@ -84,7 +84,7 @@ Route::post('/send-message', [ChatController::class, 'sendMessage']);
 
 Route::get('/chats', [ChatController::class, 'index'])->name('chat.index');
 
-Route::post('/orders/commission/{commission}/confirm', [OrderController::class, 'confirmPaymentAndCreateOrder'])->name('orders.confirmPayment');
+Route::post('/orders/{commission}/confirm', [OrderController::class, 'confirmPayment'])->name('orders.confirmPayment');
 
 // Route::get('/chat/{user}', [ChatController::class, 'show'])->name('chat.show')->middleware('auth');
 

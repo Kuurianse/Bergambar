@@ -45,7 +45,7 @@
                     <ul class="others-dropdown">
                         <li><a href="{{ route('users.show', Auth::user()->id) }}">Edit Profile</a></li>
                         <li><a href="{{ route('artist.orders.index') }}">Manage My Orders</a></li>
-                        <li><a href="{{ route('services.index') }}">Manage My Services</a></li>
+                        {{-- <li><a href="{{ route('services.index') }}">Manage My Services</a></li> --}}
                         <li><a href="{{ route('orders.index') }}">My Orders (Client)</a></li>
                     </ul>
                 </li>
@@ -71,6 +71,32 @@
     </header>
 
     <main>
+        {{-- <div class="container-fluid" style="padding-top: 20px; padding-bottom: 20px;">
+            @if (session('message'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('message') }}
+                </div>
+            @endif
+            @if (session('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('error') }}
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger" role="alert">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+        </div> --}}
         @yield('content')
     </main>
 
@@ -85,9 +111,7 @@
     </footer>
 
     
-    <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     {{-- Pindahkan skrip ini ke setelah yield('scripts') jika Anda menggunakan push/stack --}}
-    <script src="{{ asset('js/love.js') }}"></script> 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const header = document.querySelector("header");
