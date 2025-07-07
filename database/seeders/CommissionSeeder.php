@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Review;
 use App\Models\Service; // Added
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class CommissionSeeder extends Seeder
 {
@@ -115,7 +117,20 @@ class CommissionSeeder extends Seeder
 
     private function createSpecificCommissions()
     {
-        $placeholderImage = 'assets/image.jpg'; // Path relative to public folder
+        // Ensure the target directory exists
+        Storage::disk('public')->makeDirectory('commissions');
+
+        // Define the source and destination for the placeholder image
+        $sourcePath = public_path('assets/image.jpg');
+        $destinationPath = 'commissions/placeholder.jpg'; // Path within the 'public' disk
+
+        // Copy the file to the storage directory if it exists and isn't already there
+        if (File::exists($sourcePath) && !Storage::disk('public')->exists($destinationPath)) {
+            Storage::disk('public')->put($destinationPath, File::get($sourcePath));
+        }
+
+        // Use this path for seeding. If the source doesn't exist, it will be null.
+        $placeholderImage = File::exists($sourcePath) ? $destinationPath : null;
 
         $alyartUser = User::where('email', 'alya.putri@example.com')->first();
         $budisoundUser = User::where('email', 'budi.s@example.com')->first();

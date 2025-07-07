@@ -15,6 +15,15 @@
             <form action="{{ route('commissions.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
+                {{-- Tambahkan form-group untuk Title di sini --}}
+                <div class="form-group">
+                    <label for="title">{{ __('Title') }}</label>
+                    <input id="title" type="text" class="form-input @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autofocus>
+                    @error('title')
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+
                 <div class="form-group">
                     <label for="description">{{ __('Description') }}</label>
                     <textarea id="description" class="form-input @error('description') is-invalid @enderror" name="description" rows="3" required>{{ old('description') }}</textarea>
@@ -65,10 +74,13 @@
 
                 <div class="form-group">
                     <label for="image">{{ __('Upload Image') }}</label>
-                    <input type="file" class="form-input form-file-input @error('image') is-invalid @enderror" name="image" id="image">
+                    <input type="file" class="form-input form-file-input @error('image') is-invalid @enderror" name="image" id="image" onchange="previewImage(event)">
                     @error('image')
                         <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
                     @enderror
+                    <div class="mt-2">
+                        <img id="image-preview" src="#" alt="Image Preview" style="display:none; max-width: 200px; margin-top: 10px;"/>
+                    </div>
                 </div>
 
                 <div class="form-actions form-actions-single-button">
@@ -79,3 +91,17 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('image-preview');
+            output.src = reader.result;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+@endpush

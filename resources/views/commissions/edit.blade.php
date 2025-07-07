@@ -72,10 +72,13 @@
 
                 <div class="form-group">
                     <label for="image">{{ __('Upload New Image (optional)') }}</label>
-                    <input type="file" class="form-input form-file-input @error('image') is-invalid @enderror" name="image" id="image">
+                    <input type="file" class="form-input form-file-input @error('image') is-invalid @enderror" name="image" id="image" onchange="previewImage(event)">
                     @error('image')
                         <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
                     @enderror
+                    <div class="mt-2">
+                        <img id="image-preview" src="#" alt="Image Preview" style="display:none; max-width: 200px; margin-top: 10px;"/>
+                    </div>
                     @if($commission->image)
                         <div class="current-image-preview">
                             <p>{{ __('Current Image') }}:</p>
@@ -93,3 +96,17 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('image-preview');
+            output.src = reader.result;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+@endpush

@@ -14,7 +14,7 @@
             <div class="commission-image-area">
                 @if($commission->image)
                     {{-- <img src="{{ asset('storage/' . $commission->image) }}" alt="Commission Image for {{ $commission->description }}" class="commission-display-image"> --}}
-                    <img src="{{ asset($commission->image) }}" alt="Commission Image for {{ $commission->description }}" class="commission-display-image" style="width: 100%; height: 100%; object-fit: cover;">
+                    <img src="{{ asset('storage/' . $commission->image) }}" alt="Commission Image for {{ $commission->description }}" class="commission-display-image" style="width: 100%; height: 100%; object-fit: cover;">
                     {{-- <img src="{{ asset($commission->image) }}" alt="Commission Image" style="width: 100%; height: 100%; object-fit: cover;"> --}}
                 @else
                     <div class="no-image-placeholder">

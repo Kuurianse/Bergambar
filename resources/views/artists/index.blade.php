@@ -55,13 +55,13 @@
                             </span>
                             {{ $artistProfile->user->commissions_count ?? 0 }} Commission
                         </div>
-                        <div class="services">
+                        {{-- <div class="services">
                             <span><svg width="11" height="15" viewBox="0 0 11 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M5.55001 10.1C8.06291 10.1 10.1 8.06291 10.1 5.55001C10.1 3.03711 8.06291 1 5.55001 1C3.03711 1 1 3.03711 1 5.55001C1 8.06291 3.03711 10.1 5.55001 10.1Z" stroke="#57606E" />
                                     <path opacity="0.5" d="M2.52812 9.45001L2.11416 10.96C1.70574 12.4496 1.50153 13.1945 1.77403 13.6023C1.86954 13.7452 1.99765 13.8599 2.14632 13.9355C2.57053 14.1515 3.22551 13.8103 4.53545 13.1277C4.97134 12.9006 5.18929 12.7871 5.42082 12.7624C5.50668 12.7532 5.59313 12.7532 5.679 12.7624C5.91053 12.7871 6.12847 12.9006 6.56436 13.1277C7.87431 13.8103 8.52932 14.1515 8.95351 13.9355C9.10216 13.8599 9.23028 13.7452 9.32576 13.6023C9.59831 13.1945 9.39408 12.4496 8.98568 10.96L8.5717 9.45001" stroke="#57606E" stroke-linecap="round" />
                                 </svg> </span>
                             {{ $artistProfile->services_count ?? 0 }} Services
-                        </div>
+                        </div> --}}
                     </div>
                     @if($artistProfile->portfolio_link)
                         <a href="{{ $artistProfile->portfolio_link }}" target="_blank" class="link-portfolio">View Portfolio →</a>

@@ -62,7 +62,7 @@
                     @else
                     <div class="btn-container">
                         <a href="{{ route('login') }}" class="login-btn">Login</a>
-                        <a href="{{ route('register') }}" class="register-btn">Register</a>
+                        <a href="{{ route('login') }}" class="register-btn">Register</a>
                     </div>
                     @endauth
                 </li>

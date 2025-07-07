@@ -55,7 +55,7 @@
                     <div class="card">
                         <div class="card-image-placeholder">
                             @if($commission->image)
-                                <img src="{{ asset($commission->image) }}" alt="Commission Image" style="width: 100%; height: 100%; object-fit: cover;">
+                                <img src="{{ asset('storage/' . $commission->image) }}" alt="Commission Image" style="width: 100%; height: 100%; object-fit: cover;">
                             @endif
                         </div>
                         <div class="tag-completed">{{ $commission->public_status }}</div>

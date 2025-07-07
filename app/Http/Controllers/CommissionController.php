@@ -45,6 +45,7 @@ class CommissionController extends Controller
         $validatedData = $request->validate([
             // Hapus 'status' dari validasi jika kamu tidak mengirimnya dari form
             // atau atur default di sini jika perlu
+            'title' => 'required|string|max:255', // <-- Tambahkan validasi untuk title
             'total_price' => 'required|numeric|min:0',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
