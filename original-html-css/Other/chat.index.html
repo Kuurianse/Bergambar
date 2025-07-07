@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Messages Page</title>
+    <link rel="stylesheet" href="chat-index.css" />
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <a href="#" class="logo" style="text-decoration: none; color: inherit"
+        >Bergambar</a
+      >
+      <nav>
+        <ul>
+          <li><a href="#">Artists</a></li>
+          <li><a href="#">Commissions</a></li>
+          <li><a href="#">Chat</a></li>
+          <li>
+            <div class="btn-container">
+              <a href="#" class="login-btn">Alice</a>
+              <a
+                href="#"
+                class="register-btn"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+              >
+                Logout
+              </a>
+              <form id="logout-form" action="#" method="POST"></form>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section class="heading">
+        <h3>Messages</h3>
+        <p>Your conservations with artists and clients</p>
+      </section>
+
+      <sections class="chat">
+        <div class="chats-container">
+          <!-- Chat 1 -->
+          <a href="#" class="chat-card">
+            <div class="contact-info">
+              <div class="photo-profile">
+                <img
+                  src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"
+                  alt="Photo Profile"
+                  style="width: 100%; height: 100%; object-fit: cover"
+                />
+              </div>
+              <div class="information">
+                <h3 class="name">Alice Johnson</h3>
+                <p class="last-message">
+                  Thanks for the commission! I'll start working on it right
+                  away.
+                </p>
+              </div>
+            </div>
+            <div class="right-side">
+              <div class="last-chat">2 hours ago</div>
+              <div class="chat-svg">
+                <svg
+                  width="19"
+                  height="19"
+                  viewBox="0 0 19 19"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9.5 18C14.1944 18 18 14.1944 18 9.5C18 4.80558 14.1944 1 9.5 1C4.80558 1 1 4.80558 1 9.5C1 10.8597 1.31928 12.1449 1.88694 13.2846C2.0378 13.5875 2.08801 13.9337 2.00055 14.2605L1.49428 16.1527C1.27451 16.9741 2.02596 17.7255 2.84735 17.5057L4.73948 16.9995C5.06634 16.912 5.41253 16.9622 5.7154 17.113C6.85511 17.6807 8.14025 18 9.5 18Z"
+                    stroke="#57606E"
+                  />
+                </svg>
+              </div>
+            </div>
+          </a>
+          <!-- Chat 2 -->
+          <a href="#" class="chat-card">
+            <div class="contact-info">
+              <div class="photo-profile">
+                <img
+                  src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"
+                  alt="Photo Profile"
+                  style="width: 100%; height: 100%; object-fit: cover"
+                />
+              </div>
+              <div class="information">
+                <h3 class="name">Bob Smith</h3>
+                <p class="last-message">
+                  Could you provide more details about the style you want?
+                </p>
+              </div>
+            </div>
+            <div class="right-side">
+              <div class="last-chat">1 day ago</div>
+              <div class="chat-svg">
+                <svg
+                  width="19"
+                  height="19"
+                  viewBox="0 0 19 19"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9.5 18C14.1944 18 18 14.1944 18 9.5C18 4.80558 14.1944 1 9.5 1C4.80558 1 1 4.80558 1 9.5C1 10.8597 1.31928 12.1449 1.88694 13.2846C2.0378 13.5875 2.08801 13.9337 2.00055 14.2605L1.49428 16.1527C1.27451 16.9741 2.02596 17.7255 2.84735 17.5057L4.73948 16.9995C5.06634 16.912 5.41253 16.9622 5.7154 17.113C6.85511 17.6807 8.14025 18 9.5 18Z"
+                    stroke="#57606E"
+                  />
+                </svg>
+              </div>
+            </div>
+          </a>
+          <!-- Chat 3 -->
+          <a href="#" class="chat-card">
+            <div class="contact-info">
+              <div class="photo-profile">
+                <img
+                  src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"
+                  alt="Photo Profile"
+                  style="width: 100%; height: 100%; object-fit: cover"
+                />
+              </div>
+              <div class="information">
+                <h3 class="name">Carol Williams</h3>
+                <p class="last-message">The artwork is ready for review!</p>
+              </div>
+            </div>
+            <div class="right-side">
+              <div class="last-chat">3 day ago</div>
+              <div class="chat-svg">
+                <svg
+                  width="19"
+                  height="19"
+                  viewBox="0 0 19 19"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9.5 18C14.1944 18 18 14.1944 18 9.5C18 4.80558 14.1944 1 9.5 1C4.80558 1 1 4.80558 1 9.5C1 10.8597 1.31928 12.1449 1.88694 13.2846C2.0378 13.5875 2.08801 13.9337 2.00055 14.2605L1.49428 16.1527C1.27451 16.9741 2.02596 17.7255 2.84735 17.5057L4.73948 16.9995C5.06634 16.912 5.41253 16.9622 5.7154 17.113C6.85511 17.6807 8.14025 18 9.5 18Z"
+                    stroke="#57606E"
+                  />
+                </svg>
+              </div>
+            </div>
+          </a>
+        </div>
+      </sections>
+    </main>
+  </body>
+</html>
