@@ -58,35 +58,81 @@ class OrderController extends Controller
     }
 
     // Handle payment confirmation
-    public function confirmPayment(Commission $commission)
-    {
-        // Create a new order entry
-        $order = Order::create([ // Assign to $order
-            'user_id' => Auth::id(),
+    // public function confirmPayment(Commission $commission)
+    // {
+    //     // Create a new order entry
+    //     $order = Order::create([ // Assign to $order
+    //         'user_id' => Auth::id(),
+    //         'commission_id' => $commission->id,
+    //         'status' => 'paid', // Assuming payment is confirmed by this action
+    //         'total_price' => $commission->total_price,
+    //     ]);
+
+    //     // Create a corresponding Payment record
+    //     if ($order) { // Ensure order was created
+    //         Payment::create([
+    //             'order_id' => $order->id,
+    //             'commission_id' => $commission->id,
+    //             'payment_method' => 'qris_simulation', // Placeholder for now
+    //             'amount' => $order->total_price,
+    //             'payment_status' => 'completed', // Assuming direct confirmation
+    //             'payment_date' => now(),
+    //         ]);
+
+    //         // Update the commission status
+    //         $commission->status = 'ordered_pending_artist_action';
+    //         $commission->save();
+    //     }
+        
+    //     // Redirect to a success page or back to the orders page
+    //     return redirect()->route('orders.index')->with('message', 'Payment confirmed and order created successfully! The artist has been notified.');
+    // }
+
+    // app/Http/Controllers/OrderController.php
+
+public function confirmPayment(Commission $commission)
+{
+    // --- LANGKAH 1: Cek apakah pesanan untuk komisi ini sudah ada dari user yang sama ---
+    $existingOrder = Order::where('commission_id', $commission->id)
+                            ->where('user_id', Auth::id())
+                            ->first();
+
+    // Jika pesanan sudah ada, jangan buat yang baru. Langsung redirect.
+    if ($existingOrder) {
+        return redirect()->route('orders.show', $existingOrder->id)
+                         ->with('info', 'You have already placed an order for this commission.');
+    }
+
+    // --- LANGKAH 2: Jika belum ada, baru buat pesanan baru ---
+    // Kode ini hanya akan berjalan jika pesanan belum ada
+    $order = Order::create([
+        'user_id' => Auth::id(),
+        'commission_id' => $commission->id,
+        'status' => 'paid', // Asumsi pembayaran langsung dikonfirmasi
+        'total_price' => $commission->total_price,
+    ]);
+
+    // Buat record Pembayaran terkait
+    if ($order) {
+        Payment::create([
+            'order_id' => $order->id,
             'commission_id' => $commission->id,
-            'status' => 'paid', // Assuming payment is confirmed by this action
-            'total_price' => $commission->total_price,
+            'payment_method' => 'qris_simulation', // Placeholder
+            'amount' => $order->total_price,
+            'payment_status' => 'completed', // Asumsi pembayaran langsung selesai
+            'payment_date' => now(),
         ]);
 
-        // Create a corresponding Payment record
-        if ($order) { // Ensure order was created
-            Payment::create([
-                'order_id' => $order->id,
-                'commission_id' => $commission->id,
-                'payment_method' => 'qris_simulation', // Placeholder for now
-                'amount' => $order->total_price,
-                'payment_status' => 'completed', // Assuming direct confirmation
-                'payment_date' => now(),
-            ]);
-
-            // Update the commission status
-            $commission->status = 'ordered_pending_artist_action';
-            $commission->save();
-        }
-        
-        // Redirect to a success page or back to the orders page
-        return redirect()->route('orders.index')->with('message', 'Payment confirmed and order created successfully! The artist has been notified.');
+        // Update status komisi menjadi dipesan
+        $commission->status = 'ordered_pending_artist_action';
+        $commission->save();
     }
+    
+    // Arahkan ke halaman My Orders setelah berhasil membuat pesanan baru
+    return redirect()->route('orders.index')->with('success', 'Payment confirmed and order created successfully!');
+}
+
+
 
     public function approveDelivery(Order $order)
     {

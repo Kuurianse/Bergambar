@@ -75,7 +75,7 @@
                                 <td>Rp{{ number_format($order->total_price, 0, ',', '.') }}</td>
                                 <td class="actions-cell">
                                     <a href="{{ route('artist.orders.show', $commission->id) }}" class="btn-action primary">
-                                        {{ __('Kelola Pesanan') }}
+                                        {{ __('Manage Order') }}
                                     </a>
                                 </td>
                             </tr>

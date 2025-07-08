@@ -171,7 +171,7 @@
                                         <img src="{{ asset('storage/' . $commission->image) }}" alt="Commission Image" style="max-width: 100%; height: auto;" class="img-fluid mb-3">
                                     @endif
                                     <div class="commission-info">
-                                        <h4 class="text-black">{{ $commission->description }}</h4>
+                                        <h4 class="text-black">{{ $commission->title }}</h4>
                                         <p class="text-black">Total Price: ${{ number_format($commission->total_price, 2) }}</p>
                                         <p class="text-black">Status: {{ ucfirst($commission->status) }}</p>
                                     </div>

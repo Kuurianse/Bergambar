@@ -16,6 +16,14 @@
                 @csrf
 
                 <div class="form-group">
+                    <label for="title">{{ __('Title') }}</label>
+                    <input id="title" type="text" class="form-input @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required>
+                    @error('title')
+                        <span class="form-error-message" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
                     <label for="description">{{ __('Description') }}</label>
                     <textarea id="description" class="form-input @error('description') is-invalid @enderror" name="description" rows="3" required>{{ old('description') }}</textarea>
                     @error('description')

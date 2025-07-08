@@ -15,7 +15,7 @@
         <div class="commission-detail-grid-public">
             <div class="commission-image-section">
                 @if($commission->image)
-                    <img src="{{ asset($commission->image) }}" alt="Commission Image for {{ $commission->description }}" class="commission-display-image">
+                    <img src="{{ asset( 'storage/'. $commission->image) }}" alt="Commission Image for {{ $commission->description }}" class="commission-display-image">
                 @else
                     <div class="no-image-placeholder">
                         <p>{{ __('No image has been provided for this commission.') }}</p>
