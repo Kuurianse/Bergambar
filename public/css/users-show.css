@@ -87,7 +87,7 @@ main {
   margin-top: 1.3rem;
   /* width: 57.3rem; */
 }
-.btn-container {
+.profile-info .btn-container {
   margin-top: 2.3rem;
   display: flex;
   gap: 1.1rem;
